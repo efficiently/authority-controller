@@ -13,6 +13,10 @@ It's a port of the best Ruby authorization library: [`cancan`](https://github.co
 
 It's **only** compatible with PHP >= 5.4 and the Laravel 4 framework.
 
+**Warning**: This is beta-quality software.
+It works well according to our tests, but it need more. The internal API may change and other features will be added.
+We are working to make AuthorityController production quality software.
+
 It's following the D.R.W.J.P.I. principle:
 
 > Don't Reinvent the Wheel, Just Port It !
