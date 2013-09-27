@@ -153,6 +153,14 @@ Authority [introduction](https://github.com/machuga/authority#introduction).
 
 Authority-L4 [general usage](https://github.com/machuga/authority-l4#general-usage).
 
+##### Wiki Docs
+
+* [Defining Authority rules](https://github.com/efficiently/authority-controller/wiki/Defining-Authority-rules)
+* [Checking Authority rules](https://github.com/efficiently/authority-controller/wiki/Checking-Authority-rules)
+* [Authorizing Controller Actions](https://github.com/efficiently/authority-controller/wiki/Authorizing-Controller-Actions)
+* [Exception Handling](https://github.com/efficiently/authority-controller/wiki/Exception-Handling)
+* [See more](https://github.com/efficiently/authority-controller/wiki)
+
 Because AuthorityController is a CanCan port, you can read the Wiki docs of CanCan [here](https://github.com/ryanb/cancan/wiki).
 
 
