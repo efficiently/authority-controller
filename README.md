@@ -269,9 +269,9 @@ $myProduct->isNamed(); //=> true
 
 Questions or Problems?
 ----------------------
-If you have any issues with AuthorityController, please add an {issue on GitHub}[https://github.com/efficiently/authority-controller/issues] or fork the project and send a pull request.
+If you have any issues with AuthorityController, please add an [issue on GitHub](https://github.com/efficiently/authority-controller/issues) or fork the project and send a pull request.
 
-To get the specs running you should call +bundle+ and then +rake+. See the {spec/README}[https://github.com/ryanb/cancan/blob/master/spec/README.rdoc] for more information.
+To get the tests running you should instal PHPUnit and run `phpunits tests`.
 
 
 Special Thanks
