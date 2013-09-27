@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Routing\Controllers\Controller;
+
 class AcBaseController extends Controller
 {
     use Efficiently\AuthorityController\ControllerAdditions;
