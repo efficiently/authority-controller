@@ -271,7 +271,7 @@ Questions or Problems?
 ----------------------
 If you have any issues with AuthorityController, please add an [issue on GitHub](https://github.com/efficiently/authority-controller/issues) or fork the project and send a pull request.
 
-To get the tests running you should instal PHPUnit and run `phpunits tests`.
+To get the tests running you should install PHPUnit and run `phpunit tests`.
 
 
 Special Thanks
