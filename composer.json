@@ -22,6 +22,7 @@
         "machuga/authority-l4": "2.0.*"
     },
     "require-dev": {
+        "laravel/framework": "4.0.*",
         "orchestra/testbench": "2.0.*",
         "mockery/mockery": "dev-master"
     },
