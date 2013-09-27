@@ -1,0 +1,40 @@
+{
+    "name": "efficiently/authority-controller",
+    "description": "AuthorityController is an PHP authorization library for Laravel 4 which restricts what resources a given user is allowed to access.",
+    "keywords": [
+        "cancan",
+        "authority",
+        "acl",
+        "role",
+        "rbac",
+        "authorization",
+        "security"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "TortueTorche",
+            "email": "tortuetorche@spam.me"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "machuga/authority-l4": "2.0.*"
+    },
+    "require-dev": {
+        "orchestra/testbench": "2.0.*",
+        "mockery/mockery": "dev-master"
+    },
+    "autoload": {
+        "classmap": [
+            "tests/fixtures/", "tests/fixtures/controllers", "tests/fixtures/models", "tests/helpers", "tests/AcTestCase.php"
+        ],
+        "files": [
+            "src/Efficiently/AuthorityController/helpers.php"
+        ],
+        "psr-0": {
+            "Efficiently\\AuthorityController": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
