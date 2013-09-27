@@ -31,7 +31,7 @@ Add `authority-controller` package to your `composer.json` file to require Autho
 
 Now update Composer
 
-  composer update
+    composer update
 
 Then add the service provider to `app/config/app.php`
 
