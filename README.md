@@ -94,7 +94,7 @@ Authority::can('update', 'SomeModel');
 ```
 
 ##### Init resources filter and controller methods
-In your `app/controllers/base_controller.php` file:
+In your `app/controllers/BaseController.php` file:
 
 ```php
 class BaseController extends \Controller
