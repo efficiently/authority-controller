@@ -9,8 +9,16 @@ All permissions are defined in a single location:
 
 and not duplicated across controllers, views, and database queries.
 
-Installation via Composer
--------------------------
+#### Origins and Inspirations
+
+It's an extension of the [`authority-l4`](https://github.com/machuga/authority-l4) package.
+
+And a port of the best [Ruby](https://ruby-lang.org) authorization library: [CanCan](https://github.com/ryanb/cancan).
+
+[Authority](https://github.com/machuga/authority) ports some features of CanCan and this package ports [_almost_](https://github.com/efficiently/authority-controller/blob/master/README.md#missing-features) all the other features.
+
+Installation via [Composer](https://getcomposer.org/)
+---------------------------
 Add `authority-controller` package to your `composer.json` file to require AuthorityController
 
 ```javascript
@@ -109,7 +117,6 @@ class BaseController extends \Controller
 
 Getting Started
 ---------------
-
 ##### Defining Authority rules
 
 User permissions are defined in an AuthorityController configuration file.
@@ -257,7 +264,6 @@ class ProductsController extends \BaseController
 
 Missing features
 ----------------
-
 1. In `ControllerResource` class, the [`#load_collection`](https://github.com/ryanb/cancan/blob/1.6.10/lib/cancan/controller_resource.rb#L80) method, who uses in the `User` model [`#accessible_by`](https://github.com/ryanb/cancan/blob/1.6.10/lib/cancan/model_additions.rb#L22) method. Looks complicated.
   Instead, use specific query scopes with `collectionScope` option to filtering your data in your collection (e.g. `index`) controller actions.
   Because you'll allowing/denying access by roles or check user's authorizations on each record of the collection.
@@ -272,23 +278,19 @@ $authority->allow('update', 'Product', function($self, $product) {
 });
 ```
 
-Differences between CanCan and AuthorityController
--------------------------------------------------
-
-See Wiki page [Differences between CanCan and AuthorityController](https://github.com/efficiently/authority-controller/wiki/Differences-between-CanCan-and-AuthorityController)
-
 Good to know
 ------------
-AuthorityController is an extension of the [`authority-l4`](https://github.com/machuga/authority-l4) package.
+#### Compatibility
+It's **only** compatible with **PHP >= 5.4** and **Laravel 4** framework.
 
-It's a port of the best Ruby authorization library: [`cancan`](https://github.com/ryanb/cancan) gem (Authority-L4 ports some features of CanCan and this package ports _almost_ all the other features).
-
-**Note**: This is beta-quality software.
+#### This is beta-quality software
 It works well according to our tests, but it need more. The internal API may change and other features will be added.
 We are working to make AuthorityController production quality software.
 
-It's **only** compatible with **PHP >= 5.4** and **Laravel 4** framework.
+#### Differences between CanCan and AuthorityController
+See Wiki page [Differences between CanCan and AuthorityController](https://github.com/efficiently/authority-controller/wiki/Differences-between-CanCan-and-AuthorityController)
 
+#### Philosophy
 It's following the D.R.W.J.P.I. principle:
 
 > Don't Reinvent the Wheel, Just Port It !
