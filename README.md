@@ -82,7 +82,7 @@ return [
 
 ##### Configure Authority-L4
 
-Follows Authority-L4 configuration instructions from this [section](https://github.com/machuga/authority-l4/blob/master/README.md#create-roles-and-permissions-tables)
+Follows Authority-L4 configuration instructions from this [section](https://github.com/machuga/authority-l4/blob/2.0.0/README.md#create-roles-and-permissions-tables)
 
 ##### Add the aliases (facades) to your Laravel app config file.
 
@@ -149,9 +149,9 @@ App::error(function(Efficiently\AuthorityController\Exceptions\AccessDenied $e, 
 
 Documentations
 --------------
-Authority [introduction](https://github.com/machuga/authority#introduction).
+Authority [introduction](https://github.com/machuga/authority/blob/2.0.1/readme.md#introduction).
 
-Authority-L4 [general usage](https://github.com/machuga/authority-l4#general-usage).
+Authority-L4 [general usage](https://github.com/machuga/authority-l4/blob/2.0.0/README.md#general-usage).
 
 ##### Wiki Docs
 
@@ -190,10 +190,10 @@ class ProductsController extends \BaseController
 Missing features
 ----------------
 
-1. In `ControllerResource` class, the [`#load_collection`](https://github.com/ryanb/cancan/blob/60cf6a67ef59c0c9b63bc27ea0101125c4193ea6/lib/cancan/controller_resource.rb#L80) method, who uses in the `User` model [`#accessible_by`](https://github.com/ryanb/cancan/blob/f2f40c7aac4a00a88651641129eaad71916c1c82/lib/cancan/model_additions.rb#L22) method. Looks complicated.
+1. In `ControllerResource` class, the [`#load_collection`](https://github.com/ryanb/cancan/blob/1.6.10/lib/cancan/controller_resource.rb#L80) method, who uses in the `User` model [`#accessible_by`](https://github.com/ryanb/cancan/blob/1.6.10/lib/cancan/model_additions.rb#L22) method. Looks complicated.
   Instead, use specific query scopes with `collectionScope` option to filtering your data in your collection (e.g. `index`) controller actions.
   Because you'll allowing/denying access by roles or check user's authorizations on each record of the collection.
-2. In `Ability` class, the [`#attributes_for`](https://github.com/ryanb/cancan/blob/master/lib/cancan/ability.rb#L221) method.
+2. In `Ability` class, the [`#attributes_for`](https://github.com/ryanb/cancan/blob/1.6.10/lib/cancan/ability.rb#L221) method.
   Looks useless with `Authority` because rules conditions are only possible by `Closure` not by associative array. And CanCan handles `#attribute_for` only for `Hash` (associative array) conditions.
 3. `#skip_*` methods in `ControllerAdditions`.
 4. For `allow()` and `deny()` methods of `Authority`, the third argument isn't an optional hash (associative array) of conditions but an anonymous function (Closure):
