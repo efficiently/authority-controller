@@ -152,9 +152,6 @@ App::error(function(Efficiently\AuthorityController\Exceptions\AccessDenied $e, 
 
 Documentations
 --------------
-Authority [introduction](https://github.com/machuga/authority/blob/2.0.1/readme.md#introduction).
-
-Authority-L4 [general usage](https://github.com/machuga/authority-l4/blob/2.0.0/README.md#general-usage).
 
 ##### Wiki Docs
 
@@ -164,8 +161,15 @@ Authority-L4 [general usage](https://github.com/machuga/authority-l4/blob/2.0.0/
 * [Exception Handling](https://github.com/efficiently/authority-controller/wiki/Exception-Handling)
 * [See more](https://github.com/efficiently/authority-controller/wiki)
 
-Because AuthorityController is a CanCan port, you can also read the Wiki docs of CanCan [here](https://github.com/ryanb/cancan/wiki).
+##### Authority Docs
 
+Authority [introduction](https://github.com/machuga/authority/blob/2.0.1/readme.md#introduction).
+
+Authority-L4 [general usage](https://github.com/machuga/authority-l4/blob/2.0.0/README.md#general-usage).
+
+##### CanCan Wiki Docs
+
+Because AuthorityController is a CanCan port, you can also read the Wiki docs of CanCan [here](https://github.com/ryanb/cancan/wiki).
 
 Controller additions
 --------------------
