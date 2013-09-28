@@ -54,10 +54,9 @@ Configuration
   php artisan config:publish efficiently/authority-controller
 ```
 
-This will place a copy of the configuration file at `app/config/packages/efficiently/authority-controller`. The config file includes an 'initialize' function, which is a great place to setup your rules and aliases.
+This will place a copy of the configuration file at `app/config/packages/efficiently/authority-controller`. The config file includes an `initialize` function, which is a great place to setup your rules and aliases.
 
 ```php
-<?php
 // app/config/packages/efficiently/authority-controller
 
 return [
@@ -114,12 +113,12 @@ In your controller(s):
 ```php
 class ProductsController extends \BaseController
 {
-    protected $product;
 
     function __construct()
     {
         $this->loadAndAuthorizeResource();
     }
+
     //code...
 }
 ```
@@ -161,7 +160,7 @@ Authority-L4 [general usage](https://github.com/machuga/authority-l4/blob/2.0.0/
 * [Exception Handling](https://github.com/efficiently/authority-controller/wiki/Exception-Handling)
 * [See more](https://github.com/efficiently/authority-controller/wiki)
 
-Because AuthorityController is a CanCan port, you can read the Wiki docs of CanCan [here](https://github.com/ryanb/cancan/wiki).
+Because AuthorityController is a CanCan port, you can also read the Wiki docs of CanCan [here](https://github.com/ryanb/cancan/wiki).
 
 
 Controller additions
