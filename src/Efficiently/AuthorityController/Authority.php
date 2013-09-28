@@ -103,12 +103,19 @@ class Authority extends OriginalAuthority
     /**
      * Define new alias for an action
      *
+     *   $this->$authority->addAlias('read', ['index', 'show']);
+     *   $this->$authority->addAlias('create', 'new');
+     *   $this->$authority->addAlias('update', 'edit');
+     *
+     * This way one can use $params['action'] in the controller to determine the permission.
+     *
      * @param string $name Name of action
-     * @param array  $actions Actions that $name aliases
+     * @param string|array $actions Action(s) that $name aliases
      * @return RuleAlias
      */
     public function addAlias($name, $actions)
     {
+        $actions = (array) $actions;
         $this->addAliasAction($name, $actions);
         parent::addAlias($name, $this->getExpandActions($actions));
     }
@@ -145,11 +152,6 @@ class Authority extends OriginalAuthority
         return parent::getAliases();
     }
 
-    //   addAliasAction(['index', 'show', 'to' => 'read']);
-    //   addAliasAction(['new', 'to' => 'create']);
-    //   addAliasAction(['edit', 'to' => 'update']);
-    //
-    // This way one can use $params['action'] in the controller to determine the permission.
     protected function addAliasAction($target, $actions)
     {
         $this->validateTarget($target);
