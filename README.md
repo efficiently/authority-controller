@@ -117,6 +117,8 @@ class BaseController extends \Controller
 
 Getting Started
 ---------------
+AuthorityController expects that `Auth::user()` return the current authenticated user. First, set up some authentication ([from Scratch](https://bitbucket.org/beni/laravel-4-tutorial/wiki/User%20Management) or with [Confide](https://github.com/Zizaco/confide) package).
+
 ##### Defining Authority rules
 
 User permissions are defined in an AuthorityController configuration file.
