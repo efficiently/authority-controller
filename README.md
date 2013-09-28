@@ -3,24 +3,11 @@ AuthorityController [![Build Status](https://secure.travis-ci.org/efficiently/au
 
 AuthorityController is an PHP authorization library for [Laravel 4](http://laravel.com) which restricts what resources a given user is allowed to access.
 
-All permissions are defined in a single location (the `app/config/packages/efficiently/authority-controller/config.php` file) and not duplicated across controllers, views, and database queries.
+All permissions are defined in a single location:
 
-Good to know
-------------
-AuthorityController is an extension of the [`authority-l4`](https://github.com/machuga/authority-l4) package.
+    app/config/packages/efficiently/authority-controller/config.php
 
-It's a port of the best Ruby authorization library: [`cancan`](https://github.com/ryanb/cancan) gem (Authority-L4 ports some features of CanCan and this package ports _almost_ all the other features).
-
-It's **only** compatible with PHP >= 5.4 and the Laravel 4 framework.
-
-**Warning**: This is beta-quality software.
-It works well according to our tests, but it need more. The internal API may change and other features will be added.
-We are working to make AuthorityController production quality software.
-
-It's following the D.R.W.J.P.I. principle:
-
-> Don't Reinvent the Wheel, Just Port It !
-> -- <cite>(c) 2013 A.D.</cite>
+and not duplicated across controllers, views, and database queries.
 
 Installation via Composer
 -------------------------
@@ -45,6 +32,23 @@ Then add the service provider to `app/config/app.php`
 
 Congratulations, you have successfully installed AuthorityController.
 
+Good to know
+------------
+AuthorityController is an extension of the [`authority-l4`](https://github.com/machuga/authority-l4) package.
+
+It's a port of the best Ruby authorization library: [`cancan`](https://github.com/ryanb/cancan) gem (Authority-L4 ports some features of CanCan and this package ports _almost_ all the other features).
+
+**Note**: This is beta-quality software.
+It works well according to our tests, but it need more. The internal API may change and other features will be added.
+We are working to make AuthorityController production quality software.
+
+It's **only** compatible with **PHP >= 5.4** and **Laravel 4** framework.
+
+It's following the D.R.W.J.P.I. principle:
+
+> Don't Reinvent the Wheel, Just Port It !
+> -- <cite>(c) 2013 A.D.</cite>
+
 Configuration
 -------------
 
@@ -57,7 +61,7 @@ Configuration
 This will place a copy of the configuration file at `app/config/packages/efficiently/authority-controller`. The config file includes an `initialize` function, which is a great place to setup your rules and aliases.
 
 ```php
-// app/config/packages/efficiently/authority-controller
+// app/config/packages/efficiently/authority-controller/config.php
 
 return [
 
@@ -165,8 +169,7 @@ Because AuthorityController is a CanCan port, you can also read the Wiki docs of
 
 Controller additions
 --------------------
-Your controllers have now several utility properties/methods:
-* `$params` property:
+Your controllers have a `$params` property:
 
 ```php
 class ProductsController extends \BaseController
