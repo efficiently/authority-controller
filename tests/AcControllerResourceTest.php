@@ -183,7 +183,123 @@ class AcControllerResourceTest extends AcTestCase
         $this->assertEquals($this->getProperty($this->controller, 'subProject')->name, "foobar");
     }
 
-    // TODO: Port more tests, see: https://github.com/ryanb/cancan/blob/master/spec/cancan/controller_resource_spec.rb#L101
+    // Should build a collection when on index action
+    public function testBuildCollectionWhenOnIndexAction()
+    {
+        $project = $this->mock('Project');
+        $project->shouldReceive('get')->andReturn("found_projects");
+
+        $this->params['action'] = "index";
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, 'project');
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), null);
+        $this->assertEquals($this->getProperty($this->controller, 'projects'), "found_projects");
+    }
+
+    // Should not use accessible_by when defining authorityRules through a Closure
+    public function testShouldLoadCollectionResourceWhenDefiningAuthorityRulesThroughClosure()
+    {
+        $project = $this->mock('Project');
+        $project->shouldReceive('get')->andReturn("found_projects");
+
+        $this->params['action'] = "index";
+
+        $this->authority->allow('read', 'Project', function($p) { return false; });
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), null);
+        $this->assertFalse(property_exists($this->controller, 'projects'));
+    }
+
+
+    /**
+     * Should not authorize single resource in collection action
+     *
+     * @expectedException Efficiently\AuthorityController\Exceptions\AccessDenied
+     */
+    public function testShouldNotAuthorizeSingleResourceInCollectionAction()
+    {
+        $this->params['action'] = "index";
+        $this->setProperty($this->controller, 'project', 'some_project');
+
+        $this->controller->shouldReceive('authorize')->with('index', 'Project')->andReturnUsing(function() {
+            throw new Efficiently\AuthorityController\Exceptions\AccessDenied;
+        });
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
+        $resource->authorizeResource();
+    }
+
+    /**
+     * Should authorize parent resource in collection action
+     * @expectedException Efficiently\AuthorityController\Exceptions\AccessDenied
+     */
+    public function testShouldAuthorizeParentResourceInCollectionAction()
+    {
+        $this->params['action'] = "index";
+        $this->setProperty($this->controller, 'category', 'some_category');
+
+        $this->controller->shouldReceive('authorize')->with('show', 'some_category')->andReturnUsing(function() {
+            throw new Efficiently\AuthorityController\Exceptions\AccessDenied;
+        });
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, 'category', ['parent' => true]);
+        $resource->authorizeResource();
+    }
+
+    /**
+     * Should perform authorization using controller action and loaded model
+     * @expectedException Efficiently\AuthorityController\Exceptions\AccessDenied
+     */
+    public function testShouldPerformAuthorizationUsingControllerActionAndLoadedModel()
+    {
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => '123']));
+        $this->setProperty($this->controller, 'project', 'some_project');
+
+        $this->controller->shouldReceive('authorize')->with('show', 'some_project')->andReturnUsing(function() {
+            throw new Efficiently\AuthorityController\Exceptions\AccessDenied;
+        });
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
+        $resource->authorizeResource();
+    }
+
+    /**
+     * Should perform authorization using controller action and non loaded model
+     * @expectedException Efficiently\AuthorityController\Exceptions\AccessDenied
+     */
+    public function testShouldPerformAuthorizationUsingControllerActionAndNonLoadedModel()
+    {
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => '123']));
+
+        $this->controller->shouldReceive('authorize')->with('show', 'Project')->andReturnUsing(function() {
+            throw new Efficiently\AuthorityController\Exceptions\AccessDenied;
+        });
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
+        $resource->authorizeResource();
+    }
+
+    // Should call loadResource and authorizeResource for loadAndAuthorizeResource
+    public function testShouldCallLoadResourceAndAuthorizeResourceForLoadAndAuthorizeResource()
+    {
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => '123']));
+
+        $className = "Efficiently\\AuthorityController\\ControllerResource";
+        $mock = m::mock($className)->makePartial();
+        App::instance($className, $mock);
+        $resource = App::make($className, [$this->controller]);
+
+        $resource->shouldReceive('loadResource')->once();
+        $resource->shouldReceive('authorizeResource')->once();
+        $resource->loadAndAuthorizeResource();
+    }
+
+    // TODO: Port more tests, see: https://github.com/ryanb/cancan/blob/master/spec/cancan/controller_resource_spec.rb#L183
 
     protected function buildModel($modelName, $modelAttributes = [])
     {
