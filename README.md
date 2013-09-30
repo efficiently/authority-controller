@@ -22,47 +22,44 @@ Installation
 
 #### With [Composer](https://getcomposer.org/)
 
-Add `authority-controller` package to your `composer.json` file to require AuthorityController:
+1. Add `authority-controller` package to your `composer.json` file to require AuthorityController:
 
-```javascript
-  require : {
-    "laravel/framework": "4.0.*",
-    "efficiently/authority-controller" : "dev-master"
-  }
-```
+ ```bash
+ composer require efficiently/authority-controller:dev-master
+ ```
 
-Now update Composer:
+2. Add the service provider to `app/config/app.php`:
 
-```bash
-composer update
-```
+ ```php
+     'Efficiently\AuthorityController\AuthorityControllerServiceProvider',
+ ```
 
-Add the service provider to `app/config/app.php`:
+3. Add the aliases (facades) to your Laravel app config file:
 
-```php
-    'Efficiently\AuthorityController\AuthorityControllerServiceProvider',
-```
+ ```php
+     'Params'    => 'Efficiently\AuthorityController\Facades\Params',
+     'Authority' => 'Efficiently\AuthorityController\Facades\Authority',
+ ```
 
-Add the aliases (facades) to your Laravel app config file:
+4. This will allow you to access the Authority class through the static interface you are used to with Laravel components.
 
-```php
-    'Params'    => 'Efficiently\AuthorityController\Facades\Params',
-    'Authority' => 'Efficiently\AuthorityController\Facades\Authority',
-```
-
-This will allow you to access the Authority class through the static interface you are used to with Laravel components.
-
-```php
-Authority::can('update', 'SomeModel');
-```
+ ```php
+ Authority::can('update', 'SomeModel');
+ ```
 
 #### With [Laravel 4 Package Installer](https://github.com/rtablada/package-installer#laravel-4-package-installer)
 
-Simply do:
+1. Run this command:
 
-```bash
-php artisan package:install efficiently/authority-controller
-```
+ ```bash
+ php artisan package:install efficiently/authority-controller
+ ```
+
+2. Then provide a version constraint for the `efficiently/authority-controller` requirement:
+
+ ```
+ dev-master
+ ```
 
 Configuration
 -------------
