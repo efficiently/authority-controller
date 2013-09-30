@@ -32,11 +32,7 @@ class AcControllerResourceTest extends AcTestCase
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
         $resource->loadResource();
 
-        $reflection = new ReflectionProperty($this->controller, 'project');
-        $reflection->setAccessible(true);
-        $expectedProject = $reflection->getValue($this->controller);
-
-        $this->assertEquals($expectedProject, $project);
+        $this->assertEquals($this->getProperty($this->controller, 'project'), $project);
     }
 
 
@@ -44,23 +40,13 @@ class AcControllerResourceTest extends AcTestCase
     public function testNotLoadResourceInstanceIfAlreadySet()
     {
         $this->params = array_merge($this->params, ['action' => 'show', 'id' => '123']);
-        if (property_exists($this->controller, 'project')) {
-            $reflection = new ReflectionProperty($this->controller, 'project');
-            $reflection->setAccessible(true);
-            $reflection->setValue($this->controller, 'some_project');
-        } else {
-            $instanceName = 'project';
-            $this->controller->$instanceName = 'some_project';
-        }
+
+        $this->setProperty($this->controller, 'project', 'some_project');
 
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
         $resource->loadResource();
 
-        $reflection = new ReflectionProperty($this->controller, 'project');
-        $reflection->setAccessible(true);
-        $expectedProject = $reflection->getValue($this->controller);
-
-        $this->assertEquals($expectedProject, 'some_project');
+        $this->assertEquals($this->getProperty($this->controller, 'project'), 'some_project');
     }
 
     // Should properly load resource for namespaced controller
@@ -76,11 +62,7 @@ class AcControllerResourceTest extends AcTestCase
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
         $resource->loadResource();
 
-        $reflection = new ReflectionProperty($this->controller, 'project');
-        $reflection->setAccessible(true);
-        $expectedProject = $reflection->getValue($this->controller);
-
-        $this->assertEquals($expectedProject, $project);
+        $this->assertEquals($this->getProperty($this->controller, 'project'), $project);
     }
 
     // Should attempt to load a resource with the same namespace as the controller when using \\ for namespace
@@ -96,11 +78,7 @@ class AcControllerResourceTest extends AcTestCase
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
         $resource->loadResource();
 
-        $reflection = new ReflectionProperty($this->controller, 'project');
-        $reflection->setAccessible(true);
-        $expectedProject = $reflection->getValue($this->controller);
-
-        $this->assertEquals($expectedProject, $project);
+        $this->assertEquals($this->getProperty($this->controller, 'project'), $project);
     }
 
     // Laravel includes namespace in params, see CanCan issue #349
@@ -121,11 +99,7 @@ class AcControllerResourceTest extends AcTestCase
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
         $resource->loadResource();
 
-        $reflection = new ReflectionProperty($this->controller, 'project');
-        $reflection->setAccessible(true);
-        $expectedProject = $reflection->getValue($this->controller);
-
-        $this->assertEquals($expectedProject->name, "foobar");
+        $this->assertEquals($this->getProperty($this->controller, 'project')->name, "foobar");
     }
 
     // Should properly load resource for namespaced controller when using '::' for namespace
@@ -141,11 +115,7 @@ class AcControllerResourceTest extends AcTestCase
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
         $resource->loadResource();
 
-        $reflection = new ReflectionProperty($this->controller, 'project');
-        $reflection->setAccessible(true);
-        $expectedProject = $reflection->getValue($this->controller);
-
-        $this->assertEquals($expectedProject, $project);
+        $this->assertEquals($this->getProperty($this->controller, 'project'), $project);
     }
 
     // Has the specified nested resource_class when using / for namespace
@@ -165,11 +135,7 @@ class AcControllerResourceTest extends AcTestCase
 
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['authorize' => true]);
 
-        $reflection = new ReflectionMethod($resource, 'getResourceClass');
-        $reflection->setAccessible(true);
-        $resourceClass = $reflection->invoke($resource);
-
-        $this->assertEquals($resourceClass, 'Admin\Dashboard');
+        $this->assertEquals($this->invokeMethod($resource, 'getResourceClass'), 'Admin\Dashboard');
     }
 
     // Should build a new resource with hash if params[:id] is not specified
@@ -184,11 +150,7 @@ class AcControllerResourceTest extends AcTestCase
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
         $resource->loadResource();
 
-        $reflection = new ReflectionProperty($this->controller, 'project');
-        $reflection->setAccessible(true);
-        $expectedProject = $reflection->getValue($this->controller);
-
-        $this->assertEquals($expectedProject->name, "foobar");
+        $this->assertEquals($this->getProperty($this->controller, 'project')->name, "foobar");
     }
 
     // Should build a new resource for namespaced model with hash if params[:id] is not specified
@@ -203,11 +165,7 @@ class AcControllerResourceTest extends AcTestCase
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['class' => '\Sub\Project']);
         $resource->loadResource();
 
-        $reflection = new ReflectionProperty($this->controller, 'project');
-        $reflection->setAccessible(true);
-        $expectedProject = $reflection->getValue($this->controller);
-
-        $this->assertEquals($expectedProject->name, "foobar");
+        $this->assertEquals($this->getProperty($this->controller, 'project')->name, "foobar");
     }
 
     // Should build a new resource for namespaced controller and namespaced model with hash if params[:id] is not specified
@@ -222,11 +180,7 @@ class AcControllerResourceTest extends AcTestCase
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['class' => 'Project']);
         $resource->loadResource();
 
-        $reflection = new ReflectionProperty($this->controller, 'subProject');
-        $reflection->setAccessible(true);
-        $expectedProject = $reflection->getValue($this->controller);
-
-        $this->assertEquals($expectedProject->name, "foobar");
+        $this->assertEquals($this->getProperty($this->controller, 'subProject')->name, "foobar");
     }
 
     // TODO: Port more tests, see: https://github.com/ryanb/cancan/blob/master/spec/cancan/controller_resource_spec.rb#L101

@@ -72,4 +72,41 @@ trait AuthorityControllerHelpers
     {
         $this->assertTrue($this->authority->cannot($action, $resource, $resourceValue));
     }
+
+    public function setProperty($object, $propertyName, $value)
+    {
+        if (property_exists($object, $propertyName)) {
+            $reflection = new ReflectionProperty($object, $propertyName);
+            $reflection->setAccessible(true);
+            $reflection->setValue($object, $value);
+        } else {
+            $object->$propertyName = $value;
+        }
+    }
+
+    public function getProperty($object, $propertyName)
+    {
+        $reflection = new ReflectionProperty($object, $propertyName);
+        $reflection->setAccessible(true);
+        return $reflection->getValue($object);
+    }
+
+    public function invokeMethod($object, $methodName, $values = [])
+    {
+        $values = (array) $values;
+        if (method_exists($object, $methodName)) {
+            $reflection = new ReflectionMethod($object, $methodName);
+            $reflection->setAccessible(true);
+            return $reflection->invokeArgs($object, $values);
+        } else {
+            return call_user_func_array([$object, $methodName], $values);
+        }
+    }
+
+    public function getMethod($object, $methodName)
+    {
+        $reflection = new ReflectionMethod($object, $methodName);
+        $reflection->setAccessible(true);
+        return $reflection->invoke($object);
+    }
 }
