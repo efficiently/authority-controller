@@ -49,7 +49,7 @@ class ControllerResource
 
     }
 
-    function __construct($controller, $name = null, $options = [])
+    public function __construct($controller, $name = null, $options = [])
     {
         $args = array_slice(func_get_args(), 1);
         $name = array_key_exists(0, $args) && is_string($args[0]) ? array_shift($args) : null;

@@ -192,7 +192,7 @@ Setting this for every action can be tedious, therefore the `loadAndAuthorizeRes
 class ArticlesController extends \BaseController
 {
 
-    function __construct()
+    public function __construct()
     {
         $this->loadAndAuthorizeResource();
     }

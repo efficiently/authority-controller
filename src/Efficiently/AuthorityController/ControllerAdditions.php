@@ -92,7 +92,7 @@ trait ControllerAdditions
      *
      *   class BooksController extends BaseController
      *   {
-     *       function __construct()
+     *       public function __construct()
      *       {
      *           $this->loadAndAuthorizeResource();
      *       }
@@ -120,7 +120,7 @@ trait ControllerAdditions
      *
      *   class BooksController extends BaseController
      *   {
-     *       function __construct()
+     *       public function __construct()
      *       {
      *           $this->loadAndAuthorizeResource();
      *       }
@@ -131,7 +131,7 @@ trait ControllerAdditions
      *
      *   class BooksController extends BaseController
      *   {
-     *       function __construct()
+     *       public function __construct()
      *       {
      *           $this->beforeFilter('findBookByPermalink', ['only' => 'show']);
      *           $this->loadAndAuthorizeResource();
@@ -148,7 +148,7 @@ trait ControllerAdditions
      *
      *   class BooksController extends BaseController
      *   {
-     *       function __construct()
+     *       public function __construct()
      *       {
      *           $this->loadResource('author');
      *           $this->loadResource('book', ['through' => 'author']);
@@ -255,7 +255,7 @@ trait ControllerAdditions
      *
      *   class BooksController extends BaseController
      *   {
-     *       function __construct()
+     *       public function __construct()
      *       {
      *           $this->authorizeResource();
      *       }
@@ -266,7 +266,7 @@ trait ControllerAdditions
      *
      *   class BooksController extends BaseController
      *   {
-     *       function __construct()
+     *       public function __construct()
      *       {
      *           $this->authorizeResource('author');
      *           $this->authorizeResource('book');
