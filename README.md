@@ -17,9 +17,12 @@ And a port of the best [Ruby](https://ruby-lang.org) authorization library: [Can
 
 [Authority](https://github.com/machuga/authority) ports some features of CanCan and this package ports [_almost_](https://github.com/efficiently/authority-controller/blob/master/README.md#missing-features) all the other features.
 
-Installation via [Composer](https://getcomposer.org/)
+Installation
 ---------------------------
-Add `authority-controller` package to your `composer.json` file to require AuthorityController
+
+#### With [Composer](https://getcomposer.org/)
+
+Add `authority-controller` package to your `composer.json` file to require AuthorityController:
 
 ```javascript
   require : {
@@ -28,17 +31,38 @@ Add `authority-controller` package to your `composer.json` file to require Autho
   }
 ```
 
-Now update Composer
+Now update Composer:
 
-    composer update
+```bash
+composer update
+```
 
-Then add the service provider to `app/config/app.php`
+Add the service provider to `app/config/app.php`:
 
 ```php
     'Efficiently\AuthorityController\AuthorityControllerServiceProvider',
 ```
 
-Congratulations, you have successfully installed AuthorityController.
+Add the aliases (facades) to your Laravel app config file:
+
+```php
+    'Params'    => 'Efficiently\AuthorityController\Facades\Params',
+    'Authority' => 'Efficiently\AuthorityController\Facades\Authority',
+```
+
+This will allow you to access the Authority class through the static interface you are used to with Laravel components.
+
+```php
+Authority::can('update', 'SomeModel');
+```
+
+#### With [Laravel 4 Package Installer](https://github.com/rtablada/package-installer#laravel-4-package-installer)
+
+Simply do:
+
+```bash
+php artisan package:install efficiently/authority-controller
+```
 
 Configuration
 -------------
@@ -49,7 +73,7 @@ We have provided a basic table structure to get you started in creating your rol
 Run the Authority migrations
 
 ```bash
-php artisan migrate --package="machuga/authority-l4"
+php artisan migrate --package=machuga/authority-l4
 ```
 
 This will create the following tables
@@ -89,19 +113,6 @@ To utilize these tables, you can add the following methods to your `User` model.
 
     //app/models/Permission.php
     class Permission extends Eloquent {}
-```
-
-##### Add the aliases (facades) to your Laravel app config file.
-
-```php
-    'Params'    => 'Efficiently\AuthorityController\Facades\Params',
-    'Authority' => 'Efficiently\AuthorityController\Facades\Authority',
-```
-
-This will allow you to access the Authority class through the static interface you are used to with Laravel components.
-
-```php
-Authority::can('update', 'SomeModel');
 ```
 
 ##### Init resources filter and controller methods

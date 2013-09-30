@@ -1,0 +1,14 @@
+{
+  "providers": [
+    "Efficiently\AuthorityController\AuthorityControllerServiceProvider"
+  ],
+  "aliases": [
+    {
+      "alias": "Params",
+      "facade": "Efficiently\AuthorityController\Facades\Params"
+    }, {
+      "alias": "Authority",
+      "facade": "Efficiently\AuthorityController\Facades\Authority"
+    }
+  ]
+}
