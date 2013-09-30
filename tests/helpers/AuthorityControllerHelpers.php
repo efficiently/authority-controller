@@ -86,9 +86,13 @@ trait AuthorityControllerHelpers
 
     public function getProperty($object, $propertyName)
     {
-        $reflection = new ReflectionProperty($object, $propertyName);
-        $reflection->setAccessible(true);
-        return $reflection->getValue($object);
+        if (property_exists($object, $propertyName)) {
+            $reflection = new ReflectionProperty($object, $propertyName);
+            $reflection->setAccessible(true);
+            return $reflection->getValue($object);
+        } else {
+            return null;
+        }
     }
 
     public function invokeMethod($object, $methodName, $values = [])
@@ -103,10 +107,4 @@ trait AuthorityControllerHelpers
         }
     }
 
-    public function getMethod($object, $methodName)
-    {
-        $reflection = new ReflectionMethod($object, $methodName);
-        $reflection->setAccessible(true);
-        return $reflection->invoke($object);
-    }
 }
