@@ -299,7 +299,96 @@ class AcControllerResourceTest extends AcTestCase
         $resource->loadAndAuthorizeResource();
     }
 
-    // TODO: Port more tests, see: https://github.com/ryanb/cancan/blob/master/spec/cancan/controller_resource_spec.rb#L183
+    // Should not build a single resource when on custom collection action even with id
+    public function testShouldNotBuildASingleResourceWhenOnCustomCollectionActionEvenWithId()
+    {
+        $project = $this->mock('Project');
+        $project->shouldReceive('get')->andReturn(new Illuminate\Database\Eloquent\Collection);
+
+        $this->params = array_merge($this->params, array_merge(['action' => 'sort', 'id' => '123']));
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['collection' => ['sort', 'list']]);
+        $resource->loadResource();
+
+        $this->assertNull($this->getProperty($this->controller, 'project'));
+    }
+
+    // // Should load a collection resource when on custom action with no id param
+    public function testShouldLoadACollectionResourceWhenOnCustomActionWithNoIdParam()
+    {
+        $project = $this->mock('Project');
+        $project->shouldReceive('get')->andReturn("found_projects");
+
+        $this->params['action'] = "sort";
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
+        $resource->loadResource();
+
+        $this->assertNull($this->getProperty($this->controller, 'project'));
+        $this->assertEquals($this->getProperty($this->controller, 'projects'), 'found_projects');
+    }
+
+    // Should build a resource when on custom create action even when $this->params['id'] exists
+    public function testShouldBuildAResourceWhenOnCustomCreateActionEvenWhenParamsIdExists()
+    {
+        $this->params = array_merge($this->params, array_merge(['action' => 'build', 'id' => '123']));
+
+        $project = $this->mock('Project');
+        $project->shouldReceive('fill')->with(m::type('array'))->andReturn($project);
+        $project->shouldReceive('__toString')->andReturn("some_project");
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['create' => 'build']);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), 'some_project');
+    }
+
+    // Should not try to load resource for other action if $this->params['id'] is undefined
+    public function testShouldNotTryToLoadResourceForOtherActionIfParamsIdIsUndefined()
+    {
+        $project = $this->mock('Project');
+        $project->shouldReceive('get')->andReturn(new Illuminate\Database\Eloquent\Collection);
+
+        $this->params['action'] = "list";
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
+        $resource->loadResource();
+
+        $this->assertNull($this->getProperty($this->controller, 'project'));
+    }
+
+    // Should be a parent resource when name is provided which doesn't match controller
+    public function testShouldBeAParentResourceWhenNameIsProvidedWhichDoesntMatchController()
+    {
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, 'category');
+
+        $this->assertTrue($resource->isParent());
+    }
+
+    // // Should not be a parent resource when name is provided which matches controller
+    public function testShouldNotBeAParentResourceWhenNameIsProvidedWhichMatchesController()
+    {
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, 'project');
+
+        $this->assertFalse($resource->isParent());
+    }
+
+    // // Should be parent if specified in options
+    public function testShouldBeParentIfSpecifiedInOptions()
+    {
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, 'project', ['parent' => true]);
+
+        $this->assertTrue($resource->isParent());
+    }
+
+    // // Should not be parent if specified in options
+    public function testShouldNotBeParentIfSpecifiedInOptions()
+    {
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, 'category', ['parent' => false]);
+        $this->assertFalse($resource->isParent());
+    }
+
+    // TODO: Port more tests, see: https://github.com/ryanb/cancan/blob/master/spec/cancan/controller_resource_spec.rb#L234
 
     protected function buildModel($modelName, $modelAttributes = [])
     {
