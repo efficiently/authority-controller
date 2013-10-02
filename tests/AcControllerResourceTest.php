@@ -194,7 +194,7 @@ class AcControllerResourceTest extends AcTestCase
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, 'project');
         $resource->loadResource();
 
-        $this->assertEquals($this->getProperty($this->controller, 'project'), null);
+        $this->assertNull($this->getProperty($this->controller, 'project'));
         $this->assertEquals($this->getProperty($this->controller, 'projects'), "found_projects");
     }
 
@@ -211,7 +211,7 @@ class AcControllerResourceTest extends AcTestCase
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
         $resource->loadResource();
 
-        $this->assertEquals($this->getProperty($this->controller, 'project'), null);
+        $this->assertNull($this->getProperty($this->controller, 'project'));
         $this->assertFalse(property_exists($this->controller, 'projects'));
     }
 
