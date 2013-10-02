@@ -452,7 +452,7 @@ trait ControllerAdditions
     public function can($args = null)
     {
         $args = is_array($args) ? $args : func_get_args();
-        return $this->getCurrentAbility()->can($args);
+        return call_user_func_array([$this->getCurrentAbility(), 'can'], $args);
     }
 
     /**
@@ -464,7 +464,7 @@ trait ControllerAdditions
     public function cannot($args = null)
     {
         $args = is_array($args) ? $args : func_get_args();
-        return $this->getCurrentAbility()->cannot($args);
+        return call_user_func_array([$this->getCurrentAbility(), 'cannot'], $args);
     }
 
     // setParams() should be forbidden for security reasons ?
