@@ -3,13 +3,20 @@
     "description": "AuthorityController is an PHP authorization library for Laravel 4 which restricts what resources a given user is allowed to access.",
     "keywords": [
         "cancan",
+        "can",
         "authority",
         "acl",
         "role",
+        "permission",
+        "ability",
+        "allow",
+        "deny",
         "rbac",
         "authorization",
+        "authentication",
         "security",
-        "laravel"
+        "laravel",
+        "rails"
     ],
     "license": "MIT",
     "authors": [
