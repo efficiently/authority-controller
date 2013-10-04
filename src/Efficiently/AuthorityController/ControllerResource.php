@@ -195,13 +195,7 @@ class ControllerResource
 
     protected function getIdParam()
     {
-        // if(array_key_exists('idParam', $this->options)) {
-        //  return $this->params[ $this->options['idParam'] ];
-        // } else {
-        //  $idParam = $this->isParent() ? $this->getName()."_id" : "id";
-        //  return array_key_exists($idParam, $this->params) ? $this->params[$idParam] : null;
-        // }
-        return array_key_exists($this->getIdKey(), $this->params) ? $this->params[$this->getIdKey()] : null;
+        return array_key_exists($this->getIdKey(), $this->params) ? print_r($this->params[$this->getIdKey()], true) : "";
     }
 
     protected function isMemberAction()

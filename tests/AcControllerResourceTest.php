@@ -584,6 +584,19 @@ class AcControllerResourceTest extends AcTestCase
     }
 
 
+    // CVE-2012-5664
+    // Should always convert id param to string
+    public function testShouldAlwaysConvertIdParamToString()
+    {
+        $this->buildModel('Project');
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'the_project' => ['malicious' => 'I am']]));
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['idParam' => 'the_project']);
+
+        $this->assertInternalType('string', $this->invokeMethod($resource, 'getIdParam'));
+    }
+
+
     protected function buildModel($modelName, $modelAttributes = [])
     {
         $modelAttributes = $modelAttributes;
