@@ -226,9 +226,8 @@ class AcControllerResourceTest extends AcTestCase
         $this->params['action'] = "index";
         $this->setProperty($this->controller, 'project', 'some_project');
 
-        $this->controller->shouldReceive('authorize')->once()->with('index', 'Project')->andReturnUsing(function() {
-            throw new Efficiently\AuthorityController\Exceptions\AccessDenied;
-        });
+        $this->controller->shouldReceive('authorize')->once()->with('index', 'Project')
+            ->andThrow('Efficiently\AuthorityController\Exceptions\AccessDenied');
 
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
         $resource->authorizeResource();
@@ -243,9 +242,8 @@ class AcControllerResourceTest extends AcTestCase
         $this->params['action'] = "index";
         $this->setProperty($this->controller, 'category', 'some_category');
 
-        $this->controller->shouldReceive('authorize')->once()->with('show', 'some_category')->andReturnUsing(function() {
-            throw new Efficiently\AuthorityController\Exceptions\AccessDenied;
-        });
+        $this->controller->shouldReceive('authorize')->once()->with('show', 'some_category')
+            ->andThrow('Efficiently\AuthorityController\Exceptions\AccessDenied');
 
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, 'category', ['parent' => true]);
         $resource->authorizeResource();
@@ -260,9 +258,8 @@ class AcControllerResourceTest extends AcTestCase
         $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => '123']));
         $this->setProperty($this->controller, 'project', 'some_project');
 
-        $this->controller->shouldReceive('authorize')->once()->with('show', 'some_project')->andReturnUsing(function() {
-            throw new Efficiently\AuthorityController\Exceptions\AccessDenied;
-        });
+        $this->controller->shouldReceive('authorize')->once()->with('show', 'some_project')
+            ->andThrow('Efficiently\AuthorityController\Exceptions\AccessDenied');
 
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
         $resource->authorizeResource();
@@ -276,9 +273,8 @@ class AcControllerResourceTest extends AcTestCase
     {
         $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => '123']));
 
-        $this->controller->shouldReceive('authorize')->once()->with('show', 'Project')->andReturnUsing(function() {
-            throw new Efficiently\AuthorityController\Exceptions\AccessDenied;
-        });
+        $this->controller->shouldReceive('authorize')->once()->with('show', 'Project')
+            ->andThrow('Efficiently\AuthorityController\Exceptions\AccessDenied');
 
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
         $resource->authorizeResource();
