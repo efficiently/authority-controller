@@ -187,7 +187,7 @@ class AcControllerResourceTest extends AcTestCase
     public function testBuildCollectionWhenOnIndexAction()
     {
         $project = $this->mock('Project');
-        $project->shouldReceive('get')->andReturn("found_projects");
+        $project->shouldReceive('get')->once()->andReturn("found_projects");
 
         $this->params['action'] = "index";
 
@@ -198,11 +198,11 @@ class AcControllerResourceTest extends AcTestCase
         $this->assertEquals($this->getProperty($this->controller, 'projects'), "found_projects");
     }
 
-    // Should not use accessible_by when defining authorityRules through a Closure
+    // Should not use load collection when defining Authority rules through a Closure
     public function testShouldLoadCollectionResourceWhenDefiningAuthorityRulesThroughClosure()
     {
         $project = $this->mock('Project');
-        $project->shouldReceive('get')->andReturn("found_projects");
+        $project->shouldReceive('get')->never()->andReturn("found_projects");
 
         $this->params['action'] = "index";
 
@@ -226,7 +226,7 @@ class AcControllerResourceTest extends AcTestCase
         $this->params['action'] = "index";
         $this->setProperty($this->controller, 'project', 'some_project');
 
-        $this->controller->shouldReceive('authorize')->with('index', 'Project')->andReturnUsing(function() {
+        $this->controller->shouldReceive('authorize')->once()->with('index', 'Project')->andReturnUsing(function() {
             throw new Efficiently\AuthorityController\Exceptions\AccessDenied;
         });
 
@@ -243,7 +243,7 @@ class AcControllerResourceTest extends AcTestCase
         $this->params['action'] = "index";
         $this->setProperty($this->controller, 'category', 'some_category');
 
-        $this->controller->shouldReceive('authorize')->with('show', 'some_category')->andReturnUsing(function() {
+        $this->controller->shouldReceive('authorize')->once()->with('show', 'some_category')->andReturnUsing(function() {
             throw new Efficiently\AuthorityController\Exceptions\AccessDenied;
         });
 
@@ -260,7 +260,7 @@ class AcControllerResourceTest extends AcTestCase
         $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => '123']));
         $this->setProperty($this->controller, 'project', 'some_project');
 
-        $this->controller->shouldReceive('authorize')->with('show', 'some_project')->andReturnUsing(function() {
+        $this->controller->shouldReceive('authorize')->once()->with('show', 'some_project')->andReturnUsing(function() {
             throw new Efficiently\AuthorityController\Exceptions\AccessDenied;
         });
 
@@ -276,7 +276,7 @@ class AcControllerResourceTest extends AcTestCase
     {
         $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => '123']));
 
-        $this->controller->shouldReceive('authorize')->with('show', 'Project')->andReturnUsing(function() {
+        $this->controller->shouldReceive('authorize')->once()->with('show', 'Project')->andReturnUsing(function() {
             throw new Efficiently\AuthorityController\Exceptions\AccessDenied;
         });
 
@@ -303,7 +303,7 @@ class AcControllerResourceTest extends AcTestCase
     public function testShouldNotBuildASingleResourceWhenOnCustomCollectionActionEvenWithId()
     {
         $project = $this->mock('Project');
-        $project->shouldReceive('get')->andReturn(new Illuminate\Database\Eloquent\Collection);
+        $project->shouldReceive('get')->once()->andReturn(new Illuminate\Database\Eloquent\Collection);
 
         $this->params = array_merge($this->params, array_merge(['action' => 'sort', 'id' => '123']));
 
@@ -317,7 +317,7 @@ class AcControllerResourceTest extends AcTestCase
     public function testShouldLoadACollectionResourceWhenOnCustomActionWithNoIdParam()
     {
         $project = $this->mock('Project');
-        $project->shouldReceive('get')->andReturn("found_projects");
+        $project->shouldReceive('get')->once()->andReturn("found_projects");
 
         $this->params['action'] = "sort";
 
@@ -334,8 +334,8 @@ class AcControllerResourceTest extends AcTestCase
         $this->params = array_merge($this->params, array_merge(['action' => 'build', 'id' => '123']));
 
         $project = $this->mock('Project');
-        $project->shouldReceive('fill')->with(m::type('array'))->andReturn($project);
-        $project->shouldReceive('__toString')->andReturn("some_project");
+        $project->shouldReceive('fill')->with(m::type('array'))->once()->andReturn($project);
+        $project->shouldReceive('__toString')->once()->andReturn("some_project");
 
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['create' => 'build']);
         $resource->loadResource();
@@ -347,7 +347,7 @@ class AcControllerResourceTest extends AcTestCase
     public function testShouldNotTryToLoadResourceForOtherActionIfParamsIdIsUndefined()
     {
         $project = $this->mock('Project');
-        $project->shouldReceive('get')->andReturn(new Illuminate\Database\Eloquent\Collection);
+        $project->shouldReceive('get')->once()->andReturn(new Illuminate\Database\Eloquent\Collection);
 
         $this->params['action'] = "list";
 
@@ -361,7 +361,6 @@ class AcControllerResourceTest extends AcTestCase
     public function testShouldBeAParentResourceWhenNameIsProvidedWhichDoesntMatchController()
     {
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, 'category');
-
         $this->assertTrue($resource->isParent());
     }
 
@@ -369,7 +368,6 @@ class AcControllerResourceTest extends AcTestCase
     public function testShouldNotBeAParentResourceWhenNameIsProvidedWhichMatchesController()
     {
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, 'project');
-
         $this->assertFalse($resource->isParent());
     }
 
@@ -377,7 +375,6 @@ class AcControllerResourceTest extends AcTestCase
     public function testShouldBeParentIfSpecifiedInOptions()
     {
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, 'project', ['parent' => true]);
-
         $this->assertTrue($resource->isParent());
     }
 
