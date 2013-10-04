@@ -381,7 +381,167 @@ class AcControllerResourceTest extends AcTestCase
         $this->assertFalse($resource->isParent());
     }
 
-    // TODO: Port more tests, see: https://github.com/ryanb/cancan/blob/master/spec/cancan/controller_resource_spec.rb#L234
+    // Should have the specified resource_class if 'name' is passed to loadResource()
+    public function testShouldHaveTheSpecifiedResourceClassIfNameIsPassedToLoadResource()
+    {
+        // class Section {}
+        $this->mock("Section");
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, 'section');
+        $this->assertEquals($this->invokeMethod($resource, 'getResourceClass'), 'Section');
+    }
+
+    // Should load parent resource through proper id parameter
+    public function testShouldLoadParentResourceThroughProperIdParameter()
+    {
+        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $project = $this->buildModel('Project', $projectAttributes);
+
+        $this->params = array_merge(
+            $this->params,
+            ['controller' => 'categories', 'action' => 'index', 'project_id' => $project->id]
+        );
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, 'project');
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), $project);
+    }
+
+    // Should load resource through the association of another parent resource using instance variable
+    public function testShouldLoadResourceThroughTheAssociationOfAnotherParentResourceUsingInstanceVariable()
+    {
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => '123']));
+
+        $category = $this->mock('Category');
+        $this->setProperty($this->controller, 'category', $category);
+
+        $project = $this->mock('Project');
+        $category->shouldReceive('projects->getModel')->once()->andReturn($project);
+        $project->shouldReceive('where')->with('id', '123')->once()->andReturn($queryBuilder = m::mock());
+        $queryBuilder->shouldReceive('firstOrFail')->once()->andReturn('some_project');
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['through' => 'category']);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), 'some_project');
+    }
+
+    // Should load resource through the custom association name
+    public function testShouldLoadResourceThroughTheCustomAssociationName()
+    {
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => '123']));
+
+        $category = $this->mock('Category');
+        $this->setProperty($this->controller, 'category', $category);
+
+        $project = $this->mock('Project');
+        $category->shouldReceive('customProjects->getModel')->once()->andReturn($project);
+        $project->shouldReceive('where')->with('id', '123')->once()->andReturn($queryBuilder = m::mock());
+        $queryBuilder->shouldReceive('firstOrFail')->once()->andReturn('some_project');
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, [
+            'through' => 'category', 'throughAssociation' => 'customProjects'
+        ]);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), 'some_project');
+    }
+
+    // Should load resource through the association of another parent resource using method
+    public function testShouldLoadResourceThroughTheAssociationOfAnotherParentResourceUsingMethod()
+    {
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => '123']));
+
+        $category = $this->mock('Category');
+        $this->controller->shouldReceive('getCategory')->atLeast(1)->andReturn($category);
+
+        $project = $this->mock('Project');
+        $category->shouldReceive('projects->getModel')->once()->andReturn($project);
+        $project->shouldReceive('where')->with('id', '123')->once()->andReturn($queryBuilder = m::mock());
+        $queryBuilder->shouldReceive('firstOrFail')->once()->andReturn('some_project');
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['through' => 'category']);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), 'some_project');
+    }
+
+    // Should not load through parent resource if instance isn't loaded when shallow
+    public function testShouldNotLoadThroughParentResourceIfInstanceIsntLoadedWhenShallow()
+    {
+        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $project = $this->buildModel('Project', $projectAttributes);
+
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => $project->id]));
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['through' => 'category', 'shallow' => true]);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), $project);
+    }
+
+    // Should raise AccessDenied when attempting to load resource through null
+    public function testShouldRaiseAccessDeniedWhenAttemptingToLoadResourceThroughNull()
+    {
+        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $project = $this->buildModel('Project', $projectAttributes);
+
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => $project->id]));
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['through' => 'category']);
+
+        try {
+            $resource->loadResource();
+        } catch (Efficiently\AuthorityController\Exceptions\AccessDenied $exception) {
+            $this->assertEquals($exception->action, 'show');
+            $this->assertEquals($exception->subject, 'Project');
+
+            $this->assertNull($this->getProperty($this->controller, 'project'));
+            return; // see http://phpunit.de/manual/3.7/en/writing-tests-for-phpunit.html#writing-tests-for-phpunit.exceptions.examples.ExceptionTest4.php
+        }
+        $this->fail('An expected exception has not been raised.');
+    }
+
+    // Should authorize nested resource through parent association on index action
+    public function testShouldAuthorizeNestedResourceThroughParentAssociationOnIndexAction()
+    {
+        $this->params = array_merge($this->params, array_merge(['action' => 'index']));
+
+        $category = $this->mock('Category');
+
+        $this->setProperty($this->controller, 'category', $category);
+
+        $this->controller->shouldReceive('authorize')->once()->with('index', ['Project' => $category])->once()
+            ->andThrow("Efficiently\AuthorityController\Exceptions\AccessDenied");
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['through' => 'category']);
+
+        $this->setExpectedException("Efficiently\AuthorityController\Exceptions\AccessDenied");
+        $resource->authorizeResource();
+    }
+
+    // Should load through first matching if multiple are given
+    public function testShouldLoadThroughFirstMatchingIfMultipleAreGiven()
+    {
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => '123']));
+
+        $category = $this->mock('Category');
+
+        $this->setProperty($this->controller, 'category', $category);
+
+        $project = $this->mock('Project');
+        $category->shouldReceive('projects->getModel')->once()->andReturn($project);
+        $project->shouldReceive('where')->with('id', '123')->once()->andReturn($queryBuilder = m::mock());
+        $queryBuilder->shouldReceive('firstOrFail')->once()->andReturn('some_project');
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['through' => ['category', 'user']]);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), 'some_project');
+    }
+
+    // TODO: Port more tests, see: https://github.com/ryanb/cancan/blob/master/spec/cancan/controller_resource_spec.rb#L320
 
     protected function buildModel($modelName, $modelAttributes = [])
     {
@@ -389,8 +549,11 @@ class AcControllerResourceTest extends AcTestCase
         $mock = $this->mock($modelName);
         $model = $this->fillMock($mock, $modelAttributes);
 
-        $mock->shouldReceive('where->firstOrFail')->/*once()->*/andReturn($model);
-        $mock->shouldReceive('save')->/*once()->*/andReturn(true);
+        // $mock->shouldReceive('where->firstOrFail')->andReturn($model);
+        $mock->shouldReceive('where')->with('id', array_get($modelAttributes, 'id'))->andReturn($queryBuilder = m::mock());
+        $queryBuilder->shouldReceive('firstOrFail')->andReturn($model);
+
+        $mock->shouldReceive('save')->andReturn(true);
         $mock->shouldReceive('fill')->with(m::type('array'))->andReturnUsing(function($attributes) use($mock) {
             $this->fillMock($mock, $attributes);
             return $mock;
