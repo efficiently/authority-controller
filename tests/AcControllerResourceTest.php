@@ -596,6 +596,54 @@ class AcControllerResourceTest extends AcTestCase
         $this->assertInternalType('string', $this->invokeMethod($resource, 'getIdParam'));
     }
 
+    // Should load resource using custom query where('attribute_name', $attribute);
+    public function testShouldLoadResourceUsingCustomQuery()
+    {
+        $projectAttributes = ['id' => 2, 'name' => 'foo'];
+        $project = $this->buildModel('Project', $projectAttributes);
+
+        $project->shouldReceive('where')->with('id', $project->name)->once()->andReturn($queryBuilder = m::mock());
+        $queryBuilder->shouldReceive('firstOrFail')->once()->andReturn($project);
+
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => 'foo']));
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['findBy' => 'name']);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), $project);
+    }
+
+    // Should load resource using custom findByAttribute
+    public function testShouldLoadResourceUsingCustomFindByAttribute()
+    {
+        $projectAttributes = ['id' => 2, 'name' => 'foo'];
+        $project = $this->buildModel('Project', $projectAttributes);
+
+        $project->shouldReceive('findByName')->with($project->name)->once()->andReturn($project);
+
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => 'foo']));
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['findBy' => 'name']);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), $project);
+    }
+
+    // Should allow full find method to be passed into findBy option
+    public function testShouldAllowFullFindMethodToBePassedIntoFindByOption()
+    {
+        $projectAttributes = ['id' => 2, 'name' => 'foo'];
+        $project = $this->buildModel('Project', $projectAttributes);
+
+        $project->shouldReceive('findByName')->with($project->name)->once()->andReturn($project);
+
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => 'foo']));
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['findBy' => 'findByName']);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), $project);
+    }
 
     protected function buildModel($modelName, $modelAttributes = [])
     {

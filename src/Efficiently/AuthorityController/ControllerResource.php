@@ -158,8 +158,10 @@ class ControllerResource
         } else {
             $resourceModel = App::make($this->getResourceBase());
             if (array_key_exists('findBy', $this->options)) {
-                if (is_method_callable($resourceModel, "query") && is_method_callable($resourceModel->query(), "findBy".studly_case($this->options['findBy']))) {
+                if (is_method_callable($resourceModel, "findBy".studly_case($this->options['findBy']))) {
                     $resource = call_user_func_array([$resourceModel, "findBy".studly_case($this->options['findBy']) ], [$this->getIdParam()]);
+                } elseif (is_method_callable($resourceModel, camel_case($this->options['findBy']))) {
+                    $resource = call_user_func_array([$resourceModel, camel_case($this->options['findBy']) ], [$this->getIdParam()]);
                 } else {
                     $resource = $resourceModel->where($this->getResourcePrimaryKey(), $this->getIdParam())->firstOrFail();
                 }
