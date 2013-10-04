@@ -45,11 +45,18 @@ if (! function_exists('is_method_callable')) {
         if(method_exists($object, $methodName)) {
             return true;
         } elseif (is_a($object, '\Mockery\MockInterface') && ($expectationDirector = array_get($object->mockery_getExpectations(), $methodName))) {
-            foreach ($expectationDirector->getExpectations() as $expectation) {
+            foreach ((array) $expectationDirector->getExpectations() as $expectation) {
                 if ($expectation->isEligible()) {
                     return true;
                 }
             }
+        } elseif (is_string($object) && class_exists($object) && is_a(($instance=\App::make($object)), '\Mockery\MockInterface')) {
+            // Check if a mocked static method exists or not. You need to do:
+            //
+            //   $category = Mockery::mock('alias:Category', ['getProducts'=>'products']);
+            //   App::instance('Category', $category);
+            //   is_method_callable('Category', 'getProducts');//-> true
+            return is_method_callable($instance, $methodName);
         }
 
         return false;
