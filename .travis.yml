@@ -9,4 +9,4 @@ before_script:
   - mv composer.phar composer
   - ./composer install --dev
 
-script: ./vendor/bin/phpunit
+script: ./vendor/bin/phpunit tests
