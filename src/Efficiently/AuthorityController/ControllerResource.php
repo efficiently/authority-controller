@@ -143,9 +143,7 @@ class ControllerResource
     protected function setAttributes($resource)
     {
         if (array_key_exists('singleton', $this->options) && $this->getParentResource()) {
-            // FIXME: Use "$resource->setAttribute($this->getParentName(), $this->getParentResource());" instead ?
-            // Or "$resource->{studly_case($this->getParentName())}()->associate($this->getParentResource());"
-            call_user_func_array([$resource, "set".studly_case($this->getParentName())], [$this->getParentResource()]);
+            $resource->{camel_case($this->getParentName())}()->associate($this->getParentResource());
         }
         $resource->fill($this->getResourceParams());
 

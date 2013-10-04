@@ -562,6 +562,28 @@ class AcControllerResourceTest extends AcTestCase
 
     // TODO: Port more tests, see: https://github.com/ryanb/cancan/blob/master/spec/cancan/controller_resource_spec.rb#L320
 
+    // Should not build record through hasOne association with 'singleton' option because it can cause it to delete it in the database
+    public function testShouldNotBuildRecordThroughHasOneAssociationWithSingletonOptionBecauseItCanCauseItToDeleteItInTheDatabase()
+    {
+        $this->params = array_merge($this->params, array_merge(['action' => 'store', 'project' => ['name' => 'foobar']]));
+
+        $category = $this->mock('Category');
+        $this->setProperty($this->controller, 'category', $category);
+
+        $project = $this->buildModel('Project');
+        $project->shouldReceive('category->associate')->with($category)->once()->andReturnUsing(function () use($category, $project) {
+            $project->category = $category;
+            return $project;
+        });
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['through' => 'category', 'singleton' => true]);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project')->name, 'foobar');
+        $this->assertEquals($this->getProperty($this->controller, 'project')->category, $category);
+    }
+
+
     protected function buildModel($modelName, $modelAttributes = [])
     {
         $modelAttributes = $modelAttributes;
