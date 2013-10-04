@@ -13,7 +13,7 @@ class ControllerResource
     {
         $name = preg_replace("/^(.+)Controller$/", "$1", $controller);
 
-        return str_singular( snake_case( class_basename($name) ) );
+        return str_singular(snake_case(class_basename($name)));
     }
 
     public static function addBeforeFilter($controller, $method, $args)
@@ -102,7 +102,7 @@ class ControllerResource
     {
         if (! $this->isParent() && in_array($this->params['action'], $this->getCreateActions())) {
             return $this->buildResource();
-        } elseif ( $this->getIdParam() ||  array_key_exists('singleton', $this->options) ) {
+        } elseif ($this->getIdParam() ||  array_key_exists('singleton', $this->options)) {
             return $this->findResource();
         }
     }
@@ -145,7 +145,7 @@ class ControllerResource
         if (array_key_exists('singleton', $this->options) && $this->getParentResource()) {
             // FIXME: Use "$resource->setAttribute($this->getParentName(), $this->getParentResource());" instead ?
             // Or "$resource->{studly_case($this->getParentName())}()->associate($this->getParentResource());"
-            call_user_func_array([$resource, "set".studly_case( $this->getParentName() )], [$this->getParentResource()]);
+            call_user_func_array([$resource, "set".studly_case($this->getParentName())], [$this->getParentResource()]);
         }
         $resource->fill($this->getResourceParams());
 
@@ -160,7 +160,7 @@ class ControllerResource
         } else {
             $resourceModel = App::make($this->getResourceBase());
             if (array_key_exists('findBy', $this->options)) {
-                if ( is_method_callable($resourceModel, "query") && is_method_callable($resourceModel->query(), "findBy".studly_case($this->options['findBy'])) ) {
+                if (is_method_callable($resourceModel, "query") && is_method_callable($resourceModel->query(), "findBy".studly_case($this->options['findBy']))) {
                     $resource = call_user_func_array([$resourceModel, "findBy".studly_case($this->options['findBy']) ], [$this->getIdParam()]);
                 } else {
                     $resource = $resourceModel->where($this->getResourcePrimaryKey(), $this->getIdParam())->firstOrFail();
@@ -188,7 +188,7 @@ class ControllerResource
 
     protected function getIdKey()
     {
-        if ( array_key_exists('idParam', $this->options) ) {
+        if (array_key_exists('idParam', $this->options)) {
             return $this->options['idParam'];
         } else {
             return $this->isParent() ? $this->getName()."_id" : "id";
@@ -197,7 +197,7 @@ class ControllerResource
 
     protected function getIdParam()
     {
-        // if( array_key_exists('idParam', $this->options) ) {
+        // if(array_key_exists('idParam', $this->options)) {
         //  return $this->params[ $this->options['idParam'] ];
         // } else {
         //  $idParam = $this->isParent() ? $this->getName()."_id" : "id";
@@ -208,7 +208,7 @@ class ControllerResource
 
     protected function isMemberAction()
     {
-        return in_array( $this->params['action'], $this->getCreateActions() ) || array_key_exists('singleton', $this->options) || ( $this->getIdParam() && ! in_array( $this->params['action'], $this->getCollectionActions() ) );
+        return in_array($this->params['action'], $this->getCreateActions()) || array_key_exists('singleton', $this->options) || ($this->getIdParam() && ! in_array($this->params['action'], $this->getCollectionActions()));
     }
 
     protected function getResourceClass()
@@ -240,7 +240,7 @@ class ControllerResource
 
     protected function getResourceInstance()
     {
-        if ( $this->loadedInstance() ) {
+        if ($this->loadedInstance()) {
             $instanceName = $this->getInstanceName();
             if (property_exists($this->controller, $instanceName)) {
                 $reflection = new ReflectionProperty($this->controller, $instanceName);
@@ -264,7 +264,7 @@ class ControllerResource
 
     protected function getCollectionInstance()
     {
-        if ( $this->loadedInstance() ) {
+        if ($this->loadedInstance()) {
             $instanceName = str_plural($this->getInstanceName());
             if (property_exists($this->controller, $instanceName)) {
                 $reflection = new ReflectionProperty($this->controller, $instanceName);
@@ -290,7 +290,7 @@ class ControllerResource
                     $associationName = $this->options['throughAssociation'];
                     return get_classname($this->getParentResource()->$associationName()->getModel());
                 } else {
-                    $associationName = str_plural( camel_case( $this->getName() ) );
+                    $associationName = str_plural(camel_case($this->getName()));
                     return get_classname($this->getParentResource()->$associationName()->getModel());
                 }
             } elseif (array_key_exists('shallow', $this->options)) {
@@ -337,7 +337,7 @@ class ControllerResource
 
     protected function getResourceParams()
     {
-        if ( array_key_exists('class', $this->options) ) {
+        if (array_key_exists('class', $this->options)) {
             $paramsKey = $this->extractKey($this->options['class']);
             if (array_key_exists($paramsKey, $this->params)) {
                 return $this->params[$paramsKey];
@@ -349,14 +349,14 @@ class ControllerResource
 
     protected function getResourceParamsByNamespacedName()
     {
-        $paramsKey = $this->extractKey( $this->getNamespacedName() );
+        $paramsKey = $this->extractKey($this->getNamespacedName());
 
         return array_key_exists($paramsKey, $this->params) ? $this->params[$paramsKey] : [];
     }
 
     protected function getNamespace()
     {
-        return array_slice( preg_split("/\\\\|\//", $this->params['controller']), 0, -1);
+        return array_slice(preg_split("/\\\\|\//", $this->params['controller']), 0, -1);
     }
 
     protected function getNamespacedName()
@@ -364,7 +364,7 @@ class ControllerResource
         $namespaceName = null;
         $namespace = $this->getNamespace();
         if (! empty($namespace)) {
-            $namespaceName = studly_case( str_singular( implode("\\", array_flatten([$namespace, studly_case($this->getName())])) ) );
+            $namespaceName = studly_case(str_singular(implode("\\", array_flatten([$namespace, studly_case($this->getName())]))));
         }
 
         return class_exists($namespaceName) ? $namespaceName : $this->getName();
@@ -403,7 +403,7 @@ class ControllerResource
     protected function getCollectionActions()
     {
         $optionsCollection = array_key_exists('collection', $this->options) ? $this->options['collection'] : [];
-        return array_unique( array_flatten( array_merge(['index'], (array) $optionsCollection) ) );
+        return array_unique(array_flatten(array_merge(['index'], (array) $optionsCollection)));
     }
 
     // NOTICE: Against Rails, 'new' action is named 'create' in Laravel.
@@ -414,7 +414,7 @@ class ControllerResource
         $optionNew = array_key_exists('new', $this->options) ? $this->options['new'] : [];
         $optionCreate = array_key_exists('create', $this->options) ? $this->options['create'] : [];
         $options = array_merge((array) $optionNew, (array) $optionCreate);
-        return array_unique( array_flatten( array_merge(['new', 'create', 'store'], $options) ) );
+        return array_unique(array_flatten(array_merge(['new', 'create', 'store'], $options)));
     }
 
     // Alias of getCreateActions() to match CanCan API
@@ -425,7 +425,7 @@ class ControllerResource
 
     protected function extractKey($value)
     {
-        return str_replace( '/', '', snake_case(preg_replace('/\\\\/', '', $value)) );
+        return str_replace('/', '', snake_case(preg_replace('/\\\\/', '', $value)));
     }
 
     protected function getCollectionScope()
@@ -447,4 +447,5 @@ class ControllerResource
             return $collectionScope;
         }
     }
+
 }
