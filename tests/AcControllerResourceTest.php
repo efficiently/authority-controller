@@ -448,13 +448,32 @@ class AcControllerResourceTest extends AcTestCase
         $this->assertEquals($this->getProperty($this->controller, 'project'), 'some_project');
     }
 
+    // Should load resource through the association of another parent resource using getter method
+    public function testShouldLoadResourceThroughTheAssociationOfAnotherParentResourceUsingGetterMethod()
+    {
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => '123']));
+
+        $category = $this->mock('Category');
+        $this->controller->shouldReceive('getCategory')->atLeast(1)->andReturn($category);
+
+        $project = $this->mock('Project');
+        $category->shouldReceive('projects->getModel')->once()->andReturn($project);
+        $project->shouldReceive('where')->with('id', '123')->once()->andReturn($queryBuilder = m::mock());
+        $queryBuilder->shouldReceive('firstOrFail')->once()->andReturn('some_project');
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['through' => 'category']);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), 'some_project');
+    }
+
     // Should load resource through the association of another parent resource using method
     public function testShouldLoadResourceThroughTheAssociationOfAnotherParentResourceUsingMethod()
     {
         $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => '123']));
 
         $category = $this->mock('Category');
-        $this->controller->shouldReceive('getCategory')->atLeast(1)->andReturn($category);
+        $this->controller->shouldReceive('category')->atLeast(1)->andReturn($category);
 
         $project = $this->mock('Project');
         $category->shouldReceive('projects->getModel')->once()->andReturn($project);
