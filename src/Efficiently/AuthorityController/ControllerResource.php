@@ -155,12 +155,12 @@ class ControllerResource
     protected function findResource()
     {
         $resource = null;
-        if (array_key_exists('singleton', $this->options) && method_exists($this->getParentResource(), $this->getName())) {
+        if (array_key_exists('singleton', $this->options) && is_method_callable($this->getParentResource(), $this->getName())) {
             $resource = call_user_func([$this->getParentResource(), $this->getName()]);
         } else {
             $resourceModel = App::make($this->getResourceBase());
             if (array_key_exists('findBy', $this->options)) {
-                if ( method_exists($resourceModel, "query") && method_exists($resourceModel->query(), "findBy".studly_case($this->options['findBy'])) ) {
+                if ( is_method_callable($resourceModel, "query") && is_method_callable($resourceModel->query(), "findBy".studly_case($this->options['findBy'])) ) {
                     $resource = call_user_func_array([$resourceModel, "findBy".studly_case($this->options['findBy']) ], [$this->getIdParam()]);
                 } else {
                     $resource = $resourceModel->where($this->getResourcePrimaryKey(), $this->getIdParam())->firstOrFail();
@@ -323,12 +323,15 @@ class ControllerResource
     protected function fetchParent($name)
     {
         $name = camel_case($name);
-        if (method_exists($this->controller, "get".studly_case($name))) {
-            return call_user_func($this->controller, "get".studly_case($name));
-        } else if( method_exists($this->controller, $name) || property_exists($this->controller, $name) ) {
+        if (property_exists($this->controller, $name)) {
             $reflection = new ReflectionProperty($this->controller, $name);
             $reflection->setAccessible(true);
             return $reflection->getValue($this->controller);
+        } elseif (is_method_callable($this->controller, "get".studly_case($name))) {
+            $name ="get".studly_case($name);
+            return $this->controller->$name();
+        } elseif (is_method_callable($this->controller, $name)) {
+            return $this->controller->$name();
         }
     }
 
