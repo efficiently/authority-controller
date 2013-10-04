@@ -17,6 +17,44 @@ if (! function_exists('array_extract_options')) {
         return $options;
     }
 }
+if (! function_exists('get_classname')) {
+
+    /**
+     * Like get_class() function but compatible with Mockery and $object parameter is required
+     *
+     * @param  object|\Mockery\MockInterface $object
+     * @return string
+     */
+    function get_classname($object)
+    {
+        return $object instanceof \Mockery\MockInterface ? $object->mockery_getName() : get_class($object);
+    }
+}
+
+if (! function_exists('is_method_callable')) {
+
+    /**
+     * Like method_exists function but compatible with Mockery
+     *
+     * @param  mixed   $object
+     * @param  string  $methodName
+     * @return boolean
+     */
+    function is_method_callable($object, $methodName)
+    {
+        if(method_exists($object, $methodName)) {
+            return true;
+        } elseif (is_a($object, '\Mockery\MockInterface') && ($expectationDirector = array_get($object->mockery_getExpectations(), $methodName))) {
+            foreach ($expectationDirector->getExpectations() as $expectation) {
+                if ($expectation->isEligible()) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+}
 
 if (! function_exists('compact_property')) {
     function compact_property($instance, $properties)
