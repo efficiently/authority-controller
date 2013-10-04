@@ -528,7 +528,6 @@ class AcControllerResourceTest extends AcTestCase
         $this->params = array_merge($this->params, array_merge(['action' => 'index']));
 
         $category = $this->mock('Category');
-
         $this->setProperty($this->controller, 'category', $category);
 
         $this->controller->shouldReceive('authorize')->once()->with('index', ['Project' => $category])->once()
@@ -546,7 +545,6 @@ class AcControllerResourceTest extends AcTestCase
         $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => '123']));
 
         $category = $this->mock('Category');
-
         $this->setProperty($this->controller, 'category', $category);
 
         $project = $this->mock('Project');
@@ -560,7 +558,21 @@ class AcControllerResourceTest extends AcTestCase
         $this->assertEquals($this->getProperty($this->controller, 'project'), 'some_project');
     }
 
-    // TODO: Port more tests, see: https://github.com/ryanb/cancan/blob/master/spec/cancan/controller_resource_spec.rb#L320
+    // Should find record through hasOne association with 'singleton' option without id param
+    public function testShouldFindRecordThroughHasOneAssociationWithSingletonOptionWithoutIdParam()
+    {
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => null]));
+
+        $category = $this->mock('Category');
+        $this->setProperty($this->controller, 'category', $category);
+
+        $category->shouldReceive('project')->once()->andReturn('some_project');
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['through' => 'category', 'singleton' => true]);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), 'some_project');
+    }
 
     // Should not build record through hasOne association with 'singleton' option because it can cause it to delete it in the database
     public function testShouldNotBuildRecordThroughHasOneAssociationWithSingletonOptionBecauseItCanCauseItToDeleteItInTheDatabase()
@@ -583,6 +595,132 @@ class AcControllerResourceTest extends AcTestCase
         $this->assertEquals($this->getProperty($this->controller, 'project')->category, $category);
     }
 
+    // Should find record through hasOne association with 'singleton' and 'shallow' options
+    public function testShouldFindRecordThroughHasOneAssociationWithSingletonAndShallowOptions()
+    {
+        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $project = $this->buildModel('Project', $projectAttributes);
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => $project->id]));
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, [
+            'through' => 'category', 'singleton' => true, 'shallow' => true
+        ]);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), $project);
+    }
+
+    // Should build record through hasOne association with 'singleton' and 'shallow' options
+    public function testShouldBuildRecordThroughHasOneAssociationWithSingletonAndShallowOptions()
+    {
+        $this->buildModel('Project');
+        $this->params = array_merge($this->params, array_merge(['action' => 'store', 'project' => ['name' => 'foobar']]));
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, [
+            'through' => 'category', 'singleton' => true, 'shallow' => true
+        ]);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project')->name, 'foobar');
+    }
+
+    // Should only authorize 'show' action on parent resource
+    public function testShouldOnlyAuthorizeShowActionOnParentResource()
+    {
+        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $project = $this->buildModel('Project', $projectAttributes);
+
+        $this->params = array_merge($this->params, array_merge(['action' => 'create', 'project_id' => $project->id]));
+
+        $this->controller->shouldReceive('authorize')->with('show', $project)->once()
+            ->andThrow('Efficiently\AuthorityController\Exceptions\AccessDenied');
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, 'project', ['parent' => true]);
+
+        $this->setExpectedException("Efficiently\AuthorityController\Exceptions\AccessDenied");
+        $resource->loadAndAuthorizeResource();
+    }
+
+    // Should load the model using a custom class
+    public function testShouldLoadTheModelUsingACustomClass()
+    {
+        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $project = $this->buildModel('Project', $projectAttributes);
+
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => $project->id]));
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['class' => 'Project']);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), $project);
+    }
+
+    // Should load the model using a custom namespaced class
+    public function testShouldLoadTheModelUsingACustomNamespacedClass()
+    {
+        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $project = $this->buildModel('\Sub\Project', $projectAttributes);
+
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => $project->id]));
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['class' => '\Sub\Project']);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), $project);
+    }
+
+    // Should authorize based on resource name if class is false
+    public function testShouldAuthorizeBasedOnResourceNameIfClassIsFalse()
+    {
+        $this->params = array_merge($this->params, ['action' => 'show', 'id' => '123']);
+
+        $this->controller->shouldReceive('authorize')->once()->with('show', 'project')
+            ->andThrow('Efficiently\AuthorityController\Exceptions\AccessDenied');
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['class' =>  false]);
+
+        $this->setExpectedException("Efficiently\AuthorityController\Exceptions\AccessDenied");
+        $resource->authorizeResource();
+    }
+
+    // Should load and authorize using custom instance name
+    public function testShouldLoadAndAuthorizeUsingCustomInstanceName()
+    {
+        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $project = $this->buildModel('Project', $projectAttributes);
+
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => $project->id]));
+
+        $this->controller->shouldReceive('authorize')->once()->with('show', $project)
+            ->andThrow('Efficiently\AuthorityController\Exceptions\AccessDenied');
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['instanceName' => 'customProject']);
+
+        try {
+            $resource->loadAndAuthorizeResource();
+        } catch (Efficiently\AuthorityController\Exceptions\AccessDenied $e) {
+            $this->assertEquals($this->getProperty($this->controller, 'customProject'), $project);
+            return; // see http://phpunit.de/manual/3.7/en/writing-tests-for-phpunit.html#writing-tests-for-phpunit.exceptions.examples.ExceptionTest4.php
+        }
+        $this->fail('An expected exception has not been raised.');
+    }
+
+    // Should load resource using custom ID param
+    public function testShouldLoadResourceUsingCustomIDParam()
+    {
+        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $project = $this->buildModel('Project', $projectAttributes);
+
+        $project->shouldReceive('where')->with('the_project', $project->id)->once()->andReturn($queryBuilder = m::mock());
+        $queryBuilder->shouldReceive('firstOrFail')->once()->andReturn($project);
+
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'the_project' => $project->id]));
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['idParam' => 'the_project']);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), $project);
+    }
 
     // CVE-2012-5664
     // Should always convert id param to string
