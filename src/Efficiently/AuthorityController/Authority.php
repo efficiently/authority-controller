@@ -28,7 +28,7 @@ class Authority extends OriginalAuthority
     {
         if (is_object($resource)) {
             $resourceValue = $resource;
-            $resource = $this->getClass($resourceValue);
+            $resource = get_classname($resourceValue);
         } elseif (is_array($resource)) {
             // Nested resources can be passed through an associative array, this way conditions which are
             // dependent upon the association will work when using a class.
@@ -56,11 +56,11 @@ class Authority extends OriginalAuthority
         if ($this->cannot($action, $resource, $args)) {
             $resourceClass = $resource;
             if (is_object($resourceClass)) {
-                $resourceClass = $this->getClass($resourceClass);
+                $resourceClass = get_classname($resourceClass);
             } elseif (is_array($resourceClass)) {
                 $resourceClass = head(array_values($resourceClass));
                 if (is_object($resourceClass)) {
-                    $resourceClass = $this->getClass($resourceClass);
+                    $resourceClass = get_classname($resourceClass);
                 }
             }
             $message = $message ?: $this->getUnauthorizedMessage($action, $resourceClass);
@@ -245,11 +245,6 @@ class Authority extends OriginalAuthority
         foreach ($this->getDefaultAliasActions() as $name => $actions) {
             $this->addAlias($name, $actions);
         }
-    }
-
-    public function getClass($resourceClass)
-    {
-        return $resourceClass instanceof \Mockery\MockInterface ? $resourceClass->mockery_getName() : get_class($resourceClass);
     }
 
 }

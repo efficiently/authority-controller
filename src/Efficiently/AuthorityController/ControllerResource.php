@@ -35,7 +35,7 @@ class ControllerResource
         }
 
         $resourceOptions = array_except($options, ['only', 'except']);
-        $filterName = "controller.".$method.".".get_class($controller)."(".md5(json_encode($args)).")";
+        $filterName = "controller.".$method.".".get_classname($controller)."(".md5(json_encode($args)).")";
         if (! Route::getFilter($filterName)) {//needed ?
 
             Route::filter($filterName, function() use($controller, $method, $resourceOptions, $resourceName) {
@@ -288,10 +288,10 @@ class ControllerResource
                     return $this->getResourceClass();
                 } elseif (array_key_exists('throughAssociation', $this->options)) {
                     $associationName = $this->options['throughAssociation'];
-                    return get_class($this->getParentResource()->$associationName()->getModel());
+                    return get_classname($this->getParentResource()->$associationName()->getModel());
                 } else {
                     $associationName = str_plural( camel_case( $this->getName() ) );
-                    return get_class($this->getParentResource()->$associationName()->getModel());
+                    return get_classname($this->getParentResource()->$associationName()->getModel());
                 }
             } elseif (array_key_exists('shallow', $this->options)) {
                 return $this->getResourceClass();

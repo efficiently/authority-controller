@@ -12,7 +12,7 @@ class Parameters
     public function fillController($controller)
     {
         $router = App::make('router');
-        $controllerClass = \Authority::getClass($controller);
+        $controllerClass = get_classname($controller);
         $paramsFilterName = "controller.parameters.".$controllerClass;
 
         if (! $router->getFilter($paramsFilterName)) {
