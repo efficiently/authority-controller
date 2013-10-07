@@ -25,7 +25,7 @@ class AcControllerResourceTest extends AcTestCase
     // Should load the resource into an instance variable if $params['id'] is specified
     public function testLoadResourceInstanceWithParamId()
     {
-        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $projectAttributes = ['id' => 2];
         $project = $this->buildModel('Project', $projectAttributes);
         $this->params = array_merge($this->params, ['action' => 'show', 'id' => $project->id]);
 
@@ -52,7 +52,7 @@ class AcControllerResourceTest extends AcTestCase
     // Should properly load resource for namespaced controller
     public function testLoadResourceForNamespacedController()
     {
-        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $projectAttributes = ['id' => 2];
         $project = $this->buildModel('Project', $projectAttributes);
         $this->params = array_merge(
             $this->params,
@@ -68,7 +68,7 @@ class AcControllerResourceTest extends AcTestCase
     // Should attempt to load a resource with the same namespace as the controller when using \\ for namespace
     public function testLoadResourceWithSameNamespaceAsControllerWithBackslashedNamespace()
     {
-        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $projectAttributes = ['id' => 2];
         $project = $this->buildModel('MyEngine\Project', $projectAttributes);
         $this->params = array_merge(
             $this->params,
@@ -87,7 +87,7 @@ class AcControllerResourceTest extends AcTestCase
     {
         // namespace MyEngine;
         // class Project extends \Project {}
-        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $projectAttributes = ['id' => 2];
         $project = $this->buildModel('MyEngine\Project', $projectAttributes);
 
         $actionParams = ['my_engine_project' => ['name' => 'foobar']];
@@ -105,7 +105,7 @@ class AcControllerResourceTest extends AcTestCase
     // Should properly load resource for namespaced controller when using '::' for namespace
     public function testProperlyLoadResourceNamespacedControllerWithBackslashedNamespace()
     {
-        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $projectAttributes = ['id' => 2];
         $project = $this->buildModel('Project', $projectAttributes);
         $this->params = array_merge(
             $this->params,
@@ -123,7 +123,7 @@ class AcControllerResourceTest extends AcTestCase
     {
         // namespace Admin;
         // class Dashboard {}
-        $dashboardAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $dashboardAttributes = ['id' => 2];
         $dashboard = $this->buildModel('Admin\Dashboard', $dashboardAttributes);
 
         $this->authority->allow('index', 'admin/dashboard');
@@ -394,7 +394,7 @@ class AcControllerResourceTest extends AcTestCase
     // Should load parent resource through proper id parameter
     public function testShouldLoadParentResourceThroughProperIdParameter()
     {
-        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $projectAttributes = ['id' => 2];
         $project = $this->buildModel('Project', $projectAttributes);
 
         $this->params = array_merge(
@@ -489,7 +489,7 @@ class AcControllerResourceTest extends AcTestCase
     // Should not load through parent resource if instance isn't loaded when shallow
     public function testShouldNotLoadThroughParentResourceIfInstanceIsntLoadedWhenShallow()
     {
-        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $projectAttributes = ['id' => 2];
         $project = $this->buildModel('Project', $projectAttributes);
 
         $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => $project->id]));
@@ -503,7 +503,7 @@ class AcControllerResourceTest extends AcTestCase
     // Should raise AccessDenied when attempting to load resource through null
     public function testShouldRaiseAccessDeniedWhenAttemptingToLoadResourceThroughNull()
     {
-        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $projectAttributes = ['id' => 2];
         $project = $this->buildModel('Project', $projectAttributes);
 
         $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => $project->id]));
@@ -598,7 +598,7 @@ class AcControllerResourceTest extends AcTestCase
     // Should find record through hasOne association with 'singleton' and 'shallow' options
     public function testShouldFindRecordThroughHasOneAssociationWithSingletonAndShallowOptions()
     {
-        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $projectAttributes = ['id' => 2];
         $project = $this->buildModel('Project', $projectAttributes);
         $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => $project->id]));
 
@@ -627,7 +627,7 @@ class AcControllerResourceTest extends AcTestCase
     // Should only authorize 'show' action on parent resource
     public function testShouldOnlyAuthorizeShowActionOnParentResource()
     {
-        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $projectAttributes = ['id' => 2];
         $project = $this->buildModel('Project', $projectAttributes);
 
         $this->params = array_merge($this->params, array_merge(['action' => 'create', 'project_id' => $project->id]));
@@ -644,7 +644,7 @@ class AcControllerResourceTest extends AcTestCase
     // Should load the model using a custom class
     public function testShouldLoadTheModelUsingACustomClass()
     {
-        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $projectAttributes = ['id' => 2];
         $project = $this->buildModel('Project', $projectAttributes);
 
         $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => $project->id]));
@@ -658,7 +658,7 @@ class AcControllerResourceTest extends AcTestCase
     // Should load the model using a custom namespaced class
     public function testShouldLoadTheModelUsingACustomNamespacedClass()
     {
-        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $projectAttributes = ['id' => 2];
         $project = $this->buildModel('\Sub\Project', $projectAttributes);
 
         $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => $project->id]));
@@ -686,7 +686,7 @@ class AcControllerResourceTest extends AcTestCase
     // Should load and authorize using custom instance name
     public function testShouldLoadAndAuthorizeUsingCustomInstanceName()
     {
-        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $projectAttributes = ['id' => 2];
         $project = $this->buildModel('Project', $projectAttributes);
 
         $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => $project->id]));
@@ -708,7 +708,7 @@ class AcControllerResourceTest extends AcTestCase
     // Should load resource using custom ID param
     public function testShouldLoadResourceUsingCustomIDParam()
     {
-        $projectAttributes = ['id' => 2, 'name' => 'Test AuthorityController package', 'priority' => 1];
+        $projectAttributes = ['id' => 2];
         $project = $this->buildModel('Project', $projectAttributes);
 
         $project->shouldReceive('where')->with('the_project', $project->id)->once()->andReturn($queryBuilder = m::mock());
