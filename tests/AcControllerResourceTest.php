@@ -486,6 +486,24 @@ class AcControllerResourceTest extends AcTestCase
         $this->assertEquals($this->getProperty($this->controller, 'project'), 'some_project');
     }
 
+    // Should load resource through a custom method of the controller
+    public function testShouldLoadResourceThroughCustomMethodOfTheController()
+    {
+        $this->params = array_merge($this->params, array_merge(['action' => 'show', 'id' => '123']));
+
+        $this->controller->shouldReceive('getCurrentUser')->atLeast(1)->andReturn($this->user);
+
+        $project = $this->mock('Project');
+        $this->user->shouldReceive('projects->getModel')->once()->andReturn($project);
+        $project->shouldReceive('where')->with('id', '123')->once()->andReturn($queryBuilder = m::mock());
+        $queryBuilder->shouldReceive('firstOrFail')->once()->andReturn('some_project');
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['through' => 'getCurrentUser']);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'project'), 'some_project');
+    }
+
     // Should not load through parent resource if instance isn't loaded when shallow
     public function testShouldNotLoadThroughParentResourceIfInstanceIsntLoadedWhenShallow()
     {
