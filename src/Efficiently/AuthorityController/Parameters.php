@@ -9,6 +9,11 @@ class Parameters
 {
     protected $params = [];
 
+    /**
+     * Fill the $params property of the given Controller
+     *
+     * @param  \Illuminate\Routing\Controllers\Controller $controller
+     */
     public function fillController($controller)
     {
         $router = App::make('router');
@@ -21,66 +26,152 @@ class Parameters
                 $resourceParams = [];
                 list($resourceParams['controller'], $resourceParams['action']) = explode('@', $currentRoute->getAction());
                 $resourceController = $resourceParams['controller'];
+
+                // TODO: Remove this dependency
                 $resourceId = ControllerResource::getNameByController($resourceController);
-                $params = [$resourceId => Input::except('_method', '_token') ];
+                if (Input::has($resourceId)) {
+                    $params = Input::all();
+                } else {
+                    $specialInputKeys = $this->specialInputKeys();
+                    $params = [$resourceId => Input::except($specialInputKeys)] + Input::only($specialInputKeys);
+                }
                 $routeParams = $currentRoute->getParametersWithoutDefaults();
 
                 // In Laravel, unlike Rails, by default 'id' parameter of a 'Product' resource is 'products'
                 // And 'shop_id' parameter of a 'Shop' parent resource is 'shops'
-                // So we need to reaffect correct parameter name at ControllerResource initialization.
+                // So we need to reaffect correct parameter name before any controller's actions or filters.
                 // TODO: Handle the situation when Laravel Router doesn't provide 'products' or 'shops' params
                 $routeParamsParsed = [];
                 $keysToRemove = [];
-                if ( str_plural($resourceId) === last(array_keys($routeParams)) ) {
-                    $routeParamsParsed['id'] = array_pop($routeParams);
+                if ($resourceId === str_singular(last(array_keys($routeParams)))) {
+                    $id = last($routeParams);
+                    if(is_string($id) || is_numeric($id)) {
+                        $routeParamsParsed['id'] = array_pop($routeParams);
+                    }
                 }
-                foreach ($routeParams as $key => $routeParam) {
-                    $routeParamsParsed[str_singular($key).'_id'] = $routeParam;
-                    $keysToRemove[] = $key;
+
+                foreach ($routeParams as $key => $parentId) {
+                    if(is_string($parentId) || is_numeric($parentId)) {
+                        $routeParamsParsed[str_singular($key).'_id'] = $parentId;
+                        $keysToRemove[] = $key;
+                    }
                 }
                 $routeParams = array_except($routeParams, $keysToRemove);
 
-                // TODO: Escape or sanitize these params. Maybe an external filter/listener(event) can do the job.
-                $this->params = array_filter( array_merge( $params, $routeParams, $routeParamsParsed, $resourceParams ) );
+                /**
+                 * You can escape or purify these parameters. For example:
+                 *
+                 *   class ProductsController extends \BaseController
+                 *   {
+                 *       public function __construct()
+                 *       {
+                 *           $self = $this;
+                 *           $this->beforeFilter(function () use($self) {
+                 *               if(array_get($self->params, 'product')) {
+                 *                   $productParams = $this->yourPurifyOrEscapeMethod('product');
+                 *                   $self->params['product'] = $productParams;
+                 *               }
+                 *           });
+                 *       }
+                 *   }
+                 *
+                 */
+                $this->params = array_filter(array_merge($params, $routeParams, $routeParamsParsed, $resourceParams));
 
-                $reflection = new ReflectionProperty($controller, 'params');
-                $reflection->setAccessible(true);
-                $reflection->setValue($controller, $this->params);
+                if (property_exists($controller, 'params')) {
+                    $reflection = new ReflectionProperty($controller, 'params');
+                    $reflection->setAccessible(true);
+                    $reflection->setValue($controller, $this->params);
+                } else {
+                    $controller->params = $this->params;
+                }
             });
 
             $controller->paramsBeforeFilter($paramsFilterName);
         }
     }
 
-    protected function add($key, $value)
-    {
-        return $this->params[$key] = $value;
-    }
-
-    public function all()
-    {
-        return $this->params;
-    }
-
+    /**
+     * Get an item from the parameters.
+     *
+     * @param  string $key
+     * @param  mixed  $default
+     * @return mixed
+     */
     public function get($key, $default = null)
     {
         return $this->has($key) ? $this->params[$key] : $default;
     }
 
+    /**
+     * Determine if the request contains a given parameter item.
+     *
+     * @param  string|array  $key
+     * @return bool
+     */
     public function has($key)
     {
         return array_key_exists($key, $this->params);
     }
 
-    public function only($args = null)
+    /**
+     * Get all of the parameters for the request.
+     *
+     * @return array
+     */
+    public function all()
     {
-        $args = is_array( $args ) ? $args : func_get_args();
-        return array_only($this->params, $args);
+        return $this->params;
     }
 
-    public function except($args = null)
+    /**
+     * Get a subset of the items from the parameters.
+     *
+     * @param  array  $keys
+     * @return array
+     */
+    public function only($keys = null)
     {
-        $args = is_array( $args ) ? $args : func_get_args();
-        return array_except($this->params, $args);
+        $keys = is_array( $keys ) ? $keys : func_get_args();
+        return array_only($this->params, $keys);
     }
+
+    /**
+     * Get all of the input except for a specified array of items.
+     *
+     * @param  array  $keys
+     * @return array
+     */
+    public function except($keys = null)
+    {
+        $keys = is_array( $keys ) ? $keys : func_get_args();
+        return array_except($this->params, $keys);
+    }
+
+    /**
+     * Adds an item to the parameters.
+     *
+     * @param string $key    Key to add value to.
+     * @param mixed  $value  New data.
+     *
+     * @return mixed
+     */
+    protected function add($key, $value)
+    {
+        return $this->params[$key] = $value;
+    }
+
+    /**
+     * Returns all inputs keys who starts with an underscore character (<code>_</code>).
+     * For exmaple '_method' and '_token' inputs
+     *
+     * @param  array $inputKeyss
+     * @return array
+     */
+    protected function specialInputKeys($inputKeys = [])
+    {
+        $inputKeys = $inputKeys ?: array_keys(Input::all());
+        return array_filter($inputKeys, function($value) { return is_string($value) ? starts_with($value, '_') : false; });
+    }
+
 }
