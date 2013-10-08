@@ -79,7 +79,7 @@ class AcProjectsController extends AcBaseController
      */
     public function show($id)
     {
-        // $this->acProject = $this->acProjectModel->findOrFail($id);//test
+        // $this->acProject = $this->acProjectModel->findOrFail($id);
 
         return View::make('ac_projects.show', compact_property($this, 'acProject'));
     }
@@ -130,6 +130,7 @@ class AcProjectsController extends AcBaseController
     public function destroy($id)
     {
         // $this->acProjectModel->find($id)->delete();
+
         $this->acProject->delete();
 
         return Redirect::route('ac_projects.index');
