@@ -47,6 +47,42 @@ class AcParametersTest extends AcTestCase
         $this->assertEquals($this->getProperty($controller, 'params')['project'], $input);
     }
 
+    public function testExtractResourceFromInputWithSingularControllerAndRoute()
+    {
+        $input = ['project' => ['name' => 'foo']];
+        $parameters = $this->parameters;
+
+        $controllerName = "ProjectController";
+        Route::resource('project', $controllerName);
+        $controller = $this->mockController($controllerName);
+
+        $this->call('POST', '/project', $input);// store action
+
+        $this->assertArrayHasKey('project', $this->getProperty($parameters, 'params'));
+        $this->assertEquals($this->getProperty($parameters, 'params')['project'], $input['project']);
+
+        $this->assertArrayHasKey('project', $this->getProperty($controller, 'params'));
+        $this->assertEquals($this->getProperty($controller, 'params')['project'], $input['project']);
+    }
+
+    public function testResolveResourceFromInputWithSingularControllerAndRoute()
+    {
+        $input = ['name' => 'foo'];
+        $parameters = $this->parameters;
+
+        $controllerName = "ProjectController";
+        Route::resource('project', $controllerName);
+        $controller = $this->mockController($controllerName);
+
+        $this->call('POST', '/project', $input);// store action
+
+        $this->assertArrayHasKey('project', $this->getProperty($parameters, 'params'));
+        $this->assertEquals($this->getProperty($parameters, 'params')['project'], $input);
+
+        $this->assertArrayHasKey('project', $this->getProperty($controller, 'params'));
+        $this->assertEquals($this->getProperty($controller, 'params')['project'], $input);
+    }
+
     public function testResolveActionAndControllerNamesFromRequest()
     {
         $input = ['project' => ['name' => 'foo']];
@@ -92,6 +128,80 @@ class AcParametersTest extends AcTestCase
         $controller = $this->mockController($controllerName);
 
         $this->call('GET', '/projects/5/tasks/2');// show action of task resource
+
+        $this->assertArrayHasKey('project_id', $this->getProperty($parameters, 'params'));
+        $this->assertEquals($this->getProperty($parameters, 'params')['project_id'], '5');
+
+        $this->assertArrayHasKey('project_id', $this->getProperty($controller, 'params'));
+        $this->assertEquals($this->getProperty($controller, 'params')['project_id'], '5');
+
+
+        $this->assertArrayHasKey('id', $this->getProperty($parameters, 'params'));
+        $this->assertEquals($this->getProperty($parameters, 'params')['id'], '2');
+
+        $this->assertArrayHasKey('id', $this->getProperty($controller, 'params'));
+        $this->assertEquals($this->getProperty($controller, 'params')['id'], '2');
+    }
+
+    public function testResolveResourceIdFromRequestWithSingularController()
+    {
+        $parameters = $this->parameters;
+
+        $controllerName = "ProjectController";
+        Route::resource('projects', $controllerName);
+        $controller = $this->mockController($controllerName);
+
+        $this->call('GET', '/projects/6');// show action
+
+        $this->assertArrayHasKey('id', $this->getProperty($parameters, 'params'));
+        $this->assertEquals($this->getProperty($parameters, 'params')['id'], '6');
+
+        $this->assertArrayHasKey('id', $this->getProperty($controller, 'params'));
+        $this->assertEquals($this->getProperty($controller, 'params')['id'], '6');
+    }
+
+    public function testResolveResourceIdFromRequestWithSingularRoute()
+    {
+        $parameters = $this->parameters;
+
+        Route::resource('project', $this->controllerName);
+        $controller = $this->mockController();
+
+        $this->call('GET', '/projects/7');// show action
+
+        $this->assertArrayHasKey('id', $this->getProperty($parameters, 'params'));
+        $this->assertEquals($this->getProperty($parameters, 'params')['id'], '7');
+
+        $this->assertArrayHasKey('id', $this->getProperty($controller, 'params'));
+        $this->assertEquals($this->getProperty($controller, 'params')['id'], '7');
+    }
+
+    public function testResolveResourceIdFromRequestWithSingularControllerAndRoute()
+    {
+        $parameters = $this->parameters;
+
+        $controllerName = "ProjectController";
+        Route::resource('project', $controllerName);
+        $controller = $this->mockController($controllerName);
+
+        $this->call('GET', '/project/8');// show action
+
+        $this->assertArrayHasKey('id', $this->getProperty($parameters, 'params'));
+        $this->assertEquals($this->getProperty($parameters, 'params')['id'], '8');
+
+        $this->assertArrayHasKey('id', $this->getProperty($controller, 'params'));
+        $this->assertEquals($this->getProperty($controller, 'params')['id'], '8');
+    }
+
+    public function testResolveResourceAndParentResourceIdsFromRequestWithSingularControllerAndRoute()
+    {
+        $parameters = $this->parameters;
+
+        $controllerName = "TaskController";
+        Route::resource('project.task', $controllerName);
+        $controller = $this->mockController($controllerName);
+
+        $this->call('GET', '/project/5/task/2');// show action of task resource
 
         $this->assertArrayHasKey('project_id', $this->getProperty($parameters, 'params'));
         $this->assertEquals($this->getProperty($parameters, 'params')['project_id'], '5');

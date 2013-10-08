@@ -40,7 +40,6 @@ class Parameters
                 // In Laravel, unlike Rails, by default 'id' parameter of a 'Product' resource is 'products'
                 // And 'shop_id' parameter of a 'Shop' parent resource is 'shops'
                 // So we need to reaffect correct parameter name before any controller's actions or filters.
-                // TODO: Handle the situation when Laravel Router doesn't provide 'products' or 'shops' params
                 $routeParamsParsed = [];
                 $keysToRemove = [];
                 if ($resourceId === str_singular(last(array_keys($routeParams)))) {
