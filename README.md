@@ -82,7 +82,6 @@ This will create the following tables
 To utilize these tables, you can add the following methods to your `User` model. You will also need to create Role and Permission Model stubs.
 
 ```php
-
     //app/models/User.php
     public function roles()
     {
