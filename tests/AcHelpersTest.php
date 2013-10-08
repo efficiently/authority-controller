@@ -1,5 +1,4 @@
 <?php
-// require_once __DIR__.'/../../../../vendor/phpunit/phpunit/PHPUnit/Framework/Assert/Functions.php';
 
 class AcHelpersTest extends AcTestCase
 {
