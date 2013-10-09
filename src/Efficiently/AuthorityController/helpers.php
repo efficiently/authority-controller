@@ -31,7 +31,7 @@ if (! function_exists('get_classname')) {
     }
 }
 
-if (! function_exists('is_method_callable')) {
+if (! function_exists('respond_to')) {
 
     /**
      * Like method_exists function but compatible with Mockery
@@ -40,7 +40,7 @@ if (! function_exists('is_method_callable')) {
      * @param  string  $methodName
      * @return boolean
      */
-    function is_method_callable($object, $methodName)
+    function respond_to($object, $methodName)
     {
         if(method_exists($object, $methodName)) {
             return true;
@@ -55,8 +55,8 @@ if (! function_exists('is_method_callable')) {
             //
             //   $category = Mockery::mock('alias:Category', ['getProducts'=>'products']);
             //   App::instance('Category', $category);
-            //   is_method_callable('Category', 'getProducts');//-> true
-            return is_method_callable($instance, $methodName);
+            //   respond_to('Category', 'getProducts');//-> true
+            return respond_to($instance, $methodName);
         }
 
         return false;
