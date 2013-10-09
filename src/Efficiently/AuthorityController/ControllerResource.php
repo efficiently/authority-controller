@@ -39,9 +39,15 @@ class ControllerResource
         if (! Route::getFilter($filterName)) {//needed ?
 
             Route::filter($filterName, function() use($controller, $method, $resourceOptions, $resourceName) {
-                $controllerResource = new ControllerResource($controller, $resourceName, $resourceOptions);
 
-                call_user_func([$controllerResource, $method]);
+                $controllerResourceClass = '\Efficiently\AuthorityController\ControllerResource';
+                App::bindIf($controllerResourceClass, function ($app, $parameters) {
+                    list($controller, $resourceName, $resourceOptions) = $parameters;
+                    return new ControllerResource($controller, $resourceName, $resourceOptions);
+                });
+                $controllerResource = App::make($controllerResourceClass, [$controller, $resourceName, $resourceOptions]);
+
+                $controllerResource->$method();
             });
 
             call_user_func_array([$controller, $beforeFilterMethod], [ $filterName, array_only($options, ['only', 'except']) ]);
