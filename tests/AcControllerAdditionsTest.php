@@ -91,6 +91,14 @@ class AcControllerAdditionsTest extends AcTestCase
         $controller->loadAndAuthorizeResource('project', ['foo' => 'bar']);
     }
 
+    // loadAndAuthorizeResource() with 'prepend' should prepend the before filter
+    public function testLoadAndAuthorizeResourceWithPrependShouldPrependTheBeforeFilter()
+    {
+        $this->controller->shouldReceive('prependBeforeFilter')->once();
+
+        $this->controller->loadAndAuthorizeResource(['foo' => 'bar', 'prepend' => true]);
+    }
+
     // authorizeResource() should setup a before filter which passes call to ControllerResource
     public function testAuthorizeResourceShouldSetupABeforeFilterWhichPassesCallToControllerResource()
     {

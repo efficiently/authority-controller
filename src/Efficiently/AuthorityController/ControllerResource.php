@@ -27,7 +27,7 @@ class ControllerResource
         }
         $options = array_extract_options($args);
 
-        if (array_key_exists('prepend', $options)) {
+        if (array_key_exists('prepend', $options) && $options['prepend'] === true) {
             $beforeFilterMethod = "prependBeforeFilter";
             unset($options['prepend']);
         } else {
