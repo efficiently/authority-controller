@@ -1,4 +1,4 @@
-AuthorityController [![Build Status](https://secure.travis-ci.org/efficiently/authority-controller.png?branch=master)](http://travis-ci.org/efficiently/authority-controller)
+AuthorityController [![Build Status](https://travis-ci.org/efficiently/authority-controller.png?branch=master)](http://travis-ci.org/efficiently/authority-controller)
 ===================
 
 AuthorityController is an PHP authorization library for [Laravel 4](http://laravel.com) which restricts what resources a given user is allowed to access.
