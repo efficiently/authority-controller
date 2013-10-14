@@ -36,13 +36,13 @@ class AcControllerAdditionsTest extends AcTestCase
     // Should have a getCurrentAuthority() method which generates an authority for the current user
     public function testShouldHaveACurrentAuthorityMethodWhichGeneratesAnAuthorityForTheCurrentUser()
     {
-        $this->assertInstanceOf("\Efficiently\AuthorityController\Authority", $this->controller->getCurrentAuthority());
+        $this->assertInstanceOf("Efficiently\AuthorityController\Authority", $this->controller->getCurrentAuthority());
     }
 
     // Should provide a can() and cannot() methods which go through the current authority
     public function testShouldProvideACanAndCannotMethodsWhichGoThroughTheCurrentAuthority()
     {
-        $this->assertInstanceOf("\Efficiently\AuthorityController\Authority", $this->controller->getCurrentAuthority());
+        $this->assertInstanceOf("Efficiently\AuthorityController\Authority", $this->controller->getCurrentAuthority());
         $this->assertFalse($this->controller->can('foo', 'bar'));
         $this->assertTrue($this->controller->cannot('foo', 'bar'));
     }
@@ -51,7 +51,7 @@ class AcControllerAdditionsTest extends AcTestCase
     public function testLoadAndAuthorizeResourceShouldSetupABeforeFilterWhichPassesCallToControllerResource()
     {
         $controller = $this->controller;
-        $controllerResourceClass = '\Efficiently\AuthorityController\ControllerResource';
+        $controllerResourceClass = 'Efficiently\AuthorityController\ControllerResource';
         App::bind($controllerResourceClass, function ($app, $parameters) use ($controllerResourceClass, $controller) {
             $this->assertEquals($parameters, [$controller, null, ['foo' => 'bar']]);
             $controllerResource = m::mock($controllerResourceClass, $parameters);
@@ -73,7 +73,7 @@ class AcControllerAdditionsTest extends AcTestCase
     public function testloadAndAuthorizeResourceShouldProperlyPassFirstArgumentAsTheResourceName()
     {
         $controller = $this->controller;
-        $controllerResourceClass = '\Efficiently\AuthorityController\ControllerResource';
+        $controllerResourceClass = 'Efficiently\AuthorityController\ControllerResource';
         App::bind($controllerResourceClass, function ($app, $parameters) use ($controllerResourceClass, $controller) {
             $this->assertEquals($parameters, [$controller, 'project', ['foo' => 'bar']]);
             $controllerResource = m::mock($controllerResourceClass, $parameters);
@@ -103,7 +103,7 @@ class AcControllerAdditionsTest extends AcTestCase
     public function testAuthorizeResourceShouldSetupABeforeFilterWhichPassesCallToControllerResource()
     {
         $controller = $this->controller;
-        $controllerResourceClass = '\Efficiently\AuthorityController\ControllerResource';
+        $controllerResourceClass = 'Efficiently\AuthorityController\ControllerResource';
         App::bind($controllerResourceClass, function ($app, $parameters) use ($controllerResourceClass, $controller) {
             $this->assertEquals($parameters, [$controller, null, ['foo' => 'bar']]);
             $controllerResource = m::mock($controllerResourceClass, $parameters);
@@ -125,7 +125,7 @@ class AcControllerAdditionsTest extends AcTestCase
     public function testLoadResourceShouldSetupABeforeFilterWhichPassesCallToControllerResource()
     {
         $controller = $this->controller;
-        $controllerResourceClass = '\Efficiently\AuthorityController\ControllerResource';
+        $controllerResourceClass = 'Efficiently\AuthorityController\ControllerResource';
         App::bind($controllerResourceClass, function ($app, $parameters) use ($controllerResourceClass, $controller) {
             $this->assertEquals($parameters, [$controller, null, ['foo' => 'bar']]);
             $controllerResource = m::mock($controllerResourceClass, $parameters);

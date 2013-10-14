@@ -39,11 +39,11 @@ class AuthorityControllerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app['parameters'] = $this->app->share(function($app) {
+        $this->app['parameters'] = $this->app->share(function ($app) {
             return new Parameters;
         });
 
-        $this->app['authority'] = $this->app->share(function($app) {
+        $this->app['authority'] = $this->app->share(function ($app) {
             $user = $app['auth']->user();
             $authority = new Authority($user);
             $fn = $app['config']->get('authority-controller::initialize', null);
@@ -54,6 +54,12 @@ class AuthorityControllerServiceProvider extends ServiceProvider
 
             return $authority;
         });
+
+        $this->app->bind('Efficiently\AuthorityController\ControllerResource', function ($app, $parameters) {
+            list($controller, $resourceName, $resourceOptions) = $parameters;
+            return new ControllerResource($controller, $resourceName, $resourceOptions);
+        });
+
     }
 
     /**

@@ -36,17 +36,11 @@ class ControllerResource
 
         $resourceOptions = array_except($options, ['only', 'except']);
         $filterName = "controller.".$method.".".get_classname($controller)."(".md5(json_encode($args)).")";
-        if (! Route::getFilter($filterName)) {//needed ?
-
+        if (! Route::getFilter($filterName)) {
             Route::filter($filterName, function() use($controller, $method, $resourceOptions, $resourceName) {
-
-                $controllerResourceClass = '\Efficiently\AuthorityController\ControllerResource';
-                App::bindIf($controllerResourceClass, function ($app, $parameters) {
-                    list($controller, $resourceName, $resourceOptions) = $parameters;
-                    return new ControllerResource($controller, $resourceName, $resourceOptions);
-                });
-                $controllerResource = App::make($controllerResourceClass, [$controller, $resourceName, $resourceOptions]);
-
+                $controllerResource = App::make('Efficiently\AuthorityController\ControllerResource', [
+                    $controller, $resourceName, $resourceOptions
+                ]);
                 $controllerResource->$method();
             });
 
