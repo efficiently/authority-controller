@@ -117,7 +117,7 @@ In your `app/controllers/BaseController.php` file:
 ```php
 class BaseController extends \Controller
 {
-    use Efficiently\AuthorityControllerResource\ControllerAdditions;
+    use Efficiently\AuthorityController\ControllerAdditions;
     //code...
 }
 ```
