@@ -7,7 +7,7 @@ All permissions are defined in a single location:
 
     app/config/packages/efficiently/authority-controller/config.php
 
-and not duplicated across controllers, views, and database queries.
+and not duplicated across controllers, routes, views, and database queries.
 
 #### Origins and Inspirations
 
@@ -111,7 +111,7 @@ To utilize these tables, you can add the following methods to your `User` model.
     class Permission extends Eloquent {}
 ```
 
-##### Init resources filter and controller methods
+##### Init resource filters and controller methods
 In your `app/controllers/BaseController.php` file:
 
 ```php
