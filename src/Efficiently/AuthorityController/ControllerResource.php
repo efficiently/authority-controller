@@ -19,7 +19,7 @@ class ControllerResource
     public static function addBeforeFilter($controller, $method, $args)
     {
         $method = last(explode('::', $method));
-        $resourceName = array_key_exists(0, $args) ? array_shift($args) : null;
+        $resourceName = array_key_exists(0, $args) ? snake_case(array_shift($args)) : null;
 
         $lastArg = last($args);
         if (is_array($lastArg)) {
