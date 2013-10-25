@@ -17,6 +17,32 @@ class AcParametersTest extends AcTestCase
         App::instance('Params', $this->parameters);
     }
 
+    public function testAddParameter()
+    {
+        Params::add('key', 'value');
+        $this->assertEquals(Params::get('key'), 'value');
+    }
+
+    public function testAddParameterWithDotKeys()
+    {
+        Params::add('key.subkey', 'value');
+        $this->assertEquals(Params::get('key.subkey'), 'value');
+    }
+
+    public function testOnlyParameters()
+    {
+        Params::add('key1', 'value1');
+        Params::add('key2', 'value2');
+        $this->assertEquals(Params::only('key1'), ['key1' => 'value1']);
+    }
+
+    public function testExceptParameters()
+    {
+        Params::add('key1', 'value1');
+        Params::add('key2', 'value2');
+        $this->assertEquals(Params::except('key2'), ['key1' => 'value1']);
+    }
+
     public function testExtractResourceFromInput()
     {
         $input = ['project' => ['name' => 'foo']];

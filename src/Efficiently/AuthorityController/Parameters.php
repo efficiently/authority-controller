@@ -99,7 +99,7 @@ class Parameters
      */
     public function get($key, $default = null)
     {
-        return $this->has($key) ? $this->params[$key] : $default;
+        return array_get($this->params, $key, $default);
     }
 
     /**
@@ -110,7 +110,7 @@ class Parameters
      */
     public function has($key)
     {
-        return array_key_exists($key, $this->params);
+        return !!array_get($this->params, $key);
     }
 
     /**
@@ -155,9 +155,9 @@ class Parameters
      *
      * @return mixed
      */
-    protected function add($key, $value)
+    public function add($key, $value)
     {
-        return $this->params[$key] = $value;
+        return array_set($this->params, $key, $value);
     }
 
     /**
