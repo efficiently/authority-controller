@@ -25,10 +25,9 @@ class Parameters
                 $currentRoute = $router->getCurrentRoute();
                 $resourceParams = [];
                 list($resourceParams['controller'], $resourceParams['action']) = explode('@', $currentRoute->getAction());
-                $resourceController = $resourceParams['controller'];
+                $resourceParams['controller'] = $this->normalizeControllerName($resourceParams['controller']);
 
-                // TODO: Remove this dependency
-                $resourceId = ControllerResource::getNameByController($resourceController);
+                $resourceId = str_singular($resourceParams['controller']);
                 if (Input::has($resourceId)) {
                     $params = Input::all();
                 } else {
@@ -171,6 +170,16 @@ class Parameters
     {
         $inputKeys = $inputKeys ?: array_keys(Input::all());
         return array_filter($inputKeys, function($value) { return is_string($value) ? starts_with($value, '_') : false; });
+    }
+
+    /**
+     * @param  string $controller
+     * @return string
+     */
+    protected function normalizeControllerName($controller)
+    {
+        $name = preg_replace("/^(.+)Controller$/", "$1", $controller);
+        return str_plural(snake_case(class_basename($name)));
     }
 
 }

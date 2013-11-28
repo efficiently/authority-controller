@@ -121,14 +121,14 @@ class AcParametersTest extends AcTestCase
         $this->assertEquals($this->getProperty($parameters, 'params')['action'], 'store');
 
         $this->assertArrayHasKey('controller', $this->getProperty($parameters, 'params'));
-        $this->assertEquals($this->getProperty($parameters, 'params')['controller'], 'ProjectsController');
+        $this->assertEquals($this->getProperty($parameters, 'params')['controller'], 'projects');
 
 
         $this->assertArrayHasKey('action', $this->getProperty($controller, 'params'));
         $this->assertEquals($this->getProperty($controller, 'params')['action'], 'store');
 
         $this->assertArrayHasKey('controller', $this->getProperty($controller, 'params'));
-        $this->assertEquals($this->getProperty($controller, 'params')['controller'], 'ProjectsController');
+        $this->assertEquals($this->getProperty($controller, 'params')['controller'], 'projects');
     }
 
     public function testResolveResourceIdFromRequest()
