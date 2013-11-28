@@ -9,7 +9,7 @@ return [
         // $authority->addAlias('moderate', ['read', 'update', 'delete']);
         //
         // See the wiki of CanCan for details:
-        // https://github.com/ryanb/cancan/wiki/Action-Aliases
+        // https://github.com/efficiently/authority-controller/wiki/Action-aliases
         //
         // Define abilities for the passed in user here. For example:
         //
@@ -38,7 +38,7 @@ return [
         //  });
         //
         // See the wiki of CanCan for details:
-        // https://github.com/ryanb/cancan/wiki/Defining-Abilities
+        // https://github.com/efficiently/authority-controller/wiki/Defining-Authority-rules
         //
         // Loop through each of the users permissions, and create rules:
         //
