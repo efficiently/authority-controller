@@ -271,6 +271,14 @@ class ProductsController extends \BaseController
 }
 ```
 
+Changelog
+---------
+#### 0.10.0
+* Non backwards compatible: `Params::get('controller')` behaviour is now like Rails. It returns controller name in snake_case and in plural.
+
+#### 0.9.0
+* First stable release
+
 Missing features
 ----------------
 1. In `ControllerResource` class, the [`#load_collection`](https://github.com/ryanb/cancan/blob/1.6.10/lib/cancan/controller_resource.rb#L80) method, who uses in the `User` model [`#accessible_by`](https://github.com/ryanb/cancan/blob/1.6.10/lib/cancan/model_additions.rb#L22) method. Looks complicated.
