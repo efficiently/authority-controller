@@ -262,7 +262,7 @@ class ProductsController extends \BaseController
     {
         $this->params['id'] == $id;//-> true
         $this->params['product'];//-> ["name" => "Best movie"]
-        $this->params['controller'];//-> 'ProductsController'
+        $this->params['controller'];//-> 'products'
         $this->params['action'];//-> 'update'
         //code...
     }
