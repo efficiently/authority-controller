@@ -24,7 +24,7 @@ class AccessDenied extends \Exception
         $this->defaultMessage = ac_trans("messages.unauthorized.default");
         $this->message = $message ?: $this->defaultMessage;
 
-        parent::__construct($message, $code, $previous);
+        parent::__construct($this->message, $code, $previous);
     }
 
     public function __toString()
