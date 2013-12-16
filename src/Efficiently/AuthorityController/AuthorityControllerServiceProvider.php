@@ -23,13 +23,6 @@ class AuthorityControllerServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->package('efficiently/authority-controller');
-        // $this->app->resolving(function($object) {
-        //     // Fill $params properties of the current controller if it hasn't any filters
-        //     if ( is_a($object, 'BaseController') && ! $object->getControllerFilters() ) {
-        //         $this->app['parameters']->fillController($object);
-        //     }
-        // });
-
     }
 
     /**
