@@ -1,6 +1,7 @@
 <?php namespace Efficiently\AuthorityController;
 
 use App;
+use Event;
 use Input;
 
 // TODO: Move this class in its own Laravel package
@@ -20,8 +21,7 @@ class Parameters
         $paramsFilterPrefix = "router.filter: ";
         $paramsFilterName = "controller.parameters.".$controllerClass;
 
-        $events = get_property($router, 'events');
-        if (! $events->hasListeners($paramsFilterPrefix.$paramsFilterName)) {
+        if (! Event::hasListeners($paramsFilterPrefix.$paramsFilterName)) {
             $router->filter($paramsFilterName, function() use($controller, $router) {
                 $currentRoute = $router->current();
                 $resourceParams = [];
