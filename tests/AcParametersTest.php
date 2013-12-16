@@ -268,9 +268,9 @@ class AcParametersTest extends AcTestCase
 
                 $this->app->make('Params')->fillController($controllerInstance);
 
-                $events = $this->getProperty($this->router, 'events');
-                $filterName = 'router.filter: controller.parameters.'.get_classname($controllerInstance);
-                $events->fire($filterName);
+                $filterName = "router.filter: controller.parameters.".get_classname($controllerInstance);
+                $this->assertTrue(Event::hasListeners($filterName));
+                Event::fire($filterName);
 
                 return new \Symfony\Component\HttpFoundation\Response;
         });

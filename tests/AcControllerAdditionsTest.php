@@ -10,7 +10,7 @@ class AcControllerAdditionsTest extends AcTestCase
 {
     use AuthorityControllerHelpers;
 
-    protected $controller;
+    protected $controller, $filterPrefix = "router.filter: ";
 
     public function setUp()
     {
@@ -62,9 +62,8 @@ class AcControllerAdditionsTest extends AcTestCase
 
         $controller->shouldReceive('beforeFilter')->with(m::type('string'), [])->once()
             ->andReturnUsing(function ($filterName, $options) use($controller) {
-                $router = App::make('router');
-                $events = get_property($router, 'events');
-                return $events->fire('router.'.$filterName);
+                $this->assertTrue(Event::hasListeners($this->filterPrefix.$filterName));
+                return Event::fire($this->filterPrefix.$filterName);
             });
 
         $controller->loadAndAuthorizeResource(['foo' => 'bar']);
@@ -85,9 +84,8 @@ class AcControllerAdditionsTest extends AcTestCase
 
         $controller->shouldReceive('beforeFilter')->with(m::type('string'), [])->once()
             ->andReturnUsing(function ($filterName, $options) use($controller) {
-                $router = App::make('router');
-                $events = get_property($router, 'events');
-                return $events->fire('router.'.$filterName);
+                $this->assertTrue(Event::hasListeners($this->filterPrefix.$filterName));
+                return Event::fire($this->filterPrefix.$filterName);
             });
 
         $controller->loadAndAuthorizeResource('project', ['foo' => 'bar']);
@@ -116,9 +114,8 @@ class AcControllerAdditionsTest extends AcTestCase
 
         $controller->shouldReceive('beforeFilter')->with(m::type('string'), ['except' => 'show'])->once()
             ->andReturnUsing(function ($filterName, $options) use($controller) {
-                $router = App::make('router');
-                $events = get_property($router, 'events');
-                return $events->fire('router.'.$filterName);
+                $this->assertTrue(Event::hasListeners($this->filterPrefix.$filterName));
+                return Event::fire($this->filterPrefix.$filterName);
             });
 
         $controller->authorizeResource(['foo' => 'bar', 'except' => 'show']);
@@ -139,9 +136,8 @@ class AcControllerAdditionsTest extends AcTestCase
 
         $controller->shouldReceive('beforeFilter')->with(m::type('string'), ['only' => ['show', 'index']])->once()
             ->andReturnUsing(function ($filterName, $options) use($controller) {
-                $router = App::make('router');
-                $events = get_property($router, 'events');
-                return $events->fire('router.'.$filterName);
+                $this->assertTrue(Event::hasListeners($this->filterPrefix.$filterName));
+                return Event::fire($this->filterPrefix.$filterName);
             });
 
         $controller->loadResource(['foo' => 'bar', 'only' => ['show', 'index']]);

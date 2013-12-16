@@ -1,6 +1,7 @@
 <?php namespace Efficiently\AuthorityController;
 
 use App;
+use Event;
 use Route;
 
 class ControllerResource
@@ -38,8 +39,7 @@ class ControllerResource
         $filterName = "controller.".$method.".".get_classname($controller)."(".md5(json_encode($args)).")";
 
         $router = App::make('router');
-        $events = get_property($router, 'events');
-        if (! $events->hasListeners($filterPrefix.$filterName)) {
+        if (! Event::hasListeners($filterPrefix.$filterName)) {
             $router->filter($filterName, function() use($controller, $method, $resourceOptions, $resourceName) {
                 $controllerResource = App::make('Efficiently\AuthorityController\ControllerResource', [
                     $controller, $resourceName, $resourceOptions
