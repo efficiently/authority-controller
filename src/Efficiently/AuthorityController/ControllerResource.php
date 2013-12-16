@@ -2,7 +2,6 @@
 
 use App;
 use Route;
-use ReflectionProperty;
 
 class ControllerResource
 {
@@ -35,9 +34,13 @@ class ControllerResource
         }
 
         $resourceOptions = array_except($options, ['only', 'except']);
+        $filterPrefix = "router.filter: ";
         $filterName = "controller.".$method.".".get_classname($controller)."(".md5(json_encode($args)).")";
-        if (! Route::getFilter($filterName)) {
-            Route::filter($filterName, function() use($controller, $method, $resourceOptions, $resourceName) {
+
+        $router = App::make('router');
+        $events = get_property($router, 'events');
+        if (! $events->hasListeners($filterPrefix.$filterName)) {
+            $router->filter($filterName, function() use($controller, $method, $resourceOptions, $resourceName) {
                 $controllerResource = App::make('Efficiently\AuthorityController\ControllerResource', [
                     $controller, $resourceName, $resourceOptions
                 ]);
@@ -224,9 +227,7 @@ class ControllerResource
     {
         $instanceName = $this->getInstanceName();
         if (property_exists($this->controller, $instanceName)) {
-            $reflection = new ReflectionProperty($this->controller, $instanceName);
-            $reflection->setAccessible(true);
-            $reflection->setValue($this->controller, $instance);
+            set_property($this->controller, $instanceName, $instance);
         } else {
             $this->controller->$instanceName = $instance;
         }
@@ -237,9 +238,7 @@ class ControllerResource
         if ($this->loadedInstance()) {
             $instanceName = $this->getInstanceName();
             if (property_exists($this->controller, $instanceName)) {
-                $reflection = new ReflectionProperty($this->controller, $instanceName);
-                $reflection->setAccessible(true);
-                return $reflection->getValue($this->controller);
+                return get_property($this->controller, $instanceName);
             }
         }
     }
@@ -248,9 +247,7 @@ class ControllerResource
     {
         $instanceName = str_plural($this->getInstanceName());
         if (property_exists($this->controller, $instanceName)) {
-            $reflection = new ReflectionProperty($this->controller, $instanceName);
-            $reflection->setAccessible(true);
-            $reflection->setValue($this->controller, $instance);
+            set_property($this->controller, $instanceName, $instance);
         } else {
             $this->controller->$instanceName = $instance;
         }
@@ -261,9 +258,7 @@ class ControllerResource
         if ($this->loadedInstance()) {
             $instanceName = str_plural($this->getInstanceName());
             if (property_exists($this->controller, $instanceName)) {
-                $reflection = new ReflectionProperty($this->controller, $instanceName);
-                $reflection->setAccessible(true);
-                return $reflection->getValue($this->controller);
+                return get_property($this->controller, $instanceName);
             }
         }
     }
@@ -318,9 +313,7 @@ class ControllerResource
     {
         $name = camel_case($name);
         if (property_exists($this->controller, $name)) {
-            $reflection = new ReflectionProperty($this->controller, $name);
-            $reflection->setAccessible(true);
-            return $reflection->getValue($this->controller);
+            return get_property($this->controller, $name);
         } elseif (respond_to($this->controller, "get".studly_case($name))) {
             $name ="get".studly_case($name);
             return $this->controller->$name();

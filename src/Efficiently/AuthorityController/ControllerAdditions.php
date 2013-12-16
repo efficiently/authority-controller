@@ -1,12 +1,5 @@
 <?php namespace Efficiently\AuthorityController;
 
-use Illuminate\Routing\Router;
-use Illuminate\Container\Container;
-use Illuminate\Routing\Controllers\Before;
-use Illuminate\Routing\Controllers\After;
-use Efficiently\AuthorityController\Authority;
-use Params;
-
 trait ControllerAdditions
 {
 
@@ -14,16 +7,6 @@ trait ControllerAdditions
     protected $currentAuthority;
     protected $currentUser;
     protected $_authorized;
-
-
-    // public function beforeFilter($filter, array $options = [])
-    // {
-    //     // Fill the $params property of the current controller before any before filters
-    //     if (! $this->getControllerFilters()) {
-    //         Params::fillController($this);
-    //     }
-    //     parent::beforeFilter($filter, $options);
-    // }
 
     public function paramsBeforeFilter($filter, array $options = [])
     {
@@ -39,9 +22,7 @@ trait ControllerAdditions
      */
     public function prependBeforeFilter($filter, array $options = [])
     {
-        $options = $this->prepareFilter($filter, $options);
-
-        array_unshift($this->filters, new Before($options));
+        array_unshift($this->beforeFilters, $this->parseFilter($filter, $options));
     }
 
     /**
@@ -53,37 +34,7 @@ trait ControllerAdditions
      */
     public function prependAfterFilter($filter, array $options = [])
     {
-        $options = $this->prepareFilter($filter, $options);
-
-        array_unshift($this->filters, new After($options));
-    }
-
-    /**
-     * Execute an action on the controller.
-     *
-     * @param  \Illuminate\Container\Container  $container
-     * @param  \Illuminate\Routing\Router  $router
-     * @param  string  $method
-     * @param  array   $parameters
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function callAction(Container $container, Router $router, $method, $parameters)
-    {
-        // if ($this->getControllerFilters()) {
-        //     $this->filterParser = $container['filter.parser'];
-        //     $request = $router->getRequest();
-        //     $beforeFilters = $this->getBeforeFilters($request, $method);
-        //     if (! $beforeFilters) {
-        //         Params::fillController($this);
-        //     }
-        // } else {
-
-        // Fill the $params property of the current controller before any requests
-        Params::fillController($this);
-
-        // }
-
-        return parent::callAction($container, $router, $method, $parameters);
+        array_unshift($this->afterFilters, $this->parseFilter($filter, $options));
     }
 
     /**

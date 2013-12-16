@@ -2,7 +2,6 @@
 
 use App;
 use Input;
-use ReflectionProperty;
 
 // TODO: Move this class in its own Laravel package
 class Parameters
@@ -12,19 +11,21 @@ class Parameters
     /**
      * Fill the $params property of the given Controller
      *
-     * @param  \Illuminate\Routing\Controllers\Controller $controller
+     * @param  \Efficiently\AuthorityController\ControllerDispatcher $controller
      */
     public function fillController($controller)
     {
         $router = App::make('router');
         $controllerClass = get_classname($controller);
+        $paramsFilterPrefix = "router.filter: ";
         $paramsFilterName = "controller.parameters.".$controllerClass;
 
-        if (! $router->getFilter($paramsFilterName)) {
+        $events = get_property($router, 'events');
+        if (! $events->hasListeners($paramsFilterPrefix.$paramsFilterName)) {
             $router->filter($paramsFilterName, function() use($controller, $router) {
-                $currentRoute = $router->getCurrentRoute();
+                $currentRoute = $router->current();
                 $resourceParams = [];
-                list($resourceParams['controller'], $resourceParams['action']) = explode('@', $currentRoute->getAction());
+                list($resourceParams['controller'], $resourceParams['action']) = explode('@', $router->currentRouteAction());
                 $resourceParams['controller'] = $this->normalizeControllerName($resourceParams['controller']);
 
                 $resourceId = str_singular($resourceParams['controller']);
@@ -34,7 +35,7 @@ class Parameters
                     $specialInputKeys = $this->specialInputKeys();
                     $params = [$resourceId => Input::except($specialInputKeys)] + Input::only($specialInputKeys);
                 }
-                $routeParams = $currentRoute->getParametersWithoutDefaults();
+                $routeParams = $currentRoute->parametersWithoutNulls();
 
                 // In Laravel, unlike Rails, by default 'id' parameter of a 'Product' resource is 'products'
                 // And 'shop_id' parameter of a 'Shop' parent resource is 'shops'
@@ -77,9 +78,7 @@ class Parameters
                 $this->params = array_filter(array_merge($params, $routeParams, $routeParamsParsed, $resourceParams));
 
                 if (property_exists($controller, 'params')) {
-                    $reflection = new ReflectionProperty($controller, 'params');
-                    $reflection->setAccessible(true);
-                    $reflection->setValue($controller, $this->params);
+                    set_property($controller, 'params', $this->params);
                 } else {
                     $controller->params = $this->params;
                 }
