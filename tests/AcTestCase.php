@@ -4,10 +4,8 @@ use Mockery as m;
 
 class AcTestCase extends Orchestra\Testbench\TestCase
 {
-    // public function setUp()
-    // {
-    //  parent::setUp();
-    // }
+    protected $app;
+    protected $router;
 
     public function tearDown()
     {

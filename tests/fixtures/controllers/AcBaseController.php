@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Routing\Controllers\Controller;
+use Illuminate\Routing\Controller;
 
 class AcBaseController extends Controller
 {

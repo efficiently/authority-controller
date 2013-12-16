@@ -10,11 +10,14 @@ class AcParametersTest extends AcTestCase
     {
         parent::setUp();
 
+        $this->app = $this->app = App::getFacadeRoot();
+        $this->app['router'] = $this->router = $this->mockRouter();
+
         $this->controllerName = "ProjectsController";
-        Route::resource('projects', $this->controllerName);
+        $this->router->resource('projects', $this->controllerName);
 
         $this->parameters = new \Efficiently\AuthorityController\Parameters;
-        App::instance('Params', $this->parameters);
+        $this->app->instance('Params', $this->parameters);
     }
 
     public function testAddParameter()
@@ -247,26 +250,57 @@ class AcParametersTest extends AcTestCase
     {
         $controllerName = $controllerName ?: $this->controllerName;
 
+        $this->router = $this->app['router'];
+
+        $events = $this->getProperty($this->router, 'events');
+        $this->setProperty($this->router, 'events', $events);
+
+        $this->app['router'] = $this->router;
+
         $this->mock($controllerName);
-        $controller = App::make($controllerName);
+        $controllerInstance = $this->app->make($controllerName);
+        $controllerInstance->shouldReceive('paramsBeforeFilter')->with(m::type('string'))->once();
 
-        $controller->shouldReceive('paramsBeforeFilter')->with(m::type('string'))->once();
-        $controller->shouldReceive('callAction')
-          ->with(m::type('\Illuminate\Container\Container'), m::type('\Illuminate\Routing\Router'), m::type('string'), m::type('array'))
-            ->once()->andReturnUsing(function ($container, $router, $method, $parameters) use($controller) {
+        $dispatcher = $this->router->getControllerDispatcher();
+        $dispatcher->shouldReceive('dispatch')
+          ->with(m::type('\Illuminate\Routing\Route'), m::type('\Illuminate\Http\Request'), $controllerName, m::type('string'))
+            ->once()->andReturnUsing(function ($route, $request, $controller, $method) use ($dispatcher, $controllerInstance) {
 
-                App::make('Params')->fillController($controller);
-                $filter = $router->getFilter("controller.parameters.".get_classname($controller));
-                $filter($controller, $router);// Call the Parameters filter to fill the params into the Controller's $params property
+                $this->app->make('Params')->fillController($controllerInstance);
+
+                $events = $this->getProperty($this->router, 'events');
+                $filterName = 'router.filter: controller.parameters.'.get_classname($controllerInstance);
+                $events->fire($filterName);
 
                 return new \Symfony\Component\HttpFoundation\Response;
         });
 
         $this->mock('\Efficiently\AuthorityController\ControllerResource');
-        $this->controllerResource = App::make('\Efficiently\AuthorityController\ControllerResource');
+        $this->controllerResource = $this->app->make('\Efficiently\AuthorityController\ControllerResource');
         $this->controllerResource->shouldReceive('getNameByController')->with('ProjectsController')->andReturn('project');
 
-        return $controller;
+        return $controllerInstance;
+    }
+
+    protected function mockRouter($app = null)
+    {
+        $app = $app ?: $this->app;
+        $routerFacade = new \Illuminate\Support\Facades\Route;
+        $this->invokeMethod($routerFacade, 'createFreshMockInstance', ['router']);
+        $router = $routerFacade::getFacadeRoot()->makePartial();
+
+        $this->setProperty($router, 'events', $app['events']);
+        $this->setProperty($router, 'routes', new \Illuminate\Routing\RouteCollection);
+        $this->setProperty($router, 'container', $app);
+
+        $this->mock("\Illuminate\Routing\ControllerDispatcher");
+        $dispatcher = $app->make("\Illuminate\Routing\ControllerDispatcher");
+        $this->setProperty($dispatcher, 'filterer', $router);
+        $this->setProperty($dispatcher, 'container', $app);
+
+        $router->setControllerDispatcher($dispatcher);
+
+        return $router;
     }
 
 }

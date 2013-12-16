@@ -52,6 +52,7 @@ class AcControllerAdditionsTest extends AcTestCase
     {
         $controller = $this->controller;
         $controllerResourceClass = 'Efficiently\AuthorityController\ControllerResource';
+        App::offsetUnset($controllerResourceClass);
         App::bind($controllerResourceClass, function ($app, $parameters) use ($controllerResourceClass, $controller) {
             $this->assertEquals($parameters, [$controller, null, ['foo' => 'bar']]);
             $controllerResource = m::mock($controllerResourceClass, $parameters);
@@ -62,8 +63,8 @@ class AcControllerAdditionsTest extends AcTestCase
         $controller->shouldReceive('beforeFilter')->with(m::type('string'), [])->once()
             ->andReturnUsing(function ($filterName, $options) use($controller) {
                 $router = App::make('router');
-                $filter = $router->getFilter($filterName);
-                return $filter($controller, $router);
+                $events = get_property($router, 'events');
+                return $events->fire('router.'.$filterName);
             });
 
         $controller->loadAndAuthorizeResource(['foo' => 'bar']);
@@ -74,6 +75,7 @@ class AcControllerAdditionsTest extends AcTestCase
     {
         $controller = $this->controller;
         $controllerResourceClass = 'Efficiently\AuthorityController\ControllerResource';
+        App::offsetUnset($controllerResourceClass);
         App::bind($controllerResourceClass, function ($app, $parameters) use ($controllerResourceClass, $controller) {
             $this->assertEquals($parameters, [$controller, 'project', ['foo' => 'bar']]);
             $controllerResource = m::mock($controllerResourceClass, $parameters);
@@ -84,8 +86,8 @@ class AcControllerAdditionsTest extends AcTestCase
         $controller->shouldReceive('beforeFilter')->with(m::type('string'), [])->once()
             ->andReturnUsing(function ($filterName, $options) use($controller) {
                 $router = App::make('router');
-                $filter = $router->getFilter($filterName);
-                return $filter($controller, $router);
+                $events = get_property($router, 'events');
+                return $events->fire('router.'.$filterName);
             });
 
         $controller->loadAndAuthorizeResource('project', ['foo' => 'bar']);
@@ -104,6 +106,7 @@ class AcControllerAdditionsTest extends AcTestCase
     {
         $controller = $this->controller;
         $controllerResourceClass = 'Efficiently\AuthorityController\ControllerResource';
+        App::offsetUnset($controllerResourceClass);
         App::bind($controllerResourceClass, function ($app, $parameters) use ($controllerResourceClass, $controller) {
             $this->assertEquals($parameters, [$controller, null, ['foo' => 'bar']]);
             $controllerResource = m::mock($controllerResourceClass, $parameters);
@@ -114,8 +117,8 @@ class AcControllerAdditionsTest extends AcTestCase
         $controller->shouldReceive('beforeFilter')->with(m::type('string'), ['except' => 'show'])->once()
             ->andReturnUsing(function ($filterName, $options) use($controller) {
                 $router = App::make('router');
-                $filter = $router->getFilter($filterName);
-                return $filter($controller, $router);
+                $events = get_property($router, 'events');
+                return $events->fire('router.'.$filterName);
             });
 
         $controller->authorizeResource(['foo' => 'bar', 'except' => 'show']);
@@ -126,6 +129,7 @@ class AcControllerAdditionsTest extends AcTestCase
     {
         $controller = $this->controller;
         $controllerResourceClass = 'Efficiently\AuthorityController\ControllerResource';
+        App::offsetUnset($controllerResourceClass);
         App::bind($controllerResourceClass, function ($app, $parameters) use ($controllerResourceClass, $controller) {
             $this->assertEquals($parameters, [$controller, null, ['foo' => 'bar']]);
             $controllerResource = m::mock($controllerResourceClass, $parameters);
@@ -136,8 +140,8 @@ class AcControllerAdditionsTest extends AcTestCase
         $controller->shouldReceive('beforeFilter')->with(m::type('string'), ['only' => ['show', 'index']])->once()
             ->andReturnUsing(function ($filterName, $options) use($controller) {
                 $router = App::make('router');
-                $filter = $router->getFilter($filterName);
-                return $filter($controller, $router);
+                $events = get_property($router, 'events');
+                return $events->fire('router.'.$filterName);
             });
 
         $controller->loadResource(['foo' => 'bar', 'only' => ['show', 'index']]);

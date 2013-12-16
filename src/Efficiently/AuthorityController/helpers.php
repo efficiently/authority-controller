@@ -70,9 +70,7 @@ if (! function_exists('compact_property')) {
         $compactArray = [];
         foreach ($properties as $property) {
             if ( property_exists($instance, $property) ) {
-                $reflection = new \ReflectionProperty($instance, $property);
-                $reflection->setAccessible(true);
-                $$property = $reflection->getValue($instance);
+                $$property = get_property($instance, $property);
 
                 $compactArray = array_merge($compactArray, compact($property));
             }
@@ -136,5 +134,49 @@ if (! function_exists('ac_trans_choice')) {
         }
 
         return trans_choice($id, $number, $parameters, $domain, $locale);
+    }
+}
+
+if (! function_exists('set_property')) {
+
+    function set_property($object, $propertyName, $value)
+    {
+        if (property_exists($object, $propertyName)) {
+            $reflection = new \ReflectionProperty($object, $propertyName);
+            $reflection->setAccessible(true);
+            $reflection->setValue($object, $value);
+        } else {
+            $object->$propertyName = $value;
+        }
+    }
+}
+
+if (! function_exists('get_property')) {
+
+    function get_property($object, $propertyName)
+    {
+        if (property_exists($object, $propertyName)) {
+            $reflection = new \ReflectionProperty($object, $propertyName);
+            $reflection->setAccessible(true);
+            return $reflection->getValue($object);
+        } else {
+            return null;
+        }
+    }
+
+}
+
+if (! function_exists('invoke_method')) {
+
+    function invoke_method($object, $methodName, $values = [])
+    {
+        $values = (array) $values;
+        if (method_exists($object, $methodName)) {
+            $reflection = new \ReflectionMethod($object, $methodName);
+            $reflection->setAccessible(true);
+            return $reflection->invokeArgs($object, $values);
+        } else {
+            return call_user_func_array([$object, $methodName], $values);
+        }
     }
 }

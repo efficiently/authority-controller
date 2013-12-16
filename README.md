@@ -1,7 +1,7 @@
 AuthorityController [![Build Status](https://travis-ci.org/efficiently/authority-controller.png?branch=master)](http://travis-ci.org/efficiently/authority-controller)
 ===================
 
-AuthorityController 1.0 is an PHP authorization library for [Laravel 4.0](http://laravel.com) which restricts what resources a given user is allowed to access.
+AuthorityController 1.1 is an PHP authorization library for [Laravel 4.1](http://laravel.com) which restricts what resources a given user is allowed to access.
 
 All permissions are defined in a single location:
 
@@ -9,7 +9,7 @@ All permissions are defined in a single location:
 
 and not duplicated across controllers, routes, views, and database queries.
 
-For [Laravel 4.1](http://laravel.com/docs/4-1) supports see [AuthorityController 1.1 branch](https://github.com/efficiently/authority-controller/tree/1.1)
+For [Laravel 4.0](http://laravel.com/docs/4-0) supports see [AuthorityController 1.0 branch](https://github.com/efficiently/authority-controller/tree/1.0)
 
 #### Origins and Inspirations
 
@@ -27,7 +27,7 @@ Installation
 1. Add `authority-controller` package to your `composer.json` file to require AuthorityController:
 
  ```bash
- composer require efficiently/authority-controller:dev-master
+ composer require efficiently/authority-controller:1.1.*
  ```
 
 2. Add the service provider to `app/config/app.php`:
@@ -60,7 +60,7 @@ Installation
 2. Then provide a version constraint for the `efficiently/authority-controller` requirement:
 
  ```
- 1.0.*
+ 1.1.*
  ```
 
 Configuration
@@ -275,6 +275,10 @@ class ProductsController extends \BaseController
 
 Changelog
 ---------
+#### 1.1.0
+* First beta release for Laravel **4.1** compatibility.
+* Non backwards compatible with Laravel **4.0**.
+
 #### 1.0.0
 * First stable release, only compatible with Laravel **4.0**.
 * For Laravel **4.1** supports, see [AuthorityController 1.1 branch](https://github.com/efficiently/authority-controller/tree/1.1).
@@ -284,7 +288,7 @@ Changelog
 * Non backwards compatible: `Params::get('controller')` behaviour is now like Rails. It returns controller name in snake_case and in plural.
 
 #### 0.9.0
-* First stable release
+* First beta release
 
 Missing features
 ----------------
@@ -305,7 +309,11 @@ $authority->allow('update', 'Product', function($self, $product) {
 Good to know
 ------------
 #### Compatibility
-It's **only** compatible with **PHP >= 5.4** and **Laravel 4.0** framework.
+It's **only** compatible with **PHP >= 5.4** and **Laravel 4.1** framework.
+
+#### This is beta-quality software
+It works well according to our tests. The internal API may change and other features will be added.
+We are working to make AuthorityController production quality software.
 
 #### Differences between CanCan and AuthorityController
 See Wiki page [Differences between CanCan and AuthorityController](https://github.com/efficiently/authority-controller/wiki/Differences-between-CanCan-and-AuthorityController)
