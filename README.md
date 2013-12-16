@@ -27,7 +27,7 @@ Installation
 1. Add `authority-controller` package to your `composer.json` file to require AuthorityController:
 
  ```bash
- composer require efficiently/authority-controller:dev-master
+ composer require efficiently/authority-controller:1.0.*
  ```
 
 2. Add the service provider to `app/config/app.php`:
