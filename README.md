@@ -1,13 +1,15 @@
 AuthorityController [![Build Status](https://travis-ci.org/efficiently/authority-controller.png?branch=master)](http://travis-ci.org/efficiently/authority-controller)
 ===================
 
-AuthorityController is an PHP authorization library for [Laravel 4](http://laravel.com) which restricts what resources a given user is allowed to access.
+AuthorityController 1.0 is an PHP authorization library for [Laravel 4.0](http://laravel.com) which restricts what resources a given user is allowed to access.
 
 All permissions are defined in a single location:
 
     app/config/packages/efficiently/authority-controller/config.php
 
 and not duplicated across controllers, routes, views, and database queries.
+
+For [Laravel 4.1](http://laravel.com/docs/4-1) supports see [AuthorityController 1.1 branch](https://github.com/efficiently/authority-controller/tree/1.1)
 
 #### Origins and Inspirations
 
@@ -58,7 +60,7 @@ Installation
 2. Then provide a version constraint for the `efficiently/authority-controller` requirement:
 
  ```
- dev-master
+ 1.0.*
  ```
 
 Configuration
@@ -273,6 +275,11 @@ class ProductsController extends \BaseController
 
 Changelog
 ---------
+#### 1.0.0
+* First stable release, only compatible with Laravel **4.0**.
+* For Laravel **4.1** supports, see [AuthorityController 1.1 branch](https://github.com/efficiently/authority-controller/tree/1.1).
+* Fix AccessDenied class, the exception message didn't fallback to the default message if it was empty.
+
 #### 0.10.0
 * Non backwards compatible: `Params::get('controller')` behaviour is now like Rails. It returns controller name in snake_case and in plural.
 
@@ -298,11 +305,7 @@ $authority->allow('update', 'Product', function($self, $product) {
 Good to know
 ------------
 #### Compatibility
-It's **only** compatible with **PHP >= 5.4** and **Laravel 4** framework.
-
-#### This is beta-quality software
-It works well according to our tests. The internal API may change and other features will be added.
-We are working to make AuthorityController production quality software.
+It's **only** compatible with **PHP >= 5.4** and **Laravel 4.0** framework.
 
 #### Differences between CanCan and AuthorityController
 See Wiki page [Differences between CanCan and AuthorityController](https://github.com/efficiently/authority-controller/wiki/Differences-between-CanCan-and-AuthorityController)
