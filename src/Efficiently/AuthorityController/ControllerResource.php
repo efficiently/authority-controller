@@ -47,7 +47,7 @@ class ControllerResource
                 $controllerResource->$method();
             });
 
-            call_user_func_array([$controller, $beforeFilterMethod], [ $filterName, array_only($options, ['only', 'except']) ]);
+            call_user_func_array([$controller, $beforeFilterMethod], [$filterName, array_only($options, ['only', 'except'])]);
         }
 
     }
