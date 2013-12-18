@@ -9,7 +9,11 @@ All permissions are defined in a single location:
 
 and not duplicated across controllers, routes, views, and database queries.
 
-For [Laravel 4.0](http://laravel.com/docs/4-0) supports see [AuthorityController 1.0 branch](https://github.com/efficiently/authority-controller/tree/1.0)
+For [**Laravel 4.0**](http://laravel.com/docs/4-0) supports see [AuthorityController 1.0 branch](https://github.com/efficiently/authority-controller/tree/1.0)
+
+#### Demo application
+
+You can see in action this package with this Laravel 4.1 [**demo application**](https://github.com/efficiently/laravel_authority-controller_app).
 
 #### Origins and Inspirations
 
