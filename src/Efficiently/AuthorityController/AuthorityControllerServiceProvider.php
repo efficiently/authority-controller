@@ -1,8 +1,8 @@
 <?php namespace Efficiently\AuthorityController;
 
-use Efficiently\AuthorityController\Authority;
 use Illuminate\Support\ServiceProvider;
-use Controller;
+use Illuminate\Foundation\AliasLoader;
+use Efficiently\AuthorityController\Authority;
 use Efficiently\AuthorityController\Parameters;
 
 class AuthorityControllerServiceProvider extends ServiceProvider
@@ -36,12 +36,13 @@ class AuthorityControllerServiceProvider extends ServiceProvider
             return new Parameters;
         });
 
-        $this->app->resolvingAny(function($object) {
-            // Fill $params properties of the current controller
-            if (
-                is_a($object, '\Illuminate\Routing\Controller') &&
-                ! in_array(class_basename(get_classname($object)), ['Controller', 'BaseController'])
-            ) {
+        // Find the default Controller class of the current Laravel application
+        $aliasLoader = AliasLoader::getInstance();
+        $controllerClass = array_get($aliasLoader->getAliases(), 'Controller', '\Illuminate\Routing\Controller');
+
+        $this->app->resolvingAny(function ($object) use ($controllerClass) {
+            if (is_a($object, $controllerClass)) {
+                // Fill $params properties of the current controller
                 $this->app['parameters']->fillController($object);
             }
         });
