@@ -12,7 +12,7 @@ class Parameters
     /**
      * Fill the $params property of the given Controller
      *
-     * @param  \Efficiently\AuthorityController\ControllerDispatcher $controller
+     * @param  \Illuminate\Routing\Controller $controller
      */
     public function fillController($controller)
     {
