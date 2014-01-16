@@ -138,7 +138,8 @@ class ControllerResource
     {
         $resourceBase = $this->getResourceBase();
         $resourceParams = $this->getResourceParams();
-        $resource = App::make($resourceBase, is_array($resourceParams) ? $resourceParams : []);
+
+        $resource = App::make($resourceBase, is_array($resourceParams) ? [$resourceParams] : []);
 
         return $this->setAttributes($resource);
     }
