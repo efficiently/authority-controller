@@ -279,6 +279,11 @@ class ProductsController extends \BaseController
 
 Changelog
 ---------
+#### 1.1.1
+* Less intrusive parameters injection in the controllers
+    * Check if the current resolved controller responds to paramsBeforeFilter method. Otherwise the application crash.
+    * Use the Controller alias of the current Laravel application instead of a hardcoded class name.
+
 #### 1.1.0
 * First beta release for Laravel **4.1** compatibility.
 * Non backwards compatible with Laravel **4.0**.
