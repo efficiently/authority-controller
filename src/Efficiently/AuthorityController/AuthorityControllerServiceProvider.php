@@ -41,7 +41,8 @@ class AuthorityControllerServiceProvider extends ServiceProvider
         $controllerClass = array_get($aliasLoader->getAliases(), 'Controller', '\Illuminate\Routing\Controller');
 
         $this->app->resolvingAny(function ($object) use ($controllerClass) {
-            if (is_a($object, $controllerClass)) {
+            // Check if the current $object class is a Controller class and if it responds to paramsBeforeFilter method
+            if (is_a($object, $controllerClass) && respond_to($object, "paramsBeforeFilter")) {
                 // Fill $params properties of the current controller
                 $this->app['parameters']->fillController($object);
             }
