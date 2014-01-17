@@ -16,18 +16,24 @@ class AcTestCase extends Orchestra\Testbench\TestCase
     protected function mock($className)
     {
         $mock = m::mock($className);
-        // App::instance($className, $mock);
-        App::bind($className, function() use($mock) { return $mock; });
+        App::bind($className, function($app, $parameters = []) use($mock) {
+            if(is_array($parameters) && is_array($attributes=array_get($parameters, 0, []))) {
+                $mock = $this->fillMock($mock, $attributes);
+            }
+
+            return $mock;
+        });
 
         return $mock;
     }
 
-    protected function fillMock($mock, $attributes)
+    protected function fillMock($mock, $attributes = [])
     {
         $instance = $mock->makePartial();
         foreach ($attributes as $key => $value) {
             $instance->$key = $value;
         }
+
         return $instance;
     }
 

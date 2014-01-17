@@ -149,7 +149,8 @@ class ControllerResource
         if (array_key_exists('singleton', $this->options) && $this->getParentResource()) {
             $resource->{camel_case($this->getParentName())}()->associate($this->getParentResource());
         }
-        $resource->fill($this->getResourceParams());
+        // TODO: ?Implements initial attributes feature?
+        // See: https://github.com/ryanb/cancan/blob/1.6.10/lib/cancan/controller_resource.rb#L91
 
         return $resource;
     }

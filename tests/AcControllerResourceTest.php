@@ -330,7 +330,6 @@ class AcControllerResourceTest extends AcTestCase
         $this->params = array_merge($this->params, array_merge(['action' => 'build', 'id' => '123']));
 
         $project = $this->mock('Project');
-        $project->shouldReceive('fill')->with(m::type('array'))->once()->andReturn($project);
         $project->shouldReceive('__toString')->once()->andReturn("some_project");
 
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller, ['create' => 'build']);
