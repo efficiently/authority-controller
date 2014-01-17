@@ -17,7 +17,7 @@ class AcTestCase extends Orchestra\Testbench\TestCase
     {
         $mock = m::mock($className);
         App::bind($className, function($app, $parameters = []) use($mock) {
-            if(is_array($parameters) && is_array($attributes=array_get($parameters, 0, []))) {
+            if(is_array($parameters) && is_array($attributes=array_get($parameters, 0, [])) && respond_to($mock, "fill")) {
                 $mock = $this->fillMock($mock, $attributes);
             }
 
