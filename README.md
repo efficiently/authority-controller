@@ -279,6 +279,9 @@ class ProductsController extends \BaseController
 
 Changelog
 ---------
+#### 1.1.2
+* Tweak the mock system who simulates Eloquent's constructor method.
+
 #### 1.1.1
 * Less intrusive parameters injection in the controllers
     * Check if the current resolved controller responds to paramsBeforeFilter method. Otherwise the application crash.
