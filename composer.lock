@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "e64b54f8bf78366fcecae7c9e67195ce",
+    "hash": "49e2f80030caa6b2781e8bbd58df18e3",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -54,16 +54,16 @@
         },
         {
             "name": "d11wtq/boris",
-            "version": "v1.0.6",
+            "version": "v1.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/d11wtq/boris.git",
-                "reference": "7db59be30dad2e6f902db348e21a939215fbd967"
+                "reference": "125dd4e5752639af7678a22ea597115646d89c6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/d11wtq/boris/zipball/7db59be30dad2e6f902db348e21a939215fbd967",
-                "reference": "7db59be30dad2e6f902db348e21a939215fbd967",
+                "url": "https://api.github.com/repos/d11wtq/boris/zipball/125dd4e5752639af7678a22ea597115646d89c6e",
+                "reference": "125dd4e5752639af7678a22ea597115646d89c6e",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
-            "time": "2013-11-18 12:13:16"
+            "time": "2014-01-17 12:21:18"
         },
         {
             "name": "filp/whoops",
@@ -230,12 +230,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "97f5fece6ce23a25581dde2a28f4ffc175405022"
+                "reference": "24c9aafb913ea7aeb0c2522428025477b77f235c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/97f5fece6ce23a25581dde2a28f4ffc175405022",
-                "reference": "97f5fece6ce23a25581dde2a28f4ffc175405022",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/24c9aafb913ea7aeb0c2522428025477b77f235c",
+                "reference": "24c9aafb913ea7aeb0c2522428025477b77f235c",
                 "shasum": ""
             },
             "require": {
@@ -339,7 +339,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2014-01-16 04:17:29"
+            "time": "2014-01-20 04:32:11"
         },
         {
             "name": "machuga/authority",
@@ -347,12 +347,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/machuga/authority.git",
-                "reference": "3fbe9d784df5c0fcf3f3e7a4830d91b955984265"
+                "reference": "b5f111d503e32c02aa07693c84a88ee0db3ee5a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/machuga/authority/zipball/3fbe9d784df5c0fcf3f3e7a4830d91b955984265",
-                "reference": "3fbe9d784df5c0fcf3f3e7a4830d91b955984265",
+                "url": "https://api.github.com/repos/machuga/authority/zipball/b5f111d503e32c02aa07693c84a88ee0db3ee5a7",
+                "reference": "b5f111d503e32c02aa07693c84a88ee0db3ee5a7",
                 "shasum": ""
             },
             "require": {
@@ -366,7 +366,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "2.1.x-dev"
                 }
             },
             "autoload": {
@@ -393,7 +393,7 @@
                 }
             ],
             "description": "A simple and flexible authorization system for PHP",
-            "time": "2013-11-05 02:32:27"
+            "time": "2014-01-21 05:35:49"
         },
         {
             "name": "machuga/authority-l4",
@@ -401,17 +401,17 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/machuga/authority-l4.git",
-                "reference": "2910242e296150e69d1b13c56a5ff2ff9221d5e2"
+                "reference": "dccf9b0a9047879d7a748b64d9286fb4b0e022aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/machuga/authority-l4/zipball/2910242e296150e69d1b13c56a5ff2ff9221d5e2",
-                "reference": "2910242e296150e69d1b13c56a5ff2ff9221d5e2",
+                "url": "https://api.github.com/repos/machuga/authority-l4/zipball/dccf9b0a9047879d7a748b64d9286fb4b0e022aa",
+                "reference": "dccf9b0a9047879d7a748b64d9286fb4b0e022aa",
                 "shasum": ""
             },
             "require": {
                 "illuminate/support": "~4",
-                "machuga/authority": "2.0.*@stable",
+                "machuga/authority": "2.1.*",
                 "php": ">=5.3.0"
             },
             "require-dev": {
@@ -421,7 +421,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "2.1.x-dev"
                 }
             },
             "autoload": {
@@ -459,7 +459,7 @@
                 "authorization",
                 "laravel"
             ],
-            "time": "2013-12-24 02:28:36"
+            "time": "2014-01-21 05:35:56"
         },
         {
             "name": "monolog/monolog",
@@ -467,12 +467,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "01a01a4841ea749426834d127c897f4dc9d62611"
+                "reference": "7f783c0ab09dc341f858882e2d2ce6fc36ca1351"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/01a01a4841ea749426834d127c897f4dc9d62611",
-                "reference": "01a01a4841ea749426834d127c897f4dc9d62611",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/7f783c0ab09dc341f858882e2d2ce6fc36ca1351",
+                "reference": "7f783c0ab09dc341f858882e2d2ce6fc36ca1351",
                 "shasum": ""
             },
             "require": {
@@ -484,7 +484,7 @@
                 "doctrine/couchdb": "dev-master",
                 "mlehner/gelf-php": "1.0.*",
                 "phpunit/phpunit": "~3.7.0",
-                "raven/raven": "0.5.*",
+                "raven/raven": "~0.5",
                 "ruflin/elastica": "0.90.*"
             },
             "suggest": {
@@ -526,7 +526,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2014-01-15 09:37:32"
+            "time": "2014-01-17 14:16:06"
         },
         {
             "name": "nesbot/carbon",
@@ -580,12 +580,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "0353c921bd12980399e3e6404ea3931b3356e15a"
+                "reference": "bf9956b6345a606a206ba77484d750676e0e5805"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/0353c921bd12980399e3e6404ea3931b3356e15a",
-                "reference": "0353c921bd12980399e3e6404ea3931b3356e15a",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/bf9956b6345a606a206ba77484d750676e0e5805",
+                "reference": "bf9956b6345a606a206ba77484d750676e0e5805",
                 "shasum": ""
             },
             "require": {
@@ -617,7 +617,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2013-11-27 19:33:56"
+            "time": "2014-01-20 16:24:18"
         },
         {
             "name": "patchwork/utf8",
@@ -676,12 +676,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpseclib/phpseclib.git",
-                "reference": "268ec2e5d18110235f3677a15abae39303191b2f"
+                "reference": "211e237090842f0bc1813b639633e05267fb0444"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/268ec2e5d18110235f3677a15abae39303191b2f",
-                "reference": "268ec2e5d18110235f3677a15abae39303191b2f",
+                "url": "https://api.github.com/repos/phpseclib/phpseclib/zipball/211e237090842f0bc1813b639633e05267fb0444",
+                "reference": "211e237090842f0bc1813b639633e05267fb0444",
                 "shasum": ""
             },
             "require": {
@@ -762,7 +762,7 @@
                 "x.509",
                 "x509"
             ],
-            "time": "2013-12-28 19:49:05"
+            "time": "2014-01-18 17:51:33"
         },
         {
             "name": "predis/predis",
@@ -770,12 +770,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/nrk/predis.git",
-                "reference": "0f01b89d44368633e05da72db434df3cb078f08c"
+                "reference": "5f2eea628eb465d866ad2771927d83769c8f956c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nrk/predis/zipball/0f01b89d44368633e05da72db434df3cb078f08c",
-                "reference": "0f01b89d44368633e05da72db434df3cb078f08c",
+                "url": "https://api.github.com/repos/nrk/predis/zipball/5f2eea628eb465d866ad2771927d83769c8f956c",
+                "reference": "5f2eea628eb465d866ad2771927d83769c8f956c",
                 "shasum": ""
             },
             "require": {
@@ -809,7 +809,7 @@
                 "predis",
                 "redis"
             ],
-            "time": "2014-01-10 16:46:58"
+            "time": "2014-01-16 14:10:29"
         },
         {
             "name": "psr/log",
@@ -817,12 +817,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "65f363ac44058796a8e1428cf41e6d92d8a75ddc"
+                "reference": "a78d6504ff5d4367497785ab2ade91db3a9fbe11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/65f363ac44058796a8e1428cf41e6d92d8a75ddc",
-                "reference": "65f363ac44058796a8e1428cf41e6d92d8a75ddc",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/a78d6504ff5d4367497785ab2ade91db3a9fbe11",
+                "reference": "a78d6504ff5d4367497785ab2ade91db3a9fbe11",
                 "shasum": ""
             },
             "type": "library",
@@ -852,7 +852,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2013-12-25 11:17:50"
+            "time": "2014-01-18 15:33:09"
         },
         {
             "name": "stack/builder",
@@ -860,12 +860,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/stackphp/builder.git",
-                "reference": "49ab90450d7f959943f3659a4bcb5965530117c2"
+                "reference": "f98a5eb77b212a77b67a70f74d856ae859dd74b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stackphp/builder/zipball/49ab90450d7f959943f3659a4bcb5965530117c2",
-                "reference": "49ab90450d7f959943f3659a4bcb5965530117c2",
+                "url": "https://api.github.com/repos/stackphp/builder/zipball/f98a5eb77b212a77b67a70f74d856ae859dd74b3",
+                "reference": "f98a5eb77b212a77b67a70f74d856ae859dd74b3",
                 "shasum": ""
             },
             "require": {
@@ -902,7 +902,7 @@
             "keywords": [
                 "stack"
             ],
-            "time": "2013-10-25 14:04:45"
+            "time": "2014-01-18 16:33:58"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -1427,12 +1427,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/HttpKernel.git",
-                "reference": "eb1ed60a4a066238106721f67f664fd6382a99ea"
+                "reference": "52e247c4d53d724b376a87abdacc04db5cc747d7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/HttpKernel/zipball/eb1ed60a4a066238106721f67f664fd6382a99ea",
-                "reference": "eb1ed60a4a066238106721f67f664fd6382a99ea",
+                "url": "https://api.github.com/repos/symfony/HttpKernel/zipball/52e247c4d53d724b376a87abdacc04db5cc747d7",
+                "reference": "52e247c4d53d724b376a87abdacc04db5cc747d7",
                 "shasum": ""
             },
             "require": {
@@ -1489,7 +1489,7 @@
             ],
             "description": "Symfony HttpKernel Component",
             "homepage": "http://symfony.com",
-            "time": "2014-01-07 13:28:54"
+            "time": "2014-01-20 06:30:15"
         },
         {
             "name": "symfony/process",
@@ -1671,7 +1671,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/a6785ff09acca7eeddae1684e088c34856b89090",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/0163f082dee93c895497571afd458a04c48b0b7a",
                 "reference": "1e1e189dabda8bf47de0a64371987e7a80db581f",
                 "shasum": ""
             },
@@ -1680,7 +1680,8 @@
                 "php": ">=5.3.2"
             },
             "require-dev": {
-                "hamcrest/hamcrest-php": "~1.1"
+                "hamcrest/hamcrest-php": "~1.1",
+                "satooshi/php-coveralls": "dev-master"
             },
             "type": "library",
             "extra": {
@@ -1731,12 +1732,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/orchestral/testbench.git",
-                "reference": "1cb9fbb8eb1503577f62390d76c927e7fcfe5224"
+                "reference": "5da91591974c320819bbfb46d0f8f16972074749"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orchestral/testbench/zipball/1cb9fbb8eb1503577f62390d76c927e7fcfe5224",
-                "reference": "1cb9fbb8eb1503577f62390d76c927e7fcfe5224",
+                "url": "https://api.github.com/repos/orchestral/testbench/zipball/5da91591974c320819bbfb46d0f8f16972074749",
+                "reference": "5da91591974c320819bbfb46d0f8f16972074749",
                 "shasum": ""
             },
             "require": {
@@ -1770,7 +1771,7 @@
             "keywords": [
                 "laravel"
             ],
-            "time": "2013-12-20 15:56:55"
+            "time": "2014-01-20 01:48:10"
         },
         {
             "name": "phpunit/php-code-coverage",
