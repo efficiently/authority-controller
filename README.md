@@ -279,6 +279,9 @@ class ProductsController extends \BaseController
 
 Changelog
 ---------
+#### 1.1.3
+* Upgrade Authority-L4 package to fix Laravel 4.1 support.
+
 #### 1.1.2
 * Tweak the mock system who simulates Eloquent's constructor method.
 
