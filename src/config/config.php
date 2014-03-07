@@ -8,7 +8,7 @@ return [
         //
         // $authority->addAlias('moderate', ['read', 'update', 'delete']);
         //
-        // See the wiki of CanCan for details:
+        // See the wiki of AuthorityController for details:
         // https://github.com/efficiently/authority-controller/wiki/Action-aliases
         //
         // Define abilities for the passed in user here. For example:
@@ -37,7 +37,7 @@ return [
         //      return $product->available === true;
         //  });
         //
-        // See the wiki of CanCan for details:
+        // See the wiki of AuthorityController for details:
         // https://github.com/efficiently/authority-controller/wiki/Defining-Authority-rules
         //
         // Loop through each of the users permissions, and create rules:
