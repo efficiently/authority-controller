@@ -216,7 +216,7 @@ class AcControllerResourceTest extends AcTestCase
     }
 
     // Should not call Closure when only class name is passed, only return true
-    public function testShouldNotCallBlockWhenOnlyClassNameIsPassedOnlyReturnTrue()
+    public function testShouldNotCallClosureWhenOnlyClassNameIsPassedOnlyReturnTrue()
     {
         $blockCalled = false;
         $this->authority->allow('preview', 'all', function($self, $object) use(&$blockCalled) {
@@ -224,6 +224,18 @@ class AcControllerResourceTest extends AcTestCase
         });
         $this->assertTrue($this->authority->can('preview', 'Project'));
         $this->assertFalse($blockCalled);
+    }
+
+    // Should call Closure when an instance variable is passed
+    public function testShouldCallClosureWhenAnInstanceVariableIsPassed()
+    {
+        $blockCalled = false;
+        $this->authority->allow('preview', 'all', function($self, $object) use(&$blockCalled) {
+          $this->assertInstanceOf('stdClass', $object);
+          return $blockCalled = true;
+        });
+        $this->assertTrue($this->authority->can('preview', new stdClass));
+        $this->assertTrue($blockCalled);
     }
 
     /**

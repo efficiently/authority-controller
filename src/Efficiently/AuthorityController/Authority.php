@@ -38,7 +38,7 @@ class Authority extends OriginalAuthority
 
         // The conditional callback (Closure) is only evaluated when an actual instance object is present.
         // It is not evaluated when checking permissions on the class name (such as in the 'index' action).
-        if (is_string($resource) && $this->hasCondition($action, $resource)) {
+        if (is_string($resource) && ! is_object($resourceValue) && $this->hasCondition($action, $resource)) {
             return true;
         }
 
