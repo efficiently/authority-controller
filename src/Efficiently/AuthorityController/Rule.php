@@ -32,11 +32,17 @@ class Rule extends OriginalRule
         return $this->action === 'manage' || in_array($this->action,$action);
     }
 
+    /**
+     * @return boolean
+     */
     public function onlyCondition()
     {
         return ! $this->isConditionsEmpty();
     }
 
+    /**
+     * @return boolean
+     */
     public function isConditionsEmpty()
     {
         $conditions = $this->conditions;
