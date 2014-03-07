@@ -65,7 +65,7 @@ trait ControllerAdditions
      *
      * If a conditional callback is used in the Authority, the '<code>create</code>' and '<code>store</code>' actions will set
      * the initial attributes based on these conditions. This way these actions will satisfy
-     * the ability restrictions.
+     * the authority restrictions.
      *
      * Call this method directly on the controller class.
      *
@@ -323,7 +323,7 @@ trait ControllerAdditions
     {
         $args = is_array($args) ? $args : func_get_args();
         $this->_authorized = true;
-        return call_user_func_array([$this->getCurrentAbility(), 'authorize'], $args);
+        return call_user_func_array([$this->getCurrentAuthority(), 'authorize'], $args);
     }
 
     public function setCurrentAuthority($authority)
@@ -338,7 +338,7 @@ trait ControllerAdditions
     }
 
     /**
-     * Creates and returns the current user's ability and caches it. If you
+     * Creates and returns the current user's authority and caches it. If you
      * want to override how the Authority is defined then this is the place.
      * Just define the method in the controller to change behavior.
      *
@@ -350,7 +350,7 @@ trait ControllerAdditions
      *     return $this->currentAuthority;
      *   }
      *
-     * Notice it is important to cache the ability object so it is not
+     * Notice it is important to cache the authority object so it is not
      * recreated every time.
      *
      */
@@ -372,7 +372,7 @@ trait ControllerAdditions
     public function getCurrentUser()
     {
         if (is_null($this->currentUser)) {
-            $this->currentUser = $this->getCurrentAbility()->getCurrentUser();
+            $this->currentUser = $this->getCurrentAuthority()->getCurrentUser();
         }
 
         return $this->currentUser;
@@ -403,7 +403,7 @@ trait ControllerAdditions
     public function can($args = null)
     {
         $args = is_array($args) ? $args : func_get_args();
-        return call_user_func_array([$this->getCurrentAbility(), 'can'], $args);
+        return call_user_func_array([$this->getCurrentAuthority(), 'can'], $args);
     }
 
     /**
@@ -415,7 +415,7 @@ trait ControllerAdditions
     public function cannot($args = null)
     {
         $args = is_array($args) ? $args : func_get_args();
-        return call_user_func_array([$this->getCurrentAbility(), 'cannot'], $args);
+        return call_user_func_array([$this->getCurrentAuthority(), 'cannot'], $args);
     }
 
     // setParams() should be forbidden for security reasons ?
