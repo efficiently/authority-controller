@@ -23,7 +23,12 @@ class Authority extends OriginalAuthority
     {
       $this->aliasedActions = [];
     }
-
+    
+    /**
+     * Determine if current user can access the given action and resource
+     *
+     * @return boolean
+     */
     public function can($action, $resource, $resourceValue = null)
     {
         if (is_object($resource)) {
@@ -38,11 +43,36 @@ class Authority extends OriginalAuthority
 
         // The conditional callback (Closure) is only evaluated when an actual instance object is present.
         // It is not evaluated when checking permissions on the class name (such as in the 'index' action).
+        $skipConditions = false;
         if (is_string($resource) && ! is_object($resourceValue) && $this->hasCondition($action, $resource)) {
-            return true;
+            $skipConditions = true;
         }
 
-        return parent::can($action, $resource, $resourceValue);
+        $self = $this;
+        $rules = $this->getRulesFor($action, $resource);
+
+        if (! $rules->isEmpty()) {
+            $allowed = array_reduce($rules->all(), function($result, $rule) use ($self, $resourceValue, $skipConditions) {
+                if ($skipConditions) {
+                    return $rule->getBehavior(); // Short circuit
+                } else {
+                    if ($rule->isRestriction()) {
+                        // 'deny' rules override prior rules.
+                        $result = $result && $rule->isAllowed($self, $resourceValue);
+                    } else {
+                        // 'allow' rules do not override prior rules but instead are logically or'ed.
+                        // Unlike Authority default behavior.
+                        $result =  $result || $rule->isAllowed($self, $resourceValue);
+                    }
+                }
+
+                return $result;
+            }, false);
+        } else {
+            $allowed = false;
+        }
+
+        return $allowed;
     }
 
     public function authorize($action, $resource, $args = null)
