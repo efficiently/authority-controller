@@ -36,6 +36,12 @@ class Authority extends OriginalAuthority
             $resource = head(array_keys($resource));
         }
 
+        // The conditional callback (Closure) is only evaluated when an actual instance object is present.
+        // It is not evaluated when checking permissions on the class name (such as in the 'index' action).
+        if (is_string($resource) && $this->hasCondition($action, $resource)) {
+            return true;
+        }
+
         return parent::can($action, $resource, $resourceValue);
     }
 
@@ -120,6 +126,22 @@ class Authority extends OriginalAuthority
         parent::addAlias($name, $this->getExpandActions($actions));
     }
 
+    /**
+     * Returns all rules relevant to the given action and resource
+     *
+     * @return RuleRepository
+     */
+    public function getRulesFor($action, $resource)
+    {
+        $aliases = array_merge((array) $action, $this->getAliasesForAction($action));
+        return $this->rules->getRelevantRules($aliases, $resource);
+    }
+
+    /**
+     * @param  string|array $name Name of action(s)
+     * @param  string|object $resource Resource for the rule
+     * @return boolean
+     */
     public function hasCondition($action, $resource)
     {
         $relevantConditions = $this->getRelevantConditions($action, $resource);
@@ -127,6 +149,11 @@ class Authority extends OriginalAuthority
         return ! empty($relevantConditions);
     }
 
+    /**
+     * @param  string|array $name Name of action(s)
+     * @param  string|object $resource Resource for the rule
+     * @return array
+     */
     public function getRelevantConditions($action, $resource)
     {
         $rules = $this->getRulesFor($action, $resource)->getIterator()->getArrayCopy();
@@ -158,7 +185,7 @@ class Authority extends OriginalAuthority
         if (! array_key_exists($target, $this->getAliasedActions())) {
             $this->aliasedActions[$target] = [];
         }
-        $this->aliasedActions[$target] = array_merge($this->getAliasedActions()[$target], $actions);
+        $this->aliasedActions[$target] = array_unique(array_merge($this->getAliasedActions()[$target], $actions));
     }
 
     // User shouldn't specify targets with names of real actions or it will cause Seg fault
@@ -202,14 +229,14 @@ class Authority extends OriginalAuthority
         return array_flatten( array_map( function($trySubject) use($action) {
             return array_map( function($tryAction) use($trySubject, $action) {
                 return "$tryAction.$trySubject";
-            }, array_flatten([$this->getAliasesForAction($action), 'manage']) );
+            }, array_flatten([$action, $this->getAliasesForAction($action), 'manage']) );
         }, [$subject, 'all'] ) );
     }
 
     // Accepts an array of actions and returns an array of actions which match.
     // This should be called before "matches" and other checking methods since they
     // rely on the actions to be expanded.
-    protected function getExpandActions($actions) {
+    public function getExpandActions($actions) {
         $actions = (array) $actions;
         return array_flatten( array_map(function ($action) use($actions) {
             return array_key_exists($action, $this->getAliasedActions()) ? [$action, $this->getExpandActions($this->getAliasedActions()[$action])] : $action;
@@ -218,16 +245,18 @@ class Authority extends OriginalAuthority
 
     // Given an action, it will try to find all of the actions which are aliased to it.
     // This does the opposite kind of lookup as 'getExpandActions()'.
-    // protected function getAliasesForAction($action)
-    // {
-    //  $results = [];
-    //  foreach ($this->getAliasedActions() as $aliasedAction => $actions) {
-    //      if ( in_array($action, $actions) ) {
-    //          $results = array_merge( $results, $this->getAliasesForAction($aliasedAction) );
-    //      }
-    //  }
-    //  return $results;
-    // }
+    public function getAliasesForAction($action)
+    {
+        $action = (array) $action;
+        $results = [];
+        foreach ($this->getAliasedActions() as $aliasedAction => $actions) {
+            if (array_intersect($action, $actions)) {
+                $results = array_merge($results, parent::getAliasesForAction($aliasedAction));
+            }
+        }
+
+        return array_unique($results);
+    }
 
     protected function getDefaultAliasActions()
     {

@@ -206,7 +206,7 @@ class AcControllerResourceTest extends AcTestCase
 
         $this->params['action'] = "index";
 
-        $this->authority->allow('read', 'Project', function($p) { return false; });
+        $this->authority->allow('read', 'Project', function($self, $p) { return false; });
 
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
         $resource->loadResource();
@@ -215,6 +215,16 @@ class AcControllerResourceTest extends AcTestCase
         $this->assertFalse(property_exists($this->controller, 'projects'));
     }
 
+    // Should not call Closure when only class name is passed, only return true
+    public function testShouldNotCallBlockWhenOnlyClassNameIsPassedOnlyReturnTrue()
+    {
+        $blockCalled = false;
+        $this->authority->allow('preview', 'all', function($self, $object) use(&$blockCalled) {
+          return $blockCalled = true;
+        });
+        $this->assertTrue($this->authority->can('preview', 'Project'));
+        $this->assertFalse($blockCalled);
+    }
 
     /**
      * Should not authorize single resource in collection action
