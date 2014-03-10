@@ -27,7 +27,12 @@ if (! function_exists('get_classname')) {
      */
     function get_classname($object)
     {
-        return $object instanceof \Mockery\MockInterface ? $object->mockery_getName() : get_class($object);
+        $classname = get_class($object);
+        if ($object instanceof \Mockery\MockInterface) {
+            $classname = preg_replace('/_/', '\\', preg_replace('/^Mockery_[0-9]+_+(.+)$/', '$1', $classname));
+        }
+
+        return $classname;
     }
 }
 
