@@ -1,5 +1,7 @@
 <?php
 
+use Mockery as m;
+
 class AcHelpersTest extends AcTestCase
 {
 
@@ -35,6 +37,17 @@ class AcHelpersTest extends AcTestCase
         $this->assertArrayHasKey('price', $compactedArray);
         $this->assertEquals($expectName, $compactedArray['name']);
         $this->assertEquals($expectPrice, $compactedArray['price']);
+    }
+
+    public function testGetClassname()
+    {
+        $mock = m::mock('Project');
+        $this->assertNotEquals('Project', get_class($mock));
+        $this->assertEquals('Project', get_classname($mock));
+
+        $mockNamespace = m::mock('Sub\Task');
+        $this->assertNotEquals('Sub\Task', get_class($mockNamespace));
+        $this->assertEquals('Sub\Task', get_classname($mockNamespace));
     }
 
 }
