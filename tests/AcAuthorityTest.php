@@ -39,17 +39,45 @@ class AcAuthorityTest extends AcTestCase
         });
         $this->assertGreaterThan($rulesCount, $this->authority->getRules()->count());
 
-        $project = m::mock("Project");
+        $project = m::mock('Project');
         $project->user_id = 1;
         $this->assertCan('destroy', $project);
 
         $this->assertCannot('destroy', new stdClass);
     }
 
+    // A user cannot do anything without rules
+    public function testCannotDoAnythingWithoutRules()
+    {
+        $project = $this->mock('Project');
+
+        $this->assertCount(0, $this->authority->getRules());
+
+        $this->assertCannot('read', 'all');
+        $this->assertCannot('read', $project);
+        $this->assertCannot('read', 'Project');
+
+        $this->assertCannot('create', 'all');
+        $this->assertCannot('create', $project);
+        $this->assertCannot('create', 'Project');
+
+        $this->assertCannot('update', 'all');
+        $this->assertCannot('update', $project);
+        $this->assertCannot('update', 'Project');
+
+        $this->assertCannot('delete', 'all');
+        $this->assertCannot('delete', $project);
+        $this->assertCannot('delete', 'Project');
+
+        $this->assertCannot('manage', 'all');
+        $this->assertCannot('manage', $project);
+        $this->assertCannot('manage', 'Project');
+    }
+
     // Adding deny rule overrides prior rules
     public function testDenyRuleOverridesPriorRules()
     {
-        $project = $this->mock("Project");
+        $project = $this->mock('Project');
 
         $this->authority->allow('manage', 'Project');
         $this->authority->deny('destroy', 'Project');
