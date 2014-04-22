@@ -279,13 +279,16 @@ class ProductsController extends \BaseController
 
 Changelog
 ---------
+#### 1.2.1
+* Fix `composer.json` file.
+
 #### 1.2.0
 * Security fix: conditional callback was never evaluated when an actual instance object was present.
-* Non backwards compatible: Deny rules override prior rules and Allow rules don't override prior rules but instead are logically or'ed (#5).
+* Non backwards compatible: Deny rules override prior rules and Allow rules don't override prior rules but instead are logically or'ed (fix [#5](https://github.com/efficiently/authority-controller/issues/5)).
   Match more CanCan default behavior unlike `machuga\authority` package.
   Read the Wiki doc for more information: [Authority-Precedence](https://github.com/efficiently/authority-controller/wiki/Authority-Precedence).
 * Support PHP 5.4, 5.5, 5.6 and HipHop Virtual Machine (hhvm).
-* Update [`Parameters`](https://github.com/efficiently/authority-controller/blob/18c2ad7788385da4e0309708772ea40cc8be0f53/src/Efficiently/AuthorityController/Parameters.php#L46) class to allow custom routes with `id` and `parent_id` routes's parameters (#6).
+* Update [`Parameters`](https://github.com/efficiently/authority-controller/blob/18c2ad7788385da4e0309708772ea40cc8be0f53/src/Efficiently/AuthorityController/Parameters.php#L46) class to allow custom routes with `id` and `parent_id` routes's parameters (fix [#6](https://github.com/efficiently/authority-controller/issues/6)).
 
 #### 1.1.3
 * Upgrade Authority-L4 package to fix Laravel 4.1 support.
