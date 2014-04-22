@@ -44,13 +44,13 @@ class Parameters
                 $keysToRemove = [];
                 if ($resourceId === str_singular(last(array_keys($routeParams)))) {
                     $id = last($routeParams);
-                    if(is_string($id) || is_numeric($id)) {
+                    if (is_string($id) || is_numeric($id)) {
                         $routeParamsParsed['id'] = array_pop($routeParams);
                     }
                 }
 
                 foreach ($routeParams as $key => $parentId) {
-                    if(is_string($parentId) || is_numeric($parentId)) {
+                    if (is_string($parentId) || is_numeric($parentId)) {
                         $routeParamsParsed[str_singular($key).'_id'] = $parentId;
                         $keysToRemove[] = $key;
                     }
@@ -66,7 +66,7 @@ class Parameters
                  *       {
                  *           $self = $this;
                  *           $this->beforeFilter(function () use($self) {
-                 *               if(array_get($self->params, 'product')) {
+                 *               if (array_get($self->params, 'product')) {
                  *                   $productParams = $this->yourPurifyOrEscapeMethod('product');
                  *                   $self->params['product'] = $productParams;
                  *               }
