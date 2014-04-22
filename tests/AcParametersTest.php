@@ -246,6 +246,101 @@ class AcParametersTest extends AcTestCase
         $this->assertEquals($this->getProperty($controller, 'params')['id'], '2');
     }
 
+    public function testExtractResourceIdFromRequestWithImplicitAction()
+    {
+        $parameters = $this->parameters;
+
+        $controllerName = "UsersController";
+        Route::get('users/{id}', ['as'=>'users.show', 'uses' =>'UsersController@show']); // show action
+        $controller = $this->mockController($controllerName);
+
+        $this->call('GET', '/users/6');// show action
+
+        $this->assertArrayHasKey('id', $this->getProperty($parameters, 'params'));
+        $this->assertEquals($this->getProperty($parameters, 'params')['id'], '6');
+
+        $this->assertArrayHasKey('id', $this->getProperty($controller, 'params'));
+        $this->assertEquals($this->getProperty($controller, 'params')['id'], '6');
+    }
+
+    public function testExtractResourceIdFromRequestWithEditAction()
+    {
+        $parameters = $this->parameters;
+
+        $controllerName = "UsersController";
+        Route::get('users/{id}/edit', ['as'=>'users.edit', 'uses' =>'UsersController@edit']); // edit action
+        $controller = $this->mockController($controllerName);
+
+        $this->call('GET', '/users/6/edit');// edit action
+
+        $this->assertArrayHasKey('id', $this->getProperty($parameters, 'params'));
+        $this->assertEquals($this->getProperty($parameters, 'params')['id'], '6');
+
+        $this->assertArrayHasKey('id', $this->getProperty($controller, 'params'));
+        $this->assertEquals($this->getProperty($controller, 'params')['id'], '6');
+    }
+
+    public function testExtractResourceAndParentResourceIdsFromRequest()
+    {
+        $parameters = $this->parameters;
+
+        Route::get('users/{id}', ['as'=>'users.show', 'uses' =>'UsersController@show']); // user show action
+
+        $controllerName = "PostsController";
+        Route::get('users/{user_id}/posts/{id}', ['as'=>'users.posts.show', 'uses' =>'PostsController@show']); // post show action
+        $controller = $this->mockController($controllerName);
+
+        $this->call('GET', '/users/7/posts/3');// show action of post resource
+
+        $this->assertArrayHasKey('user_id', $this->getProperty($parameters, 'params'));
+        $this->assertEquals($this->getProperty($parameters, 'params')['user_id'], '7');
+
+        $this->assertArrayHasKey('user_id', $this->getProperty($controller, 'params'));
+        $this->assertEquals($this->getProperty($controller, 'params')['user_id'], '7');
+
+
+        $this->assertArrayHasKey('id', $this->getProperty($parameters, 'params'));
+        $this->assertEquals($this->getProperty($parameters, 'params')['id'], '3');
+
+        $this->assertArrayHasKey('id', $this->getProperty($controller, 'params'));
+        $this->assertEquals($this->getProperty($controller, 'params')['id'], '3');
+    }
+
+    public function testExtractResourceAndNestedResourceIdsFromRequest()
+    {
+        $parameters = $this->parameters;
+
+        Route::get('users/{id}', ['as'=>'users.show', 'uses' =>'UsersController@show']); // user show action
+
+        Route::get('users/{user_id}/posts/{id}', ['as'=>'users.posts.show', 'uses' =>'PostsController@show']); // post show action
+
+        $controllerName = "CommentsController";
+        // comment show action
+        Route::get('users/{user_id}/posts/{post_id}/comments/{id}', ['as'=>'users.posts.comments.show', 'uses' =>'CommentsController@show']);
+        $controller = $this->mockController($controllerName);
+
+        $this->call('GET', '/users/7/posts/3/comments/8');// show action of comment resource
+
+        $this->assertArrayHasKey('user_id', $this->getProperty($parameters, 'params'));
+        $this->assertEquals($this->getProperty($parameters, 'params')['user_id'], '7');
+
+        $this->assertArrayHasKey('user_id', $this->getProperty($controller, 'params'));
+        $this->assertEquals($this->getProperty($controller, 'params')['user_id'], '7');
+
+        $this->assertArrayHasKey('post_id', $this->getProperty($parameters, 'params'));
+        $this->assertEquals($this->getProperty($parameters, 'params')['post_id'], '3');
+
+        $this->assertArrayHasKey('post_id', $this->getProperty($controller, 'params'));
+        $this->assertEquals($this->getProperty($controller, 'params')['post_id'], '3');
+
+        $this->assertArrayHasKey('id', $this->getProperty($parameters, 'params'));
+        $this->assertEquals($this->getProperty($parameters, 'params')['id'], '8');
+
+        $this->assertArrayHasKey('id', $this->getProperty($controller, 'params'));
+        $this->assertEquals($this->getProperty($controller, 'params')['id'], '8');
+    }
+
+
     protected function mockController($controllerName = null)
     {
         $controllerName = $controllerName ?: $this->controllerName;

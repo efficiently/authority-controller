@@ -42,17 +42,21 @@ class Parameters
                 // So we need to reaffect correct parameter name before any controller's actions or filters.
                 $routeParamsParsed = [];
                 $keysToRemove = [];
-                if ($resourceId === str_singular(last(array_keys($routeParams)))) {
+                $lastRouteParamKey = last(array_keys($routeParams));
+                if ($lastRouteParamKey === 'id' || $resourceId === str_singular($lastRouteParamKey)) {
                     $id = last($routeParams);
                     if (is_string($id) || is_numeric($id)) {
                         $routeParamsParsed['id'] = array_pop($routeParams);
                     }
                 }
 
-                foreach ($routeParams as $key => $parentId) {
-                    if (is_string($parentId) || is_numeric($parentId)) {
-                        $routeParamsParsed[str_singular($key).'_id'] = $parentId;
-                        $keysToRemove[] = $key;
+                foreach ($routeParams as $parentIdKey => $parentIdValue) {
+                    if (is_string($parentIdValue) || is_numeric($parentIdValue)) {
+                        if (! ends_with($parentIdKey, '_id')) {
+                            $parentIdKey = str_singular($parentIdKey).'_id';
+                        }
+                        $routeParamsParsed[$parentIdKey] = $parentIdValue;
+                        $keysToRemove[] = $parentIdKey;
                     }
                 }
                 $routeParams = array_except($routeParams, $keysToRemove);
