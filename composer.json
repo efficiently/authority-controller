@@ -52,5 +52,9 @@
             "dev-1.2": "1.2.x-dev"
        }
     },
+	"config": {
+		"preferred-install": "dist"
+	},
+	"prefer-stable": true,
     "minimum-stability": "dev"
 }
