@@ -27,12 +27,12 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "machuga/authority-l4": "2.1.*"
+        "machuga/authority-l4": "2.2.*"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
         "mockery/mockery": "0.9.*",
-        "orchestra/testbench": "2.1.*"
+        "orchestra/testbench": "2.2.*"
     },
     "autoload": {
         "classmap": [
