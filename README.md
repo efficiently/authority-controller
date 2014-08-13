@@ -101,9 +101,8 @@ To utilize these tables, you can add the following methods to your `User` model.
 
     public function hasRole($key)
     {
-        foreach($this->roles as $role){
-            if($role->name === $key)
-            {
+        foreach ($this->roles as $role){
+            if ($role->name === $key) {
                 return true;
             }
         }
@@ -149,7 +148,7 @@ This will place a copy of the configuration file at `app/config/packages/efficie
 
 return [
 
-    'initialize' => function($authority) {
+    'initialize' => function ($authority) {
         $user = Auth::guest() ? new User : $authority->getCurrentUser();
 
         // Action aliases. For example:
@@ -161,7 +160,6 @@ return [
         } else {
             $authority->allow('read', 'all');
         }
-
     }
 
 ];
@@ -222,11 +220,10 @@ Authority::authorize('read', 'Product', 'Unable to read this product.');
 You can catch the exception and modify its behavior in the `app/start/global.php` file. For example here we set the error message to a flash and redirect to the home page.
 
 ```php
-App::error(function(Efficiently\AuthorityController\Exceptions\AccessDenied $e, $code, $fromConsole)
-{
+App::error(function (Efficiently\AuthorityController\Exceptions\AccessDenied $e, $code, $fromConsole) {
     $msg = $e->getMessage();
     if ($fromConsole) {
-      return 'Error '.$code.': '.$msg."\n";
+        return 'Error '.$code.': '.$msg."\n";
     }
     Log::error('Access denied! '.$msg);
     return Redirect::route('home')->with('flash_alert', $msg);
@@ -279,6 +276,9 @@ class ProductsController extends \BaseController
 
 Changelog
 ---------
+#### 1.2.3
+* Follow [PSR-2](http://www.php-fig.org) coding style
+
 #### 1.2.2
 * Run tests with Laravel 4.2
 
@@ -330,7 +330,7 @@ Missing features
 4. For `allow()` and `deny()` methods of `Authority`, the third argument isn't an optional hash (associative array) of conditions but an anonymous function (Closure):
 
 ```php
-$authority->allow('update', 'Product', function($self, $product) {
+$authority->allow('update', 'Product', function ($self, $product) {
     return $product->available === true;
 });
 ```
