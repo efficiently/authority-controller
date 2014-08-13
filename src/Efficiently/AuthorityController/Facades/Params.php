@@ -9,6 +9,8 @@ class Params extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'parameters'; }
-
+    protected static function getFacadeAccessor()
+    {
+        return 'parameters';
+    }
 }

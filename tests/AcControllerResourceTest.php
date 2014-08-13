@@ -17,8 +17,12 @@ class AcControllerResourceTest extends AcTestCase
         $this->user = $this->getUserWithRole('admin');
         $this->authority = $this->getAuthority($this->user);
 
-        $this->controller->shouldReceive('getParams')->andReturnUsing(function() { return $this->params; } );
-        $this->controller->shouldReceive('getCurrentAuthority')->andReturnUsing(function() { return $this->authority; });
+        $this->controller->shouldReceive('getParams')->andReturnUsing(function () {
+            return $this->params;
+        });
+        $this->controller->shouldReceive('getCurrentAuthority')->andReturnUsing(function () {
+            return $this->authority;
+        });
         // $this->controllerClass->shouldReceive('cancanSkipper')->andReturnUsing( function() { return ['authorize' => [], 'load' => []] });;
     }
 
@@ -206,7 +210,9 @@ class AcControllerResourceTest extends AcTestCase
 
         $this->params['action'] = "index";
 
-        $this->authority->allow('read', 'Project', function($self, $p) { return false; });
+        $this->authority->allow('read', 'Project', function ($self, $p) {
+            return false;
+        });
 
         $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
         $resource->loadResource();
@@ -219,8 +225,8 @@ class AcControllerResourceTest extends AcTestCase
     public function testShouldNotCallClosureWhenOnlyClassNameIsPassedOnlyReturnTrue()
     {
         $blockCalled = false;
-        $this->authority->allow('preview', 'all', function($self, $object) use(&$blockCalled) {
-          return $blockCalled = true;
+        $this->authority->allow('preview', 'all', function ($self, $object) use (&$blockCalled) {
+            return $blockCalled = true;
         });
         $this->assertTrue($this->authority->can('preview', 'Project'));
         $this->assertFalse($blockCalled);
@@ -230,9 +236,9 @@ class AcControllerResourceTest extends AcTestCase
     public function testShouldCallClosureWhenAnInstanceVariableIsPassed()
     {
         $blockCalled = false;
-        $this->authority->allow('preview', 'all', function($self, $object) use(&$blockCalled) {
-          $this->assertInstanceOf('stdClass', $object);
-          return $blockCalled = true;
+        $this->authority->allow('preview', 'all', function ($self, $object) use (&$blockCalled) {
+            $this->assertInstanceOf('stdClass', $object);
+            return $blockCalled = true;
         });
         $this->assertTrue($this->authority->can('preview', new stdClass));
         $this->assertTrue($blockCalled);
@@ -622,7 +628,7 @@ class AcControllerResourceTest extends AcTestCase
         $this->setProperty($this->controller, 'category', $category);
 
         $project = $this->buildModel('Project');
-        $project->shouldReceive('category->associate')->with($category)->once()->andReturnUsing(function () use($category, $project) {
+        $project->shouldReceive('category->associate')->with($category)->once()->andReturnUsing(function () use ($category, $project) {
             $project->category = $category;
             return $project;
         });
@@ -833,7 +839,7 @@ class AcControllerResourceTest extends AcTestCase
         $queryBuilder->shouldReceive('firstOrFail')->andReturn($model);
 
         $mock->shouldReceive('save')->andReturn(true);
-        $mock->shouldReceive('fill')->with(m::type('array'))->andReturnUsing(function($attributes) use($mock) {
+        $mock->shouldReceive('fill')->with(m::type('array'))->andReturnUsing(function ($attributes) use ($mock) {
             $this->fillMock($mock, $attributes);
             return $mock;
         });
@@ -845,5 +851,4 @@ class AcControllerResourceTest extends AcTestCase
 
         return $model;
     }
-
 }

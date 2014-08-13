@@ -13,5 +13,4 @@ class AcTask extends Eloquent
     {
         return $this->belongsTo('AcProject');
     }
-
 }

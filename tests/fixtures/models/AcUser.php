@@ -21,7 +21,6 @@ class AcUser extends Eloquent implements UserInterface, RemindableInterface
 
     public static $passwordAttributes  = ['password'];
     public $autoHashPasswordAttributes = true;
-
     public $autoPurgeRedundantAttributes = true;
 
     public static $rules = [
@@ -104,5 +103,4 @@ class AcUser extends Eloquent implements UserInterface, RemindableInterface
     {
         return 'remember_token';
     }
-
 }

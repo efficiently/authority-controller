@@ -21,9 +21,9 @@ class Authority extends OriginalAuthority
     // Removes previously aliased actions including the defaults.
     public function clearAliasedActions()
     {
-      $this->aliasedActions = [];
+        $this->aliasedActions = [];
     }
-    
+
     /**
      * Determine if current user can access the given action and resource
      *
@@ -52,7 +52,7 @@ class Authority extends OriginalAuthority
         $rules = $this->getRulesFor($action, $resource);
 
         if (! $rules->isEmpty()) {
-            $allowed = array_reduce($rules->all(), function($result, $rule) use ($self, $resourceValue, $skipConditions) {
+            $allowed = array_reduce($rules->all(), function ($result, $rule) use ($self, $resourceValue, $skipConditions) {
                 if ($skipConditions) {
                     return $rule->getBehavior(); // Short circuit
                 } else {
@@ -84,7 +84,7 @@ class Authority extends OriginalAuthority
         if (is_array($options) && array_key_exists('message', $options)) {
             $message = $options['message'];
             // unset($options['message']);
-        } elseif (is_array($args) && array_key_exists(0, $args))  {
+        } elseif (is_array($args) && array_key_exists(0, $args)) {
             list($message) = $args;
             unset($args[0]);
         }
@@ -188,7 +188,7 @@ class Authority extends OriginalAuthority
     {
         $rules = $this->getRulesFor($action, $resource)->getIterator()->getArrayCopy();
 
-        $relevantConditions = array_filter($rules, function($rule) {
+        $relevantConditions = array_filter($rules, function ($rule) {
             return $rule->onlyCondition();
         });
 
@@ -221,7 +221,7 @@ class Authority extends OriginalAuthority
     // User shouldn't specify targets with names of real actions or it will cause Seg fault
     protected function validateTarget($target)
     {
-        if ( in_array($target, array_flatten( array_values($this->getAliasedActions()) ) ) ) {
+        if (in_array($target, array_flatten(array_values($this->getAliasedActions())))) {
             throw new \Exception("You can't specify target ($target) as alias because it is real action name", 1);
         }
     }
@@ -239,38 +239,39 @@ class Authority extends OriginalAuthority
 
     public function getUnauthorizedMessage($action, $subject)
     {
-      $keys = $this->getUnauthorizedMessageKeys($action, $subject);
-      $variables = ['action' => $action];
-      $variables['subject'] = class_exists($subject) ? $subject : snake_case($subject, ' ');
-      $transKey = null;
-      foreach ($keys as $key) {
-        if (\Lang::has('messages.unauthorized.'.$key)) {
-            $transKey = "messages.unauthorized.".$key;
-            break;
+        $keys = $this->getUnauthorizedMessageKeys($action, $subject);
+        $variables = ['action' => $action];
+        $variables['subject'] = class_exists($subject) ? $subject : snake_case($subject, ' ');
+        $transKey = null;
+        foreach ($keys as $key) {
+            if (\Lang::has('messages.unauthorized.'.$key)) {
+                $transKey = "messages.unauthorized.".$key;
+                break;
+            }
         }
-      }
-      $message = ac_trans($transKey, $variables);
-      return $message ?: null;
+        $message = ac_trans($transKey, $variables);
+        return $message ?: null;
     }
 
     protected function getUnauthorizedMessageKeys($action, $subject)
     {
-        $subject = snake_case( class_exists($subject) ? $subject : $subject );
-        return array_flatten( array_map( function($trySubject) use($action) {
-            return array_map( function($tryAction) use($trySubject, $action) {
+        $subject = snake_case(class_exists($subject) ? $subject : $subject);
+        return array_flatten(array_map(function ($trySubject) use ($action) {
+            return array_map(function ($tryAction) use ($trySubject, $action) {
                 return "$tryAction.$trySubject";
-            }, array_flatten([$action, $this->getAliasesForAction($action), 'manage']) );
-        }, [$subject, 'all'] ) );
+            }, array_flatten([$action, $this->getAliasesForAction($action), 'manage']));
+        }, [$subject, 'all']));
     }
 
     // Accepts an array of actions and returns an array of actions which match.
     // This should be called before "matches" and other checking methods since they
     // rely on the actions to be expanded.
-    public function getExpandActions($actions) {
+    public function getExpandActions($actions)
+    {
         $actions = (array) $actions;
-        return array_flatten( array_map(function ($action) use($actions) {
+        return array_flatten(array_map(function ($action) use ($actions) {
             return array_key_exists($action, $this->getAliasedActions()) ? [$action, $this->getExpandActions($this->getAliasedActions()[$action])] : $action;
-        }, $actions) );
+        }, $actions));
     }
 
     // Given an action, it will try to find all of the actions which are aliased to it.
@@ -305,5 +306,4 @@ class Authority extends OriginalAuthority
             $this->addAlias($name, $actions);
         }
     }
-
 }

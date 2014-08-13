@@ -16,8 +16,8 @@ class AcTestCase extends Orchestra\Testbench\TestCase
     protected function mock($className)
     {
         $mock = m::mock($className);
-        App::bind($className, function($app, $parameters = []) use($mock) {
-            if(is_array($parameters) && is_array($attributes=array_get($parameters, 0, [])) && respond_to($mock, "fill")) {
+        App::bind($className, function ($app, $parameters = []) use ($mock) {
+            if (is_array($parameters) && is_array($attributes = array_get($parameters, 0, [])) && respond_to($mock, "fill")) {
                 $mock = $this->fillMock($mock, $attributes);
             }
 
@@ -51,5 +51,4 @@ class AcTestCase extends Orchestra\Testbench\TestCase
             'Params'    => 'Efficiently\AuthorityController\Facades\Params',
         ];
     }
-
 }

@@ -254,5 +254,4 @@ class AcProjectsControllerTest extends AcTestCase
 
         return $model;
     }
-
 }

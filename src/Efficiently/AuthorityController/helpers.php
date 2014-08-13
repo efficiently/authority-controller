@@ -7,8 +7,8 @@ if (! function_exists('array_extract_options')) {
         if (is_array($array)) {
             $clonedArray = $array;
             uksort($clonedArray, 'strnatcmp');
-            foreach ( $clonedArray as $key => $value ) {
-                if ( is_string($key) ) {
+            foreach ($clonedArray as $key => $value) {
+                if (is_string($key)) {
                     $options[$key] = $value;
                     unset($array[$key]);
                 }
@@ -47,7 +47,7 @@ if (! function_exists('respond_to')) {
      */
     function respond_to($object, $methodName)
     {
-        if(method_exists($object, $methodName)) {
+        if (method_exists($object, $methodName)) {
             return true;
         } elseif (is_a($object, '\Mockery\MockInterface') && ($expectationDirector = array_get($object->mockery_getExpectations(), $methodName))) {
             foreach ((array) $expectationDirector->getExpectations() as $expectation) {
@@ -74,7 +74,7 @@ if (! function_exists('compact_property')) {
         $properties = array_slice(func_get_args(), 1);
         $compactArray = [];
         foreach ($properties as $property) {
-            if ( property_exists($instance, $property) ) {
+            if (property_exists($instance, $property)) {
                 $$property = get_property($instance, $property);
 
                 $compactArray = array_merge($compactArray, compact($property));

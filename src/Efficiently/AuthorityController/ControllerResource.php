@@ -6,7 +6,9 @@ use Route;
 
 class ControllerResource
 {
-    protected $controller, $name, $params;
+    protected $controller;
+    protected $name;
+    protected $params;
     protected $options = [];
 
     public static function getNameByController($controller)
@@ -40,7 +42,7 @@ class ControllerResource
 
         $router = App::make('router');
         if (! Event::hasListeners($filterPrefix.$filterName)) {
-            $router->filter($filterName, function() use($controller, $method, $resourceOptions, $resourceName) {
+            $router->filter($filterName, function () use ($controller, $method, $resourceOptions, $resourceName) {
                 $controllerResource = App::make('Efficiently\AuthorityController\ControllerResource', [
                     $controller, $resourceName, $resourceOptions
                 ]);
@@ -287,7 +289,8 @@ class ControllerResource
             } elseif (array_key_exists('shallow', $this->options)) {
                 return $this->getResourceClass();
             } else {
-                throw new Exceptions\AccessDenied(null, $this->getAuthorizationAction(), $this->getResourceClass()); // maybe this should be a record not found error instead?
+                // Maybe this should be a record not found error instead?
+                throw new Exceptions\AccessDenied(null, $this->getAuthorizationAction(), $this->getResourceClass());
             }
         } else {
             return $this->getResourceClass();
@@ -297,7 +300,7 @@ class ControllerResource
     protected function getParentName()
     {
         if (array_key_exists('through', $this->options)) {
-            return array_first(array_flatten((array) $this->options['through']), function($key, $value) {
+            return array_first(array_flatten((array) $this->options['through']), function ($key, $value) {
                 return $this->fetchParent($value);
             });
         }
@@ -436,5 +439,4 @@ class ControllerResource
             return $collectionScope;
         }
     }
-
 }

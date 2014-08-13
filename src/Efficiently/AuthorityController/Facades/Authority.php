@@ -9,6 +9,8 @@ class Authority extends Facade
      *
      * @return string
      */
-    protected static function getFacadeAccessor() { return 'authority'; }
-
+    protected static function getFacadeAccessor()
+    {
+         return 'authority';
+    }
 }

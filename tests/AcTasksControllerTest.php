@@ -309,5 +309,4 @@ class AcTasksControllerTest extends AcTestCase
 
         return $model;
     }
-
 }

@@ -34,7 +34,7 @@ class AcAuthorityTest extends AcTestCase
     public function testCanEvaluateRulesOnObject()
     {
         $rulesCount = $this->authority->getRules()->count();
-        $this->authority->allow('destroy', 'Project', function($self, $project) {
+        $this->authority->allow('destroy', 'Project', function ($self, $project) {
             return $self->user()->id === $project->user_id;
         });
         $this->assertGreaterThan($rulesCount, $this->authority->getRules()->count());
@@ -100,15 +100,15 @@ class AcAuthorityTest extends AcTestCase
         $this->authority = App::make('authority');
         $this->authority->setCurrentUser($this->user);
 
-        $this->authority->allow('read', 'User', function($self, $user) {
+        $this->authority->allow('read', 'User', function ($self, $user) {
             return $user->id != 1;// Should return false
         });
 
-        $this->authority->allow('read', 'User', function($self, $user) {
+        $this->authority->allow('read', 'User', function ($self, $user) {
             return $user->email == "admin@localhost";// Should return true
         });
 
-        $this->authority->allow('read', 'User', function($self, $user) {
+        $this->authority->allow('read', 'User', function ($self, $user) {
             return $user->name != "Administrator";// Should return false
         });
 
@@ -128,15 +128,15 @@ class AcAuthorityTest extends AcTestCase
         $this->authority = App::make('authority');
         $this->authority->setCurrentUser($this->user);
 
-        $this->authority->allow('read', 'User', function($self, $user) {
+        $this->authority->allow('read', 'User', function ($self, $user) {
             return $user->id != 1;// Should return false
         });
 
-        $this->authority->allow('read', 'User', function($self, $user) {
+        $this->authority->allow('read', 'User', function ($self, $user) {
             return $user->email != "admin@localhost";// Should return false
         });
 
-        $this->authority->allow('read', 'User', function($self, $user) {
+        $this->authority->allow('read', 'User', function ($self, $user) {
             return $user->name != "Administrator";// Should return false
         });
 
@@ -155,7 +155,7 @@ class AcAuthorityTest extends AcTestCase
         $this->assertCan('index', $user);
 
         // $user cannot view the 'index' action if there above one 'deny' rules with  conditions
-        $this->authority->deny('read', 'User', function($self, $user) {
+        $this->authority->deny('read', 'User', function ($self, $user) {
             return $user->name == "Administrator";// Should return true
         });
         $this->assertCannot('index', $user);

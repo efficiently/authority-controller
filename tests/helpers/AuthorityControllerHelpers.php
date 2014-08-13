@@ -87,5 +87,4 @@ trait AuthorityControllerHelpers
     {
         return invoke_method($object, $methodName, $values);
     }
-
 }

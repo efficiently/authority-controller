@@ -1,4 +1,5 @@
 <?php
+
 use Mockery as m;
 
 class AcControllerAdditionsClass
@@ -10,7 +11,8 @@ class AcControllerAdditionsTest extends AcTestCase
 {
     use AuthorityControllerHelpers;
 
-    protected $controller, $filterPrefix = "router.filter: ";
+    protected $controller;
+    protected $filterPrefix = "router.filter: ";
 
     public function setUp()
     {
@@ -61,7 +63,7 @@ class AcControllerAdditionsTest extends AcTestCase
         });
 
         $controller->shouldReceive('beforeFilter')->with(m::type('string'), [])->once()
-            ->andReturnUsing(function ($filterName, $options) use($controller) {
+            ->andReturnUsing(function ($filterName, $options) use ($controller) {
                 $this->assertTrue(Event::hasListeners($this->filterPrefix.$filterName));
                 return Event::fire($this->filterPrefix.$filterName);
             });
@@ -83,7 +85,7 @@ class AcControllerAdditionsTest extends AcTestCase
         });
 
         $controller->shouldReceive('beforeFilter')->with(m::type('string'), [])->once()
-            ->andReturnUsing(function ($filterName, $options) use($controller) {
+            ->andReturnUsing(function ($filterName, $options) use ($controller) {
                 $this->assertTrue(Event::hasListeners($this->filterPrefix.$filterName));
                 return Event::fire($this->filterPrefix.$filterName);
             });
@@ -113,7 +115,7 @@ class AcControllerAdditionsTest extends AcTestCase
         });
 
         $controller->shouldReceive('beforeFilter')->with(m::type('string'), ['except' => 'show'])->once()
-            ->andReturnUsing(function ($filterName, $options) use($controller) {
+            ->andReturnUsing(function ($filterName, $options) use ($controller) {
                 $this->assertTrue(Event::hasListeners($this->filterPrefix.$filterName));
                 return Event::fire($this->filterPrefix.$filterName);
             });
@@ -135,12 +137,11 @@ class AcControllerAdditionsTest extends AcTestCase
         });
 
         $controller->shouldReceive('beforeFilter')->with(m::type('string'), ['only' => ['show', 'index']])->once()
-            ->andReturnUsing(function ($filterName, $options) use($controller) {
+            ->andReturnUsing(function ($filterName, $options) use ($controller) {
                 $this->assertTrue(Event::hasListeners($this->filterPrefix.$filterName));
                 return Event::fire($this->filterPrefix.$filterName);
             });
 
         $controller->loadResource(['foo' => 'bar', 'only' => ['show', 'index']]);
     }
-
 }

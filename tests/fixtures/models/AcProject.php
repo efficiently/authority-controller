@@ -21,5 +21,4 @@ class AcProject extends Eloquent
     {
         return $this->hasMany('AcTask');
     }
-
 }

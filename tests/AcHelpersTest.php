@@ -49,5 +49,4 @@ class AcHelpersTest extends AcTestCase
         $this->assertNotEquals('Sub\Task', get_class($mockNamespace));
         $this->assertEquals('Sub\Task', get_classname($mockNamespace));
     }
-
 }

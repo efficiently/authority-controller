@@ -22,7 +22,7 @@ class Parameters
         $paramsFilterName = "controller.parameters.".$controllerClass;
 
         if (! Event::hasListeners($paramsFilterPrefix.$paramsFilterName)) {
-            $router->filter($paramsFilterName, function() use($controller, $router) {
+            $router->filter($paramsFilterName, function () use ($controller, $router) {
                 $currentRoute = $router->current();
                 $resourceParams = [];
                 list($resourceParams['controller'], $resourceParams['action']) = explode('@', $router->currentRouteAction());
@@ -133,7 +133,7 @@ class Parameters
      */
     public function only($keys = null)
     {
-        $keys = is_array( $keys ) ? $keys : func_get_args();
+        $keys = is_array($keys) ? $keys : func_get_args();
         return array_only($this->params, $keys);
     }
 
@@ -145,7 +145,7 @@ class Parameters
      */
     public function except($keys = null)
     {
-        $keys = is_array( $keys ) ? $keys : func_get_args();
+        $keys = is_array($keys) ? $keys : func_get_args();
         return array_except($this->params, $keys);
     }
 
@@ -172,7 +172,9 @@ class Parameters
     protected function specialInputKeys($inputKeys = [])
     {
         $inputKeys = $inputKeys ?: array_keys(Input::all());
-        return array_filter($inputKeys, function($value) { return is_string($value) ? starts_with($value, '_') : false; });
+        return array_filter($inputKeys, function ($value) {
+            return is_string($value) ? starts_with($value, '_') : false;
+        });
     }
 
     /**
@@ -184,5 +186,4 @@ class Parameters
         $name = preg_replace("/^(.+)Controller$/", "$1", $controller);
         return str_plural(snake_case(class_basename($name)));
     }
-
 }

@@ -80,7 +80,7 @@ class AcTasksController extends AcBaseController
     {
         // $this->acTask = App::make('AcTask');
 
-        $this->acTask->fill( Input::except('_method', '_token') );
+        $this->acTask->fill(Input::except('_method', '_token'));
         $this->acTask->ac_project_id = $acProjectId;
         if ($this->acTask->save()) {
             return Redirect::route('ac_projects.ac_tasks.index', $acProjectId);
@@ -134,7 +134,7 @@ class AcTasksController extends AcBaseController
     {
         // $this->acTask = $this->acTaskModel->find($id);
 
-        $this->acTask->fill( Input::except('_method', '_token') );
+        $this->acTask->fill(Input::except('_method', '_token'));
         if ($this->acTask->save()) {
             return Redirect::route('ac_projects.ac_tasks.show', [$acProjectId, $id]);
         } else {
@@ -159,5 +159,4 @@ class AcTasksController extends AcBaseController
 
         return Redirect::route('ac_projects.ac_tasks.index', $acProjectId);
     }
-
 }

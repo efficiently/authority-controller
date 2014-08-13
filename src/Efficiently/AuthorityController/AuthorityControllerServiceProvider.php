@@ -76,5 +76,4 @@ class AuthorityControllerServiceProvider extends ServiceProvider
     {
         return ['authority'];
     }
-
 }

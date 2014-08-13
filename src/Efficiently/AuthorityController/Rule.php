@@ -16,7 +16,7 @@ class Rule extends OriginalRule
     {
         // Nested resources can be passed through a associative array, this way conditions which are
         // dependent upon the association will work when using a class.
-        $resource = is_array($resource) ? head( array_keys($resource) ) : $resource;
+        $resource = is_array($resource) ? head(array_keys($resource)) : $resource;
         return parent::isRelevant($action, $resource);
     }
 
@@ -29,7 +29,7 @@ class Rule extends OriginalRule
     public function matchesAction($action)
     {
         $action = (array) $action;
-        return $this->action === 'manage' || in_array($this->action,$action);
+        return $this->action === 'manage' || in_array($this->action, $action);
     }
 
     /**

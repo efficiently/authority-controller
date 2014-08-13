@@ -17,7 +17,7 @@ class AccessDenied extends \Exception
     public $subject;
     public $defaultMessage;
 
-    function __construct($message = null, $action = null, $subject = null, $code = 0, \Exception $previous = null)
+    public function __construct($message = null, $action = null, $subject = null, $code = 0, \Exception $previous = null)
     {
         $this->action = $action;
         $this->subject = $subject;

@@ -358,7 +358,7 @@ class AcParametersTest extends AcTestCase
 
         $dispatcher = $this->router->getControllerDispatcher();
         $dispatcher->shouldReceive('dispatch')
-          ->with(m::type('\Illuminate\Routing\Route'), m::type('\Illuminate\Http\Request'), $controllerName, m::type('string'))
+            ->with(m::type('\Illuminate\Routing\Route'), m::type('\Illuminate\Http\Request'), $controllerName, m::type('string'))
             ->once()->andReturnUsing(function ($route, $request, $controller, $method) use ($dispatcher, $controllerInstance) {
 
                 $this->app->make('Params')->fillController($controllerInstance);
@@ -368,7 +368,7 @@ class AcParametersTest extends AcTestCase
                 Event::fire($filterName);
 
                 return new \Symfony\Component\HttpFoundation\Response;
-        });
+            });
 
         $this->mock('\Efficiently\AuthorityController\ControllerResource');
         $this->controllerResource = $this->app->make('\Efficiently\AuthorityController\ControllerResource');
@@ -397,5 +397,4 @@ class AcParametersTest extends AcTestCase
 
         return $router;
     }
-
 }

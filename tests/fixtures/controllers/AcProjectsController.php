@@ -61,7 +61,7 @@ class AcProjectsController extends AcBaseController
     {
         // $this->acProject = App::make('AcProject');
 
-        $this->acProject->fill( Input::except('_method', '_token') );
+        $this->acProject->fill(Input::except('_method', '_token'));
         if ($this->acProject->save()) {
             return Redirect::route('ac_projects.index');
         } else {
@@ -111,7 +111,7 @@ class AcProjectsController extends AcBaseController
     {
         // $this->acProject = $this->acProjectModel->find($id);
 
-        $this->acProject->fill( Input::except('_method', '_token') );
+        $this->acProject->fill(Input::except('_method', '_token'));
         if ($this->acProject->save()) {
             return Redirect::route('ac_projects.show', $id);
         } else {
@@ -135,5 +135,4 @@ class AcProjectsController extends AcBaseController
 
         return Redirect::route('ac_projects.index');
     }
-
 }

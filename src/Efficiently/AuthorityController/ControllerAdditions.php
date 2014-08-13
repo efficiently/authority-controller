@@ -190,7 +190,7 @@ trait ControllerAdditions
      */
     public function loadResource($args = null)
     {
-        $args = is_array( $args ) ? $args : func_get_args();
+        $args = is_array($args) ? $args : func_get_args();
         ControllerResource::addBeforeFilter($this, __METHOD__, $args);
     }
 
@@ -428,5 +428,4 @@ trait ControllerAdditions
     {
         return (array) $this->params;
     }
-
 }

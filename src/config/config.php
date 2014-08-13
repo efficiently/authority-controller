@@ -2,7 +2,7 @@
 
 return [
 
-    'initialize' => function($authority) {
+    'initialize' => function ($authority) {
 
         // Action aliases. For example:
         //
