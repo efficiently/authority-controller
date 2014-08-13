@@ -1,7 +1,7 @@
 AuthorityController [![Build Status](https://travis-ci.org/efficiently/authority-controller.png?branch=master)](http://travis-ci.org/efficiently/authority-controller)
 ===================
 
-AuthorityController 1.2 is an PHP authorization library for [Laravel 4.1](http://laravel.com) which restricts what resources a given user is allowed to access.
+AuthorityController 1.2 is an PHP authorization library for [Laravel 4.1+](http://laravel.com) which restricts what resources a given user is allowed to access.
 
 All permissions are defined in a single location:
 
@@ -13,7 +13,7 @@ For [**Laravel 4.0**](http://laravel.com/docs/4-0) supports see [AuthorityContro
 
 #### Demo application
 
-You can see in action this package with this Laravel 4.1 [**demo application**](https://github.com/efficiently/laravel_authority-controller_app).
+You can see in action this package with this Laravel 4.2 [**demo application**](https://github.com/efficiently/laravel_authority-controller_app).
 
 #### Origins and Inspirations
 
@@ -279,6 +279,9 @@ class ProductsController extends \BaseController
 
 Changelog
 ---------
+#### 1.2.2
+* Run tests with Laravel 4.2
+
 #### 1.2.1
 * Fix `composer.json` file.
 
