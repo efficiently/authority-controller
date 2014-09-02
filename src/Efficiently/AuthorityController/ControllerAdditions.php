@@ -8,6 +8,39 @@ trait ControllerAdditions
     protected $currentUser;
     protected $_authorized;
 
+   /**
+    * Remove all of the Authority-Controller event listeners of the specified controller.
+    * If $controllerName == '*', it removes all the Authority-Controller events
+    * of every Controllers of the application.
+    *
+    *   BaseController::flushAuthorityEvents('*'); // Remove all Authority-Controller events of every Controllers
+    *   ProjectsController::flushAuthorityEvents(); // Remove all Authority-Controller events of ProjectsController
+    *
+    * @param string Controller name. If null it get the current Controller name.
+    * @return void
+    */
+    public static function flushAuthorityEvents($controllerName = null)
+    {
+        $controllerName = $controllerName ?: get_called_class();
+
+        $events = app('events');
+        $listeners = (array) get_property($events, 'listeners');
+        foreach ($listeners as $eventName => $listener) {
+            $remove = false; // flag
+            if ($controllerName === "*") { // All Controllers
+                if (starts_with($eventName, "router.filter: controller.")) {
+                    $remove = true;
+                }
+            } elseif (preg_match("/^router\.filter: controller\.[^.]+?\.$controllerName/", $eventName)) {
+                $remove = true;
+            }
+            if ($remove) {
+                $events->forget($eventName);
+            }
+        }
+
+    }
+
     public function paramsBeforeFilter($filter, array $options = [])
     {
         $this->prependBeforeFilter($filter, $options);
