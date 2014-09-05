@@ -101,10 +101,15 @@ To utilize these tables, you can add the following methods to your `User` model.
 
     public function hasRole($key)
     {
-        $this->roles->each(function ($role) use ($key) {
-            return $role->name === $key;
-        });
-        return false;
+        $hasRole = false;
+        foreach ($this->roles as $role) {
+            if ($role->name === $key) {
+                $hasRole = true;
+                break;
+            }
+        }
+
+        return $hasRole;
     }
 
     //app/models/Role.php
