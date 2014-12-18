@@ -281,7 +281,7 @@ Changelog
 ---------
 #### 1.2.4
 * Add `BaseController::flushAuthorityEvents()` static method.
-  Useful for functional tests with Codeception (see issue #14).
+  Useful for functional tests with Codeception (see issue [#14](https://github.com/efficiently/authority-controller/issues/14) and [this Wiki page](https://github.com/efficiently/authority-controller/wiki/Testing-Authority-rules#functional-tests-with-codeception) for more explanations).
 * Fix User::hasRoles() method to avoid duplicate roles.
 
 #### 1.2.3
