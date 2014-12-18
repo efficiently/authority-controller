@@ -279,6 +279,11 @@ class ProductsController extends \BaseController
 
 Changelog
 ---------
+#### 1.2.4
+* Add `BaseController::flushAuthorityEvents()` static method.
+  Useful for functional tests with Codeception (see issue #14).
+* Fix User::hasRoles() method to avoid duplicate roles.
+
 #### 1.2.3
 * Follow [PSR-2](http://www.php-fig.org) coding style
 
