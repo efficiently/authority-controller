@@ -13,11 +13,11 @@ For [**Laravel 4.1 or 4.2**](http://laravel.com/docs/4.2) supports see [Authorit
 
 #### Demo application
 
-You can see in action this package with this Laravel 5 [**demo application**](https://github.com/efficiently/laravel_authority-controller_app/tree/2.0).
+You can see in action this package with this Laravel 5 [**demo application**](https://github.com/efficiently/laravel_authority-controller_app/tree/2.0#readme).
 
 #### Origins and Inspirations
 
-It's an extension of the [`authority-l5`](https://github.com/machuga/authority-l4) package.
+It's an extension of the [`authority-laravel`](https://github.com/machuga/authority-l4) package.
 
 And a port of the best [Ruby](https://ruby-lang.org) authorization library: [CanCan](https://github.com/ryanb/cancan).
 
@@ -410,4 +410,4 @@ To get the tests running you should install PHPUnit and run `phpunit tests`.
 
 Special Thanks
 --------------
-AuthorityController was _heavily_ inspired by [CanCan](https://github.com/ryanb/cancan) and uses [Authority-L5](https://github.com/machuga/authority-l4).
+AuthorityController was _heavily_ inspired by [CanCan](https://github.com/ryanb/cancan) and uses [Authority-Laravel](https://github.com/machuga/authority-l4).
