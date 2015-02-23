@@ -355,20 +355,22 @@ class AcParametersTest extends AcTestCase
         $this->mock($controllerName);
         $controllerInstance = $this->app->make($controllerName);
         $controllerInstance->shouldReceive('paramsBeforeFilter')->with(m::type('string'))->once();
+        $controllerInstance->shouldReceive('getBeforeFilters')->once()->andReturn([
+            ['original' => null, 'filter' => null, 'parameters' => [], 'options' => []]
+        ]);
+        $controllerInstance->shouldReceive('getAfterFilters')->once()->andReturn([
+            ['original' => null, 'filter' => null, 'parameters' => [], 'options' => []]
+        ]);
+        $controllerInstance->shouldReceive('getMiddleware')->once()->andReturn([]);
+        $controllerInstance->shouldReceive('callAction')->with(m::type('string'), m::type('array'))->andReturnUsing(function ($method, $parameters) use ($controllerInstance) {
+            $this->app->make('Params')->fillController($controllerInstance);
 
-        $dispatcher = $this->router->getControllerDispatcher();
-        $dispatcher->shouldReceive('dispatch')
-            ->with(m::type('\Illuminate\Routing\Route'), m::type('\Illuminate\Http\Request'), $controllerName, m::type('string'))
-            ->once()->andReturnUsing(function ($route, $request, $controller, $method) use ($dispatcher, $controllerInstance) {
+            $filterName = "router.filter: controller.parameters.".get_classname($controllerInstance);
+            $this->assertTrue(Event::hasListeners($filterName));
+            Event::fire($filterName);
 
-                $this->app->make('Params')->fillController($controllerInstance);
-
-                $filterName = "router.filter: controller.parameters.".get_classname($controllerInstance);
-                $this->assertTrue(Event::hasListeners($filterName));
-                Event::fire($filterName);
-
-                return new \Symfony\Component\HttpFoundation\Response;
-            });
+            return new \Symfony\Component\HttpFoundation\Response;
+        });
 
         $this->mock('\Efficiently\AuthorityController\ControllerResource');
         $this->controllerResource = $this->app->make('\Efficiently\AuthorityController\ControllerResource');
@@ -387,13 +389,6 @@ class AcParametersTest extends AcTestCase
         $this->setProperty($router, 'events', $app['events']);
         $this->setProperty($router, 'routes', new \Illuminate\Routing\RouteCollection);
         $this->setProperty($router, 'container', $app);
-
-        $this->mock("\Illuminate\Routing\ControllerDispatcher");
-        $dispatcher = $app->make("\Illuminate\Routing\ControllerDispatcher");
-        $this->setProperty($dispatcher, 'filterer', $router);
-        $this->setProperty($dispatcher, 'container', $app);
-
-        $router->setControllerDispatcher($dispatcher);
 
         return $router;
     }

@@ -64,7 +64,7 @@ class Parameters
                 /**
                  * You can escape or purify these parameters. For example:
                  *
-                 *   class ProductsController extends \BaseController
+                 *   class ProductsController extends Controller
                  *   {
                  *       public function __construct()
                  *       {

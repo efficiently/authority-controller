@@ -39,7 +39,7 @@ class AcProjectsController extends AcBaseController
     {
         // $this->acProjects = $this->acProjectModel->all();
 
-        return View::make('ac_projects.index', compact_property($this, 'acProjects'));
+        return view('ac_projects.index', compact_property($this, 'acProjects'));
     }
 
     /**
@@ -49,7 +49,7 @@ class AcProjectsController extends AcBaseController
      */
     public function create()
     {
-        return View::make('ac_projects.create');
+        return view('ac_projects.create');
     }
 
     /**
@@ -81,7 +81,7 @@ class AcProjectsController extends AcBaseController
     {
         // $this->acProject = $this->acProjectModel->findOrFail($id);
 
-        return View::make('ac_projects.show', compact_property($this, 'acProject'));
+        return view('ac_projects.show', compact_property($this, 'acProject'));
     }
 
     /**
@@ -98,7 +98,7 @@ class AcProjectsController extends AcBaseController
             return Redirect::route('ac_projects.index');
         }
 
-        return View::make('ac_projects.edit', compact_property($this, 'acProject'));
+        return view('ac_projects.edit', compact_property($this, 'acProject'));
     }
 
     /**

@@ -2,7 +2,7 @@
 
 use Mockery as m;
 
-class AcTestCase extends Orchestra\Testbench\TestCase
+abstract class AcTestCase extends Orchestra\Testbench\TestCase
 {
     protected $app;
     protected $router;
@@ -40,6 +40,7 @@ class AcTestCase extends Orchestra\Testbench\TestCase
     protected function getPackageProviders()
     {
         return [
+            'Collective\Html\HtmlServiceProvider',
             'Efficiently\AuthorityController\AuthorityControllerServiceProvider',
         ];
     }
@@ -47,6 +48,8 @@ class AcTestCase extends Orchestra\Testbench\TestCase
     protected function getPackageAliases()
     {
         return [
+            'Form' => 'Collective\Html\FormFacade',
+            'Html' => 'Collective\Html\HtmlFacade',
             'Authority' => 'Efficiently\AuthorityController\Facades\Authority',
             'Params'    => 'Efficiently\AuthorityController\Facades\Params',
         ];

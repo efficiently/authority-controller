@@ -22,7 +22,18 @@ class AuthorityControllerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->package('efficiently/authority-controller');
+        // Publish config
+        $this->publishes([
+            __DIR__ . '/../../config/config.php' => config_path('authority-controller.php')
+        ], 'config');
+
+        // Publish migrations
+        $this->publishes([
+            __DIR__ . '/../../migrations/' => base_path('/database/migrations')
+        ], 'migrations');
+
+        // Load translations
+        $this->loadTranslationsFrom(__DIR__ . '/../../lang', 'authority-controller');
     }
 
     /**
@@ -37,12 +48,14 @@ class AuthorityControllerServiceProvider extends ServiceProvider
         });
 
         // Find the default Controller class of the current Laravel application
-        $aliasLoader = AliasLoader::getInstance();
-        $controllerClass = array_get($aliasLoader->getAliases(), 'Controller', '\Illuminate\Routing\Controller');
+        $controllerClass = $this->app['config']->get(
+            'authority-controller.controllerClass',
+            'Illuminate\Routing\Controller'
+        );
 
-        $this->app->resolvingAny(function ($object) use ($controllerClass) {
+        $this->app->resolving(function ($object) use ($controllerClass) {
             // Check if the current $object class is a Controller class and if it responds to paramsBeforeFilter method
-            if (is_a($object, $controllerClass) && respond_to($object, "paramsBeforeFilter")) {
+            if (is_a($object, $controllerClass) && respond_to($object, 'paramsBeforeFilter')) {
                 // Fill $params properties of the current controller
                 $this->app['parameters']->fillController($object);
             }
@@ -51,7 +64,7 @@ class AuthorityControllerServiceProvider extends ServiceProvider
         $this->app['authority'] = $this->app->share(function ($app) {
             $user = $app['auth']->user();
             $authority = new Authority($user);
-            $fn = $app['config']->get('authority-controller::initialize', null);
+            $fn = $app['config']->get('authority-controller.initialize', null);
 
             if ($fn) {
                 $fn($authority);
