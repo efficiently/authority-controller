@@ -37,7 +37,7 @@ abstract class AcTestCase extends Orchestra\Testbench\TestCase
         return $instance;
     }
 
-    protected function getPackageProviders()
+    protected function getPackageProviders($app)
     {
         return [
             'Collective\Html\HtmlServiceProvider',
@@ -45,7 +45,7 @@ abstract class AcTestCase extends Orchestra\Testbench\TestCase
         ];
     }
 
-    protected function getPackageAliases()
+    protected function getPackageAliases($app)
     {
         return [
             'Form' => 'Collective\Html\FormFacade',
