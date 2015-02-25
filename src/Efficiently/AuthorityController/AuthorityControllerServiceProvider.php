@@ -1,7 +1,6 @@
 <?php namespace Efficiently\AuthorityController;
 
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Foundation\AliasLoader;
 use Efficiently\AuthorityController\Authority;
 use Efficiently\AuthorityController\Parameters;
 
