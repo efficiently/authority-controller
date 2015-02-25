@@ -320,6 +320,10 @@ Changelog
 * Laravel 5 support!
 * Use your Laravel Aliases to resolve your models namespace name.
 * Or auto guessing them, e.g. `User` => `App\User`
+* Add a new config option `controllerClass` which is by default `Illuminate\Routing\Controller`
+* Upgrade Notes <small>(if you used previously this package with Laravel 4)</small>:
+  * Move your `authory-controller` config file from `app/config/packages/efficiently/authority-controller/config.php` to `config/authority-controller.php`
+  * Publish the `authory-controller` migrations files <small>(see the section [Create Roles and Permissions Tables](https://github.com/efficiently/authority-controller/blob/2.0/README.md#create-roles-and-permissions-tables) of this README)</small>
 
 #### 1.2.4
 * Add `BaseController::flushAuthorityEvents()` static method.
