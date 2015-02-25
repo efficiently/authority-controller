@@ -221,7 +221,7 @@ class ArticlesController extends Controller
 
     public function __construct()
     {
-        $this->loadAndAuthorizeResource(['class' => 'App\Article']);
+        $this->loadAndAuthorizeResource();
     }
 
     public function show($id)
@@ -318,6 +318,8 @@ Changelog
 ---------
 #### 2.0-dev
 * Laravel 5 support!
+* Use your Laravel Aliases to resolve your models namespace name.
+* Or auto guessing them, e.g. `User` => `App\User`
 
 #### 1.2.4
 * Add `BaseController::flushAuthorityEvents()` static method.
