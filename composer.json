@@ -44,7 +44,7 @@
         "phpunit/phpunit": "~4.5",
         "mockery/mockery": "0.9.*",
         "orchestra/testbench": "3.0.*",
-        "laravelcollective/html": "~5.0"
+        "illuminate/html": "5.0.*"
     },
     "autoload": {
         "classmap": [
@@ -71,5 +71,5 @@
 		"preferred-install": "dist"
 	},
 	"prefer-stable": true,
-    "minimum-stability": "dev"
+  "minimum-stability": "dev"
 }

@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "71eeb93c92132569cbbac1727e8e5be9",
+    "hash": "2d64deb02048c98034439ed3df789050",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -410,16 +410,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.0.6",
+            "version": "v5.0.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "43637b796f1ac0b1a960984231251ff04b438006"
+                "reference": "3b19d5d28f3214c5d8e2c929c18fde8d8450dfd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/43637b796f1ac0b1a960984231251ff04b438006",
-                "reference": "43637b796f1ac0b1a960984231251ff04b438006",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/3b19d5d28f3214c5d8e2c929c18fde8d8450dfd8",
+                "reference": "3b19d5d28f3214c5d8e2c929c18fde8d8450dfd8",
                 "shasum": ""
             },
             "require": {
@@ -436,7 +436,7 @@
                 "mtdowling/cron-expression": "~1.0",
                 "nesbot/carbon": "~1.0",
                 "php": ">=5.4.0",
-                "psy/psysh": "0.3.*",
+                "psy/psysh": "0.4.*",
                 "swiftmailer/swiftmailer": "~5.1",
                 "symfony/console": "2.6.*",
                 "symfony/debug": "2.6.*",
@@ -531,7 +531,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2015-02-20 16:22:21"
+            "time": "2015-02-26 19:56:08"
         },
         {
             "name": "league/flysystem",
@@ -863,16 +863,16 @@
         },
         {
             "name": "psy/psysh",
-            "version": "v0.3.5",
+            "version": "v0.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bobthecow/psysh.git",
-                "reference": "2ce0e8f3020fd292c2ad2a496c5d83939823f642"
+                "reference": "3787f3436f4fd898e0ac1eb6f5abd2ab6b24085b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/2ce0e8f3020fd292c2ad2a496c5d83939823f642",
-                "reference": "2ce0e8f3020fd292c2ad2a496c5d83939823f642",
+                "url": "https://api.github.com/repos/bobthecow/psysh/zipball/3787f3436f4fd898e0ac1eb6f5abd2ab6b24085b",
+                "reference": "3787f3436f4fd898e0ac1eb6f5abd2ab6b24085b",
                 "shasum": ""
             },
             "require": {
@@ -890,6 +890,7 @@
             },
             "suggest": {
                 "ext-pcntl": "Enabling the PCNTL extension makes PsySH a lot happier :)",
+                "ext-pdo-sqlite": "The doc command requires SQLite to work.",
                 "ext-posix": "If you have PCNTL, you'll want the POSIX extension as well.",
                 "ext-readline": "Enables support for arrow-key history navigation, and showing and manipulating command history."
             },
@@ -929,7 +930,7 @@
                 "interactive",
                 "shell"
             ],
-            "time": "2015-02-12 19:35:52"
+            "time": "2015-02-25 20:35:54"
         },
         {
             "name": "stayallive/authority",
@@ -1896,37 +1897,37 @@
             "time": "2014-10-13 12:58:55"
         },
         {
-            "name": "laravelcollective/html",
+            "name": "illuminate/html",
             "version": "v5.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/LaravelCollective/html.git",
-                "reference": "a21c998f997163018bb4ee4f40e5db71b0067095"
+                "url": "https://github.com/illuminate/html.git",
+                "reference": "3d1009bb8e0f25720c914af5c1f4015dd373c9ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/LaravelCollective/html/zipball/a21c998f997163018bb4ee4f40e5db71b0067095",
-                "reference": "a21c998f997163018bb4ee4f40e5db71b0067095",
+                "url": "https://api.github.com/repos/illuminate/html/zipball/3d1009bb8e0f25720c914af5c1f4015dd373c9ef",
+                "reference": "3d1009bb8e0f25720c914af5c1f4015dd373c9ef",
                 "shasum": ""
             },
             "require": {
                 "illuminate/http": "~5.0",
-                "illuminate/routing": "~5.0",
                 "illuminate/session": "~5.0",
                 "illuminate/support": "~5.0",
                 "php": ">=5.4.0"
             },
-            "require-dev": {
-                "mockery/mockery": "~0.9",
-                "phpunit/phpunit": "~4.0"
-            },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.0-dev"
+                }
+            },
             "autoload": {
                 "psr-4": {
-                    "Collective\\Html\\": "src/"
+                    "Illuminate\\Html\\": ""
                 },
                 "files": [
-                    "src/helpers.php"
+                    "helpers.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1937,13 +1938,9 @@
                 {
                     "name": "Taylor Otwell",
                     "email": "taylorotwell@gmail.com"
-                },
-                {
-                    "name": "Adam Engebretson",
-                    "email": "adam@laravelcollective.com"
                 }
             ],
-            "time": "2015-02-05 16:40:45"
+            "time": "2015-01-01 16:31:18"
         },
         {
             "name": "mockery/mockery",
@@ -2013,7 +2010,7 @@
         },
         {
             "name": "orchestra/database",
-            "version": "v3.0.1",
+            "version": "v3.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/orchestral/database.git",
@@ -2062,16 +2059,16 @@
         },
         {
             "name": "orchestra/testbench",
-            "version": "v3.0.3",
+            "version": "v3.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/orchestral/testbench.git",
-                "reference": "2a5b53e9a3b6dae6c7093b59df68b8033790eafd"
+                "reference": "8d0927a7f9b522d2af1e3d228f2f002eb2c122f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orchestral/testbench/zipball/2a5b53e9a3b6dae6c7093b59df68b8033790eafd",
-                "reference": "2a5b53e9a3b6dae6c7093b59df68b8033790eafd",
+                "url": "https://api.github.com/repos/orchestral/testbench/zipball/8d0927a7f9b522d2af1e3d228f2f002eb2c122f2",
+                "reference": "8d0927a7f9b522d2af1e3d228f2f002eb2c122f2",
                 "shasum": ""
             },
             "require": {
@@ -2120,7 +2117,7 @@
                 "orchestral",
                 "testing"
             ],
-            "time": "2015-02-22 05:03:39"
+            "time": "2015-02-26 16:29:51"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
