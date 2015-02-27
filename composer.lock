@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2d64deb02048c98034439ed3df789050",
+    "hash": "f1d08405089185f44c2f2d1d848cbe5b",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -410,16 +410,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.0.8",
+            "version": "v5.0.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "3b19d5d28f3214c5d8e2c929c18fde8d8450dfd8"
+                "reference": "c263240daa383e6b9bd979600dc61dcb2c436d53"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/3b19d5d28f3214c5d8e2c929c18fde8d8450dfd8",
-                "reference": "3b19d5d28f3214c5d8e2c929c18fde8d8450dfd8",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/c263240daa383e6b9bd979600dc61dcb2c436d53",
+                "reference": "c263240daa383e6b9bd979600dc61dcb2c436d53",
                 "shasum": ""
             },
             "require": {
@@ -531,7 +531,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2015-02-26 19:56:08"
+            "time": "2015-02-27 00:32:38"
         },
         {
             "name": "league/flysystem",
@@ -990,16 +990,16 @@
         },
         {
             "name": "stayallive/authority-l5",
-            "version": "2.4.0",
+            "version": "2.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Stayallive/authority-l5.git",
-                "reference": "a4a9bf850288aadfccfbcdbb30d8f277bc358461"
+                "reference": "f56583e409f7c71255709702f06248eb9f9a4b24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Stayallive/authority-l5/zipball/a4a9bf850288aadfccfbcdbb30d8f277bc358461",
-                "reference": "a4a9bf850288aadfccfbcdbb30d8f277bc358461",
+                "url": "https://api.github.com/repos/Stayallive/authority-l5/zipball/f56583e409f7c71255709702f06248eb9f9a4b24",
+                "reference": "f56583e409f7c71255709702f06248eb9f9a4b24",
                 "shasum": ""
             },
             "require": {
@@ -1040,10 +1040,10 @@
                 "laravel 5"
             ],
             "support": {
-                "source": "https://github.com/Stayallive/authority-l5/tree/2.4.0",
+                "source": "https://github.com/Stayallive/authority-l5/tree/2.4.1",
                 "issues": "https://github.com/Stayallive/authority-l5/issues"
             },
-            "time": "2015-02-15 22:24:53"
+            "time": "2015-02-27 18:20:28"
         },
         {
             "name": "swiftmailer/swiftmailer",
