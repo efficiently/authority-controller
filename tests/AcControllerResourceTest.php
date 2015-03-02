@@ -122,7 +122,32 @@ class AcControllerResourceTest extends AcTestCase
         $this->assertEquals($this->getProperty($this->controller, 'project'), $project);
     }
 
-    // Should properly detect root namespaced of resource for namespaced controller when using '\' for namespace
+    // Should properly detect namespaces for resource and controller when using '\' for namespace
+    public function testProperlyDetectNamespacesResourceControllerWithBackslashedNamespace()
+    {
+        $commentAttributes = ['id' => 3];
+        $comment = $this->buildModel('App\Comment', $commentAttributes);
+        $this->params = array_merge(
+            $this->params,
+            ['controller' => 'CommentsController', 'action' => 'show', 'id' => $comment->id]
+        );
+
+        $this->mock('App\Http\Controllers\CommentsController');
+        $controller = App::make('App\Http\Controllers\CommentsController');
+        $controller->shouldReceive('getParams')->andReturnUsing(function () {
+            return $this->params;
+        });
+        $controller->shouldReceive('getCurrentAuthority')->andReturnUsing(function () {
+            return $this->authority;
+        });
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($controller);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($controller, 'comment'), $comment);
+    }
+
+    // Should properly detect root namespace of resource for namespaced controller when using '\' for namespace
     public function testProperlyDetectRootNamespaceResourceNamespacedControllerWithBackslashedNamespace()
     {
         $commentAttributes = ['id' => 3];
@@ -132,10 +157,19 @@ class AcControllerResourceTest extends AcTestCase
             ['controller' => 'App\Http\Controllers\CommentsController', 'action' => 'show', 'id' => $comment->id]
         );
 
-        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
+        $this->mock('App\Http\Controllers\CommentsController');
+        $controller = App::make('App\Http\Controllers\CommentsController');
+        $controller->shouldReceive('getParams')->andReturnUsing(function () {
+            return $this->params;
+        });
+        $controller->shouldReceive('getCurrentAuthority')->andReturnUsing(function () {
+            return $this->authority;
+        });
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($controller);
         $resource->loadResource();
 
-        $this->assertEquals($this->getProperty($this->controller, 'comment'), $comment);
+        $this->assertEquals($this->getProperty($controller, 'comment'), $comment);
     }
 
     // Has the specified nested resource_class when using '/' for namespace

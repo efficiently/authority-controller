@@ -353,9 +353,11 @@ class ControllerResource
         return array_key_exists($paramsKey, $this->params) ? $this->params[$paramsKey] : [];
     }
 
-    protected function getNamespace()
+    protected function getNamespace($controllerName = null)
     {
-        return array_slice(preg_split("/\\\\|\//", $this->params['controller']), 0, -1);
+        $controllerName = $controllerName ?: $this->params['controller'];
+
+        return array_slice(preg_split("/\\\\|\//", $controllerName), 0, -1);
     }
 
     protected function getNamespacedName()
@@ -378,11 +380,12 @@ class ControllerResource
             return class_exists($aliasName) ? $aliasName : $className;
         }
 
+        $controllerNamespaces = $this->getNamespace(get_classname($this->controller));
         // Detect the Root Namespace, based on the current controller namespace
         // And test if the resource class exists with it
         // Borrowed from: https://github.com/laravel/framework/blob/v5.0.13/src/Illuminate/Routing/UrlGenerator.php#L526
-        if (! empty($namespace) && ! (strpos($className, '\\') === 0)) {
-            $rootNamespace = head($namespace);
+        if (! empty($controllerNamespaces) && ! (strpos($className, '\\') === 0)) {
+            $rootNamespace = head($controllerNamespaces);
             $guessName = $rootNamespace.'\\'.$className;
             if (class_exists($guessName)) {
                 return $guessName;
