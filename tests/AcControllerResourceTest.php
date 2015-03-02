@@ -69,7 +69,7 @@ class AcControllerResourceTest extends AcTestCase
         $this->assertEquals($this->getProperty($this->controller, 'project'), $project);
     }
 
-    // Should attempt to load a resource with the same namespace as the controller when using \\ for namespace
+    // Should attempt to load a resource with the same namespace as the controller when using '\' for namespace
     public function testLoadResourceWithSameNamespaceAsControllerWithBackslashedNamespace()
     {
         $projectAttributes = ['id' => 2];
@@ -106,7 +106,7 @@ class AcControllerResourceTest extends AcTestCase
         $this->assertEquals($this->getProperty($this->controller, 'project')->name, "foobar");
     }
 
-    // Should properly load resource for namespaced controller when using '::' for namespace
+    // Should properly load resource for namespaced controller when using '\' for namespace
     public function testProperlyLoadResourceNamespacedControllerWithBackslashedNamespace()
     {
         $projectAttributes = ['id' => 2];
