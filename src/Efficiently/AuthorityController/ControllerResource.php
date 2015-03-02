@@ -378,12 +378,15 @@ class ControllerResource
             return class_exists($aliasName) ? $aliasName : $className;
         }
 
-        // Detect App Namespace, based on the Auth Model, and test if the class exists with it
-        $authModel = \Config::get('auth.model');
-        $appNamespace = array_slice(preg_split("/\\\\|\//", $authModel), 0, -1);
-        $guessName = implode("\\", array_merge($appNamespace, [$className]));
-        if (class_exists($guessName)) {
-            return $guessName;
+        // Detect the Root Namespace, based on the current controller namespace
+        // And test if the resource class exists with it
+        // Borrowed from: https://github.com/laravel/framework/blob/v5.0.13/src/Illuminate/Routing/UrlGenerator.php#L526
+        if (! empty($namespace) && ! (strpos($className, '\\') === 0)) {
+            $rootNamespace = head($namespace);
+            $guessName = $rootNamespace.'\\'.$className;
+            if (class_exists($guessName)) {
+                return $guessName;
+            }
         }
 
         return $this->getName();

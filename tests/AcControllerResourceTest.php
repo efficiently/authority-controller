@@ -122,7 +122,23 @@ class AcControllerResourceTest extends AcTestCase
         $this->assertEquals($this->getProperty($this->controller, 'project'), $project);
     }
 
-    // Has the specified nested resource_class when using / for namespace
+    // Should properly detect root namespaced of resource for namespaced controller when using '\' for namespace
+    public function testProperlyDetectRootNamespaceResourceNamespacedControllerWithBackslashedNamespace()
+    {
+        $commentAttributes = ['id' => 3];
+        $comment = $this->buildModel('App\Comment', $commentAttributes);
+        $this->params = array_merge(
+            $this->params,
+            ['controller' => 'App\Http\Controllers\CommentsController', 'action' => 'show', 'id' => $comment->id]
+        );
+
+        $resource = new Efficiently\AuthorityController\ControllerResource($this->controller);
+        $resource->loadResource();
+
+        $this->assertEquals($this->getProperty($this->controller, 'comment'), $comment);
+    }
+
+    // Has the specified nested resource_class when using '/' for namespace
     public function testHasSpecifiedNestedResourceClassWithSlashedNamespace()
     {
         // namespace Admin;
