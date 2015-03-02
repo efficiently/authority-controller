@@ -33,6 +33,11 @@ class AuthorityControllerServiceProvider extends ServiceProvider
 
         // Load translations
         $this->loadTranslationsFrom(__DIR__ . '/../../lang', 'authority-controller');
+
+        // Publish translations
+        $this->publishes([
+            __DIR__ . '/../../lang' => base_path('/resources/lang')
+        ], 'translations');
     }
 
     /**
