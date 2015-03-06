@@ -14,6 +14,6 @@ matrix:
 
 sudo: false
 
-install: travis_retry composer install --dev --no-interaction
+install: travis_retry composer install --no-interaction
 
 script: vendor/bin/phpunit tests
