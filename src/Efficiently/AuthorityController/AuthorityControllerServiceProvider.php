@@ -28,7 +28,7 @@ class AuthorityControllerServiceProvider extends ServiceProvider
 
         // Publish migrations
         $this->publishes([
-            __DIR__ . '/../../migrations/' => base_path('/database/migrations')
+            __DIR__ . '/../../migrations/' => base_path('database/migrations')
         ], 'migrations');
 
         // Load translations
@@ -36,7 +36,7 @@ class AuthorityControllerServiceProvider extends ServiceProvider
 
         // Publish translations
         $this->publishes([
-            __DIR__ . '/../../lang' => base_path('/resources/lang')
+            __DIR__ . '/../../lang' => base_path('resources/lang')
         ], 'translations');
     }
 
