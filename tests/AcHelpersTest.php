@@ -53,7 +53,6 @@ class AcHelpersTest extends AcTestCase
     public function testAcTrans()
     {
         $defaultErrorMessage = ac_trans("messages.unauthorized.default");
-        $this->assertNotEquals(ac_trans("messages.unauthorized.manage.all"), $defaultErrorMessage);
         $this->assertEquals('You are not authorized to access this page.', $defaultErrorMessage);
 
         App::setLocale('fr');
