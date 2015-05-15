@@ -1,8 +1,10 @@
 <?php
 
+$serializer = new SuperClosure\Serializer;
+
 return [
 
-    'initialize' => function ($authority) {
+    'initialize' => $serializer->serialize(function ($authority) {
 
         // Action aliases. For example:
         //
@@ -51,6 +53,6 @@ return [
         // }
         //
 
-    }
+    })
 
 ];

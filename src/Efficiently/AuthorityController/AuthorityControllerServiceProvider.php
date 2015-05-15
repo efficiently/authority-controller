@@ -1,6 +1,7 @@
 <?php namespace Efficiently\AuthorityController;
 
 use Illuminate\Support\ServiceProvider;
+use SuperClosure\Serializer;
 use Efficiently\AuthorityController\Authority;
 use Efficiently\AuthorityController\Parameters;
 
@@ -68,7 +69,13 @@ class AuthorityControllerServiceProvider extends ServiceProvider
         $this->app['authority'] = $this->app->share(function ($app) {
             $user = $app['auth']->user();
             $authority = new Authority($user);
-            $fn = $app['config']->get('authority-controller.initialize', null);
+
+            $fn = $app['config']->get('authority-controller.initialize');
+
+            $serializer = new Serializer;
+            if (is_string($fn)) {
+                $fn = $serializer->unserialize($fn);
+            }
 
             if ($fn) {
                 $fn($authority);
