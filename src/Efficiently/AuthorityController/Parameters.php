@@ -45,12 +45,19 @@ class Parameters
                 $lastRouteParamKey = last(array_keys($routeParams));
                 if ($lastRouteParamKey === 'id' || $resourceId === str_singular($lastRouteParamKey)) {
                     $id = last($routeParams);
+                    if (is_a($id, 'Illuminate\Database\Eloquent\Model')) {
+                        $id = $id->getKey();
+                    }
                     if (is_string($id) || is_numeric($id)) {
-                        $routeParamsParsed['id'] = array_pop($routeParams);
+                        array_pop($routeParams);
+                        $routeParamsParsed['id'] = $id;
                     }
                 }
 
                 foreach ($routeParams as $parentIdKey => $parentIdValue) {
+                    if (is_a($parentIdValue, 'Illuminate\Database\Eloquent\Model')) {
+                        $parentIdValue = $parentIdValue->getKey();
+                    }
                     if (is_string($parentIdValue) || is_numeric($parentIdValue)) {
                         if (! ends_with($parentIdKey, '_id')) {
                             $parentIdKey = str_singular($parentIdKey).'_id';
