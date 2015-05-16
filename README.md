@@ -17,11 +17,11 @@ You can see in action this package with this Laravel 5 [**demo application**](ht
 
 #### Origins and Inspirations
 
-It's an extension of the [`authority-laravel`](https://github.com/machuga/authority-l4) package.
+It's an extension of the [`authority-laravel`](https://github.com/authority-php/authority-laravel) package.
 
 And a port of the best [Ruby](https://ruby-lang.org) authorization library: [CanCan](https://github.com/ryanb/cancan).
 
-[Authority](https://github.com/machuga/authority) ports some features of CanCan and this package ports [_almost_](https://github.com/efficiently/authority-controller/blob/master/README.md#missing-features) all the other features.
+[Authority](https://github.com/authority-php/authority) ports some features of CanCan and this package ports [_almost_](https://github.com/efficiently/authority-controller/blob/master/README.md#missing-features) all the other features.
 
 Installation
 ---------------------------
@@ -282,9 +282,9 @@ Documentations
 
 ##### Authority Docs
 
-Authority [introduction](https://github.com/machuga/authority/blob/2.0.1/readme.md#introduction).
+Authority [introduction](https://github.com/authority-php/authority/blob/2.2.2/readme.md#introduction).
 
-Authority-L4 [general usage](https://github.com/machuga/authority-l4/blob/2.0.0/README.md#general-usage).
+Authority-Laravel [general usage](https://github.com/authority-php/authority-laravel/blob/2.4.3/README.md#general-usage).
 
 ##### CanCan Wiki Docs
 
@@ -342,7 +342,7 @@ Changelog
 #### 1.2.0
 * Security fix: conditional callback was never evaluated when an actual instance object was present.
 * Non backwards compatible: Deny rules override prior rules and Allow rules don't override prior rules but instead are logically or'ed (fix [#5](https://github.com/efficiently/authority-controller/issues/5)).
-  Match more CanCan default behavior unlike `machuga\authority` package.
+  Match more CanCan default behavior unlike `authority-php\authority` package.
   Read the Wiki doc for more information: [Authority-Precedence](https://github.com/efficiently/authority-controller/wiki/Authority-Precedence).
 * Support PHP 5.4, 5.5, 5.6 and HipHop Virtual Machine (hhvm).
 * Update [`Parameters`](https://github.com/efficiently/authority-controller/blob/18c2ad7788385da4e0309708772ea40cc8be0f53/src/Efficiently/AuthorityController/Parameters.php#L46) class to allow custom routes with `id` and `parent_id` routes's parameters (fix [#6](https://github.com/efficiently/authority-controller/issues/6)).
@@ -416,4 +416,4 @@ To get the tests running you should install PHPUnit and run `phpunit tests`.
 
 Special Thanks
 --------------
-AuthorityController was _heavily_ inspired by [CanCan](https://github.com/ryanb/cancan) and uses [Authority-Laravel](https://github.com/machuga/authority-l4).
+AuthorityController was _heavily_ inspired by [CanCan](https://github.com/ryanb/cancan) and uses [Authority-Laravel](https://github.com/authority-php/authority-laravel).

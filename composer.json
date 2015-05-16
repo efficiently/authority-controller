@@ -26,19 +26,9 @@
             "email": "tortuetorche@spam.me"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/stayallive/authority"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/stayallive/authority-l5"
-        }
-    ],
     "require": {
         "php": ">=5.4.0",
-        "stayallive/authority-l5": "~2.4.1"
+        "authority-php/authority-laravel": "~2.4.3"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.5",
