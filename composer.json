@@ -27,7 +27,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "machuga/authority-l4": "2.2.*"
+        "authority-php/authority-laravel": "2.2.*"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.0",
