@@ -281,6 +281,10 @@ class ProductsController extends \BaseController
 
 Changelog
 ---------
+#### 1.2-dev
+* Support Route Model Binding in the Parameters class.
+  See: http://laravel.com/docs/4.2/routing#route-model-binding and issue [#21](https://github.com/efficiently/authority-controller/issues/21)
+
 #### 1.2.4
 * Add `BaseController::flushAuthorityEvents()` static method.
   Useful for functional tests with Codeception (see issue [#14](https://github.com/efficiently/authority-controller/issues/14) and [this Wiki page](https://github.com/efficiently/authority-controller/wiki/Testing-Authority-rules#functional-tests-with-codeception) for more explanations).
