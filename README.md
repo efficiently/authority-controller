@@ -19,11 +19,11 @@ You can see in action this package with this Laravel 4.2 [**demo application**](
 
 #### Origins and Inspirations
 
-It's an extension of the [`authority-l4`](https://github.com/machuga/authority-l4) package.
+It's an extension of the [`authority-laravel`](https://github.com/authority-php/authority-laravel) package.
 
 And a port of the best [Ruby](https://ruby-lang.org) authorization library: [CanCan](https://github.com/ryanb/cancan).
 
-[Authority](https://github.com/machuga/authority) ports some features of CanCan and this package ports [_almost_](https://github.com/efficiently/authority-controller/blob/master/README.md#missing-features) all the other features.
+[Authority](https://github.com/authority-php/authority) ports some features of CanCan and this package ports [_almost_](https://github.com/efficiently/authority-controller/blob/master/README.md#missing-features) all the other features.
 
 Installation
 ---------------------------
@@ -78,7 +78,7 @@ We have provided a basic table structure to get you started in creating your rol
 Run the Authority migrations
 
 ```bash
-php artisan migrate --package=machuga/authority-l4
+php artisan migrate --package=authority-php/authority-laravel
 ```
 
 This will create the following tables
@@ -249,9 +249,9 @@ Documentations
 
 ##### Authority Docs
 
-Authority [introduction](https://github.com/machuga/authority/blob/2.0.1/readme.md#introduction).
+Authority [introduction](https://github.com/authority-php/authority/blob/2.1.1/readme.md#introduction).
 
-Authority-L4 [general usage](https://github.com/machuga/authority-l4/blob/2.0.0/README.md#general-usage).
+Authority-Laravel [general usage](https://github.com/authority-php/authority-laravel/blob/2.2.0/README.md#general-usage).
 
 ##### CanCan Wiki Docs
 
@@ -283,7 +283,9 @@ Changelog
 ---------
 #### 1.2-dev
 * Support Route Model Binding in the Parameters class.
+
   See: http://laravel.com/docs/4.2/routing#route-model-binding and issue [#21](https://github.com/efficiently/authority-controller/issues/21)
+* Use the [authority-laravel](https://github.com/authority-php/authority-laravel) package instead of [authority-l4](https://github.com/machuga/authority-l4).
 
 #### 1.2.4
 * Add `BaseController::flushAuthorityEvents()` static method.
@@ -376,4 +378,4 @@ To get the tests running you should install PHPUnit and run `phpunit tests`.
 
 Special Thanks
 --------------
-AuthorityController was _heavily_ inspired by [CanCan](https://github.com/ryanb/cancan) and uses [Authority-L4](https://github.com/machuga/authority-l4).
+AuthorityController was _heavily_ inspired by [CanCan](https://github.com/ryanb/cancan) and uses [Authority-Laravel](https://github.com/authority-php/authority-laravel).
