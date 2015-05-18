@@ -1,60 +1,58 @@
 {
-    "name": "efficiently/authority-controller",
-    "description": "AuthorityController is an PHP authorization library for Laravel 4 which restricts what resources a given user is allowed to access.",
-    "keywords": [
-        "cancan",
-        "can",
-        "authority",
-        "acl",
-        "role",
-        "permission",
-        "ability",
-        "allow",
-        "deny",
-        "rbac",
-        "authorization",
-        "authentication",
-        "security",
-        "laravel",
-        "rails"
+  "name": "efficiently/authority-controller",
+  "description": "AuthorityController is an PHP authorization library for Laravel 4 which restricts what resources a given user is allowed to access.",
+  "keywords": [
+    "cancan",
+    "can",
+    "authority",
+    "acl",
+    "role",
+    "permission",
+    "ability",
+    "allow",
+    "deny",
+    "rbac",
+    "authorization",
+    "authentication",
+    "security",
+    "laravel",
+    "rails"
+  ],
+  "license": "MIT",
+  "authors": [{
+    "name": "TortueTorche",
+    "email": "tortuetorche@spam.me"
+  }],
+  "require": {
+    "php": ">=5.4.0",
+    "authority-php/authority-laravel": "2.2.*"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0",
+    "mockery/mockery": "0.9.*",
+    "orchestra/testbench": "2.2.*"
+  },
+  "autoload": {
+    "classmap": [
+      "tests/AcTestCase.php", "tests/helpers", "tests/fixtures/", "tests/fixtures/models", "tests/fixtures/controllers"
     ],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "TortueTorche",
-            "email": "tortuetorche@spam.me"
-        }
+    "files": [
+      "src/Efficiently/AuthorityController/helpers.php"
     ],
-    "require": {
-        "php": ">=5.4.0",
-        "authority-php/authority-laravel": "2.2.*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "~4.0",
-        "mockery/mockery": "0.9.*",
-        "orchestra/testbench": "2.2.*"
-    },
-    "autoload": {
-        "classmap": [
-            "tests/AcTestCase.php", "tests/helpers", "tests/fixtures/", "tests/fixtures/models", "tests/fixtures/controllers"
-        ],
-        "files": [
-            "src/Efficiently/AuthorityController/helpers.php"
-        ],
-        "psr-0": {
-            "Efficiently\\AuthorityController": "src/"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-1.0": "1.0.x-dev",
-            "dev-1.1": "1.1.x-dev",
-            "dev-1.2": "1.2.x-dev"
-       }
-    },
-	"config": {
-		"preferred-install": "dist"
-	},
-	"prefer-stable": true,
-    "minimum-stability": "dev"
+    "psr-0": {
+      "Efficiently\\AuthorityController": "src/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-1.0": "1.0.x-dev",
+      "dev-1.1": "1.1.x-dev",
+      "dev-1.2": "1.2.x-dev"
+    }
+  },
+  "config": {
+    "preferred-install": "dist"
+  },
+  "prefer-stable": true,
+  "minimum-stability": "dev"
 }
