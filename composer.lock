@@ -4,25 +4,24 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ab6f67452ea62a5db824c09704ef7113",
+    "hash": "eaf711e15d572ffc567985b69f035620",
     "packages": [
         {
-            "name": "authority-php/authority-laravel",
-            "version": "2.2.0",
+            "name": "authority-php/authority",
+            "version": "2.1.3",
             "source": {
                 "type": "git",
-                "url": "https://github.com/authority-php/authority-laravel.git",
-                "reference": "016ddd3892ec8c07c830f7e34e48bf8c63e022dd"
+                "url": "https://github.com/authority-php/authority.git",
+                "reference": "e330ce5a8d696933f622e0452a08d6823a50b9d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/authority-php/authority-laravel/zipball/016ddd3892ec8c07c830f7e34e48bf8c63e022dd",
-                "reference": "016ddd3892ec8c07c830f7e34e48bf8c63e022dd",
+                "url": "https://api.github.com/repos/authority-php/authority/zipball/e330ce5a8d696933f622e0452a08d6823a50b9d1",
+                "reference": "e330ce5a8d696933f622e0452a08d6823a50b9d1",
                 "shasum": ""
             },
             "require": {
-                "illuminate/support": "~4",
-                "machuga/authority": "2.1.*",
+                "illuminate/events": "~4",
                 "php": ">=5.3.0"
             },
             "require-dev": {
@@ -30,20 +29,68 @@
                 "phpunit/phpunit": "3.7.*"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.1.x-dev"
+            "autoload": {
+                "psr-0": {
+                    "Authority": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "mit"
+            ],
+            "authors": [
+                {
+                    "name": "Matthew Machuga",
+                    "email": "machuga@gmail.com"
+                },
+                {
+                    "name": "Koen Schmeets",
+                    "email": "hello@koenschmeets.nl"
+                },
+                {
+                    "name": "Jesse O'Brien",
+                    "email": "jesse@jesse-obrien.ca"
+                }
+            ],
+            "description": "A simple and flexible authorization system for PHP",
+            "time": "2015-05-19 08:53:44"
+        },
+        {
+            "name": "authority-php/authority-laravel",
+            "version": "2.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/authority-php/authority-laravel.git",
+                "reference": "cbfbcf1766ef8b39b707577ffe5a62edb07a2bbe"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/authority-php/authority-laravel/zipball/cbfbcf1766ef8b39b707577ffe5a62edb07a2bbe",
+                "reference": "cbfbcf1766ef8b39b707577ffe5a62edb07a2bbe",
+                "shasum": ""
+            },
+            "require": {
+                "authority-php/authority": "~2.1.3",
+                "illuminate/support": "~4",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "0.7.*",
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
             "autoload": {
                 "classmap": [
                     "src/migrations"
                 ],
                 "psr-0": {
-                    "Authority\\AuthorityL4": "src/"
+                    "Authority\\AuthorityLaravel": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
             "authors": [
                 {
                     "name": "Matthew Machuga",
@@ -63,14 +110,14 @@
                 }
             ],
             "description": "A simple and flexible authorization system for PHP",
-            "homepage": "https://github.com/machuga/authority-l4",
+            "homepage": "https://github.com/authority-php/authority-laravel",
             "keywords": [
                 "Authentication",
                 "Laravel 4",
                 "authorization",
                 "laravel"
             ],
-            "time": "2014-03-13 16:49:16"
+            "time": "2015-05-19 09:07:41"
         },
         {
             "name": "classpreloader/classpreloader",
@@ -415,60 +462,6 @@
                 "laravel"
             ],
             "time": "2015-02-11 20:37:15"
-        },
-        {
-            "name": "machuga/authority",
-            "version": "2.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/machuga/authority.git",
-                "reference": "e12c9cb5b2d0624f190ff21d27bd00a1de645b34"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/machuga/authority/zipball/e12c9cb5b2d0624f190ff21d27bd00a1de645b34",
-                "reference": "e12c9cb5b2d0624f190ff21d27bd00a1de645b34",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/events": "~4",
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "0.7.*",
-                "phpunit/phpunit": "3.7.*"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Authority": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "mit"
-            ],
-            "authors": [
-                {
-                    "name": "Matthew Machuga",
-                    "email": "machuga@gmail.com"
-                },
-                {
-                    "name": "Koen Schmeets",
-                    "email": "hello@koenschmeets.nl"
-                },
-                {
-                    "name": "Jesse O'Brien",
-                    "email": "jesse@jesse-obrien.ca"
-                }
-            ],
-            "description": "A simple and flexible authorization system for PHP",
-            "time": "2015-02-19 04:30:09"
         },
         {
             "name": "monolog/monolog",
