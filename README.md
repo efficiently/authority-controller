@@ -292,7 +292,7 @@ Because AuthorityController is a CanCan port, you can also read the Wiki docs of
 
 Controller additions
 --------------------
-Your controllers have a `$params` property:
+Your controllers have now a `$params` property:
 
 ```php
 <?php namespace App\Http\Controllers;
@@ -392,7 +392,7 @@ $authority->allow('update', 'App\Product', function ($self, $product) {
 Good to know
 ------------
 #### Compatibility
-It's **only** compatible with **PHP >= 5.4** and **Laravel 4.1** framework.
+It's **only** compatible with **PHP >= 5.4** and **Laravel >= 4.1** framework.
 
 #### This is alpha-quality software
 It works well according to our tests. The internal API may change and other features will be added.
