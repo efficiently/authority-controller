@@ -322,7 +322,7 @@ Changelog
 * Or auto guessing them, e.g. `User` => `App\User`
 * Add a new config option `controllerClass` which is by default `Illuminate\Routing\Controller`
 * Support Route Model Binding in the Parameters class.
-  See: http://laravel.com/docs/4.2/routing#route-model-binding and issue [#21](https://github.com/efficiently/authority-controller/issues/21)
+  See: http://laravel.com/docs/5.0/routing#route-model-binding and issue [#21](https://github.com/efficiently/authority-controller/issues/21)
 * Use [authority-laravel](https://github.com/authority-php/authority-laravel) package instead of [authority-l4](https://github.com/machuga/authority-l4).
 * Upgrade Notes <small>(if you used previously this package with Laravel 4)</small>:
   * Move your `authory-controller` config file from `app/config/packages/efficiently/authority-controller/config.php` to `config/authority-controller.php`
