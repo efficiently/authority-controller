@@ -14,6 +14,12 @@ matrix:
 
 sudo: false
 
-install: travis_retry composer install --no-interaction
+env:
+  - TESTBENCH_VERSION="~3.0.0"
+  - TESTBENCH_VERSION="~3.1.0"
+
+before_install:
+  - sed -i s/~3.0.0\|\|~3.1.0/${TESTBENCH_VERSION}/ composer.json
+  - composer update # Use update since we'll be changing the composer.json
 
 script: vendor/bin/phpunit tests
