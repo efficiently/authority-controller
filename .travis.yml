@@ -9,6 +9,7 @@ php:
 
 matrix:
   allow_failures:
+    - php: 5.4 # Allow PHP 5.4 failures because Laravel 5.1 requires PHP >= 5.5
     - php: hhvm
     - php: 7.0
 
