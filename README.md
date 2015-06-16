@@ -386,6 +386,10 @@ Good to know
 #### Compatibility
 It's **only** compatible with **PHP >= 5.4** and **Laravel >= 4.1** framework.
 
+#### This is beta-quality software
+It works well according to our tests. The internal API may change and other features will be added.
+We are working to make AuthorityController production quality software.
+
 #### Differences between CanCan and AuthorityController
 See Wiki page [Differences between CanCan and AuthorityController](https://github.com/efficiently/authority-controller/wiki/Differences-between-CanCan-and-AuthorityController)
 
