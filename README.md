@@ -15,7 +15,7 @@ For [Laravel 4.0](http://laravel.com/docs/4.0) supports, see [AuthorityControlle
 
 #### Demo application
 
-You can see in action this package with this Laravel 4.2 [**demo application**](https://github.com/efficiently/laravel_authority-controller_app).
+You can see in action this package with this Laravel 4.2 [**demo application**](https://github.com/efficiently/laravel_authority-controller_app/tree/1.0).
 
 #### Origins and Inspirations
 
