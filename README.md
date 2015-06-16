@@ -1,7 +1,7 @@
-AuthorityController [![Build Status](https://travis-ci.org/efficiently/authority-controller.png?branch=2.0)](http://travis-ci.org/efficiently/authority-controller)
+AuthorityController [![Build Status](https://travis-ci.org/efficiently/authority-controller.png?branch=master)](http://travis-ci.org/efficiently/authority-controller)
 ===================
 
-AuthorityController 2.0 is an PHP authorization library for [Laravel 5](http://laravel.com) which restricts what resources a given user is allowed to access.
+AuthorityController is an PHP authorization library for [Laravel 5.0 & 5.1](http://laravel.com) which restricts what resources a given user is allowed to access.
 
 All permissions are defined in a single location:
 
@@ -13,7 +13,7 @@ For [**Laravel 4.1 or 4.2**](http://laravel.com/docs/4.2) supports see [Authorit
 
 #### Demo application
 
-You can see in action this package with this Laravel 5 [**demo application**](https://github.com/efficiently/laravel_authority-controller_app/tree/2.0#readme).
+You can see in action this package with this Laravel 5.1 [**demo application**](https://github.com/efficiently/laravel_authority-controller_app#readme).
 
 #### Origins and Inspirations
 
@@ -31,7 +31,7 @@ Installation
 1. Add `authority-controller` package to your `composer.json` file to require AuthorityController:
 
  ```bash
- composer require efficiently/authority-controller:2.0.*
+ composer require efficiently/authority-controller:dev-master
  ```
 
 2. Add the service provider to `config/app.php`:
@@ -51,20 +51,6 @@ Installation
 
  ```php
  Authority::can('update', 'SomeModel');
- ```
-
-#### <del>With [Laravel 4 Package Installer](https://github.com/rtablada/package-installer#laravel-4-package-installer)</del>
-
-1. <del>Run this command:</del>
-
- ```bash
- php artisan package:install efficiently/authority-controller
- ```
-
-2. <del>Then provide a version constraint for the `efficiently/authority-controller` requirement:</del>
-
- ```
- 2.0.*
  ```
 
 Configuration
@@ -316,6 +302,9 @@ class ProductsController extends Controller
 
 Changelog
 ---------
+#### 2.1-dev
+* Laravel 5.1 support!
+
 #### 2.0.0
 * Laravel 5.0 support!
 * Use your Laravel Aliases to resolve your models namespace name.
