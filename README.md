@@ -316,11 +316,14 @@ class ProductsController extends Controller
 
 Changelog
 ---------
-#### 2.0-dev
-* Laravel 5 support!
+#### 2.0.0
+* Laravel 5.0 support!
 * Use your Laravel Aliases to resolve your models namespace name.
 * Or auto guessing them, e.g. `User` => `App\User`
 * Add a new config option `controllerClass` which is by default `Illuminate\Routing\Controller`
+* Support Route Model Binding in the Parameters class.
+  See: http://laravel.com/docs/4.2/routing#route-model-binding and issue [#21](https://github.com/efficiently/authority-controller/issues/21)
+* Use [authority-laravel](https://github.com/authority-php/authority-laravel) package instead of [authority-l4](https://github.com/machuga/authority-l4).
 * Upgrade Notes <small>(if you used previously this package with Laravel 4)</small>:
   * Move your `authory-controller` config file from `app/config/packages/efficiently/authority-controller/config.php` to `config/authority-controller.php`
   * Publish the `authory-controller` migrations files <small>(see the section [Create Roles and Permissions Tables](https://github.com/efficiently/authority-controller/blob/2.0/README.md#create-roles-and-permissions-tables) of this README)</small>
@@ -393,10 +396,6 @@ Good to know
 ------------
 #### Compatibility
 It's **only** compatible with **PHP >= 5.4** and **Laravel >= 4.1** framework.
-
-#### This is alpha-quality software
-It works well according to our tests. The internal API may change and other features will be added.
-We are working to make AuthorityController production quality software.
 
 #### Differences between CanCan and AuthorityController
 See Wiki page [Differences between CanCan and AuthorityController](https://github.com/efficiently/authority-controller/wiki/Differences-between-CanCan-and-AuthorityController)
