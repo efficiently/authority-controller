@@ -13,8 +13,8 @@ trait ControllerAdditions
     * If $controllerName == '*', it removes all the Authority-Controller events
     * of every Controllers of the application.
     *
-    *   BaseController::flushAuthorityEvents('*'); // Remove all Authority-Controller events of every Controllers
-    *   ProjectsController::flushAuthorityEvents(); // Remove all Authority-Controller events of ProjectsController
+    *   \App\Http\Controllers\Controller::flushAuthorityEvents('*'); // Remove all Authority-Controller events of every Controllers
+    *   \App\Http\Controllers\ProjectsController::flushAuthorityEvents(); // Remove all Authority-Controller events of ProjectsController
     *
     * @param string Controller name. If null it get the current Controller name.
     * @return void
@@ -74,7 +74,7 @@ trait ControllerAdditions
      * Sets up a before filter which loads and authorizes the current resource. This performs both
      * loadResource() and authorizeResource() and accepts the same arguments. See those methods for details.
      *
-     *   class BooksController extends BaseController
+     *   class BooksController extends Controller
      *   {
      *       public function __construct()
      *       {
@@ -102,7 +102,7 @@ trait ControllerAdditions
      *
      * Call this method directly on the controller class.
      *
-     *   class BooksController extends BaseController
+     *   class BooksController extends Controller
      *   {
      *       public function __construct()
      *       {
@@ -113,7 +113,7 @@ trait ControllerAdditions
      * A resource is not loaded if the instance variable is already set. This makes it easy to override
      * the behavior through a beforeFilter() on certain actions.
      *
-     *   class BooksController extends BaseController
+     *   class BooksController extends Controller
      *   {
      *       public function __construct()
      *       {
@@ -130,7 +130,7 @@ trait ControllerAdditions
      * If a name is provided which does not match the controller it assumes it is a parent resource. Child
      * resources can then be loaded through it.
      *
-     *   class BooksController extends BaseController
+     *   class BooksController extends Controller
      *   {
      *       public function __construct()
      *       {
@@ -237,7 +237,7 @@ trait ControllerAdditions
      *
      * Call this method directly on the controller class.
      *
-     *   class BooksController extends BaseController
+     *   class BooksController extends Controller
      *   {
      *       public function __construct()
      *       {
@@ -248,7 +248,7 @@ trait ControllerAdditions
      * If you pass in the name of a resource which does not match the controller it will assume
      * it is a parent resource.
      *
-     *   class BooksController extends BaseController
+     *   class BooksController extends Controller
      *   {
      *       public function __construct()
      *       {
@@ -333,18 +333,22 @@ trait ControllerAdditions
      *       ],
      *   ];
      *
-     * You can catch the exception and modify its behavior in the app/start/global.php file.
+     * You can catch the exception and modify its behavior in the report() method of the app/Exceptions/Handler.php file.
      * For example here we set the error message to a flash and redirect to the home page.
-     *   App::error(function(Efficiently\AuthorityController\Exceptions\AccessDenied $e, $code, $fromConsole)
-     *   {
-     *       $msg = $e->getMessage();
      *
-     *       if ($fromConsole) {
-     *         return 'Error '.$code.': '.$msg."\n";
-     *       }
-     *       Log::error('Access denied! '.$msg);
-     *       return Redirect::route('home')->with('flash_alert', $msg);
-     *   });
+     *    public function report(Exception $e)
+     *    {
+     *        if ($e instanceof \Efficiently\AuthorityController\Exceptions\AccessDenied) {
+     *            $msg = $e->getMessage();
+     *            \Log::error('Access denied! '.$msg);
+     *
+     *            return Redirect::route('home')->with('flash_alert', $msg);
+     *        }
+     *
+     *        return parent::report($e);
+     *    }
+     *
+     *    //code...
      *
      * See the Efficiently\AuthorityController\Exceptions\AccessDenied exception for more details on working with the exception.
      *

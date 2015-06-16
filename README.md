@@ -1,21 +1,19 @@
-AuthorityController [![Build Status](https://travis-ci.org/efficiently/authority-controller.png?branch=master)](http://travis-ci.org/efficiently/authority-controller)
+AuthorityController [![Build Status](https://travis-ci.org/efficiently/authority-controller.png?branch=2.0)](http://travis-ci.org/efficiently/authority-controller)
 ===================
 
-AuthorityController 1.2 is an PHP authorization library for [Laravel 4.1+](http://laravel.com) which restricts what resources a given user is allowed to access.
+AuthorityController 2.0 is an PHP authorization library for [Laravel 5](http://laravel.com) which restricts what resources a given user is allowed to access.
 
 All permissions are defined in a single location:
 
-    app/config/packages/efficiently/authority-controller/config.php
+    config/authority-controller.php
 
 and not duplicated across controllers, routes, views, and database queries.
 
-For [**Laravel 5.0**](http://laravel.com/docs/5.0) supports, see [AuthorityController 2.0 branch](https://github.com/efficiently/authority-controller/tree/2.0)
-
-For [Laravel 4.0](http://laravel.com/docs/4.0) supports, see [AuthorityController 1.0 branch](https://github.com/efficiently/authority-controller/tree/1.0)
+For [**Laravel 4.1 or 4.2**](http://laravel.com/docs/4.2) supports see [AuthorityController 1.2 branch](https://github.com/efficiently/authority-controller/tree/1.2)
 
 #### Demo application
 
-You can see in action this package with this Laravel 4.2 [**demo application**](https://github.com/efficiently/laravel_authority-controller_app/tree/1.0).
+You can see in action this package with this Laravel 5 [**demo application**](https://github.com/efficiently/laravel_authority-controller_app/tree/2.0#readme).
 
 #### Origins and Inspirations
 
@@ -33,10 +31,10 @@ Installation
 1. Add `authority-controller` package to your `composer.json` file to require AuthorityController:
 
  ```bash
- composer require efficiently/authority-controller:1.2.*
+ composer require efficiently/authority-controller:2.0.*
  ```
 
-2. Add the service provider to `app/config/app.php`:
+2. Add the service provider to `config/app.php`:
 
  ```php
      'Efficiently\AuthorityController\AuthorityControllerServiceProvider',
@@ -55,18 +53,18 @@ Installation
  Authority::can('update', 'SomeModel');
  ```
 
-#### With [Laravel 4 Package Installer](https://github.com/rtablada/package-installer#laravel-4-package-installer)
+#### <del>With [Laravel 4 Package Installer](https://github.com/rtablada/package-installer#laravel-4-package-installer)</del>
 
-1. Run this command:
+1. <del>Run this command:</del>
 
  ```bash
  php artisan package:install efficiently/authority-controller
  ```
 
-2. Then provide a version constraint for the `efficiently/authority-controller` requirement:
+2. <del>Then provide a version constraint for the `efficiently/authority-controller` requirement:</del>
 
  ```
- 1.2.*
+ 2.0.*
  ```
 
 Configuration
@@ -75,10 +73,16 @@ Configuration
 
 We have provided a basic table structure to get you started in creating your roles and permissions.
 
-Run the Authority migrations
+Publish them to your migrations directory or copy them directly.
 
 ```bash
-php artisan migrate --package=authority-php/authority-laravel
+php artisan vendor:publish --provider="Efficiently\AuthorityController\AuthorityControllerServiceProvider" --tag="migrations"
+```
+
+Run the migrations
+
+```bash
+php artisan migrate
 ```
 
 This will create the following tables
@@ -87,18 +91,18 @@ This will create the following tables
 - role_user
 - permissions
 
-To utilize these tables, you can add the following methods to your `User` model. You will also need to create Role and Permission Model stubs.
+To utilize these tables, you can add the following methods to your `User` model. You will also need to create Role and Permission Model stubs (replacing `App\Authority\` with you own namespace)..
 
 ```php
-    //app/models/User.php
+    //app/User.php
     public function roles()
     {
-        return $this->belongsToMany('Role');
+        return $this->belongsToMany('App\Authority\Role');
     }
 
     public function permissions()
     {
-        return $this->hasMany('Permission');
+        return $this->hasMany('App\Authority\Permission');
     }
 
     public function hasRole($key)
@@ -114,27 +118,42 @@ To utilize these tables, you can add the following methods to your `User` model.
         return $hasRole;
     }
 
-    //app/models/Role.php
-    class Role extends Eloquent {}
+    //app/Authority/Role.php
+    <?php namespace App\Authority;
 
-    //app/models/Permission.php
-    class Permission extends Eloquent {}
+    use Illuminate\Database\Eloquent\Model;
+
+    class Role extends Model {}
+
+    //app/Authority/Permission.php
+    <?php namespace App\Authority;
+
+    use Illuminate\Database\Eloquent\Model;
+
+    class Permission extends Model {}
 ```
 
 ##### Init resource filters and controller methods
-In your `app/controllers/BaseController.php` file:
+In your `app/Http/Controllers/Controller.php` file to add the `ControllerAdditions` trait:
 
 ```php
-class BaseController extends \Controller
+<?php namespace App\Http\Controllers;
+
+use Illuminate\Foundation\Bus\DispatchesCommands;
+use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Foundation\Validation\ValidatesRequests;
+
+abstract class Controller extends BaseController
 {
-    use Efficiently\AuthorityController\ControllerAdditions;
+  	use DispatchesCommands, ValidatesRequests;
+    use \Efficiently\AuthorityController\ControllerAdditions;
     //code...
 }
 ```
 
 Getting Started
 ---------------
-AuthorityController expects that `Auth::user()` return the current authenticated user. First, set up some authentication ([from Scratch](https://bitbucket.org/beni/laravel-4-tutorial/wiki/User%20Management) or with [Confide](https://github.com/Zizaco/confide) package).
+AuthorityController expects that `Auth::user()` return the current authenticated user. Now, by default Laravel 5 handles [this](http://laravel.com/docs/5.0/authentication#retrieving-the-authenticated-user).
 
 ##### Defining Authority rules
 
@@ -142,19 +161,18 @@ User permissions are defined in an AuthorityController configuration file.
 
 You can publish the AuthorityController default configuration file with the command below:
 
-```
-  php artisan config:publish efficiently/authority-controller
+```bash
+php artisan vendor:publish --provider="Efficiently\AuthorityController\AuthorityControllerServiceProvider" --tag="config"
 ```
 
-This will place a copy of the configuration file at `app/config/packages/efficiently/authority-controller`. The config file includes an `initialize` function, which is a great place to setup your rules and aliases.
+This will place a copy of the configuration file at `config/authority-controller.php`. The config file includes an `initialize` function, which is a great place to setup your rules and aliases.
 
 ```php
-// app/config/packages/efficiently/authority-controller/config.php
+//config/authority-controller.php
 
 return [
-
-    'initialize' => function ($authority) {
-        $user = Auth::guest() ? new User : $authority->getCurrentUser();
+    'initialize' => function($authority) {
+        $user = Auth::guest() ? new App\User : $authority->getCurrentUser();
 
         // Action aliases. For example:
         $authority->addAlias('moderate', ['read', 'update', 'delete']);
@@ -166,7 +184,6 @@ return [
             $authority->allow('read', 'all');
         }
     }
-
 ];
 ```
 
@@ -189,7 +206,7 @@ The `authorize()` method in the controller will throw an exception if the user i
 ```php
 public function show($id)
 {
-    $this->article = Article::find($id);
+    $this->article = App\Article::find($id);
     $this->authorize('read', $this->article);
 }
 ```
@@ -197,7 +214,9 @@ public function show($id)
 Setting this for every action can be tedious, therefore the `loadAndAuthorizeResource()` method is provided to automatically authorize all actions in a RESTful style resource controller. It will use a before filter to load the resource into an instance variable and authorize it for every action.
 
 ```php
-class ArticlesController extends \BaseController
+<?php namespace App\Http\Controllers;
+
+class ArticlesController extends Controller
 {
 
     public function __construct()
@@ -219,20 +238,34 @@ See [Authorizing Controller Actions](https://github.com/efficiently/authority-co
 The `Efficiently\AuthorityController\Exceptions\AccessDenied` exception is thrown when calling `authorize()` in the controller and the user is not able to perform the given action. A message can optionally be provided.
 
 ```php
-Authority::authorize('read', 'Product', 'Unable to read this product.');
+Authority::authorize('read', 'App\Product', 'Unable to read this product.');
 ```
 
-You can catch the exception and modify its behavior in the `app/start/global.php` file. For example here we set the error message to a flash and redirect to the home page.
+You can catch the exception and modify its behavior in the `render()` method of the `app/Exceptions/Handler.php` file. For example here we set the error message to a flash and redirect to the home page.
 
 ```php
-App::error(function (Efficiently\AuthorityController\Exceptions\AccessDenied $e, $code, $fromConsole) {
-    $msg = $e->getMessage();
-    if ($fromConsole) {
-        return 'Error '.$code.': '.$msg."\n";
+//app/Exceptions/Handler.php
+
+  /**
+   * Render an exception into an HTTP response.
+   *
+   * @param  \Illuminate\Http\Request  $request
+   * @param  \Exception  $e
+   * @return \Illuminate\Http\Response
+   */
+	public function render($request, Exception $e)
+    {
+        if ($e instanceof \Efficiently\AuthorityController\Exceptions\AccessDenied) {
+            $msg = $e->getMessage();
+            \Log::error('Access denied! '.$msg);
+
+            return redirect('/home')->with('flash_alert', $msg);
+        }
+
+        return parent::render($request, $e);
     }
-    Log::error('Access denied! '.$msg);
-    return Redirect::route('home')->with('flash_alert', $msg);
-});
+
+    //code...
 ```
 
 See [Exception Handling](https://github.com/efficiently/authority-controller/wiki/Exception-Handling) for more information.
@@ -249,9 +282,9 @@ Documentations
 
 ##### Authority Docs
 
-Authority [introduction](https://github.com/authority-php/authority/blob/2.1.1/readme.md#introduction).
+Authority [introduction](https://github.com/authority-php/authority/blob/2.2.2/readme.md#introduction).
 
-Authority-Laravel [general usage](https://github.com/authority-php/authority-laravel/blob/2.2.0/README.md#general-usage).
+Authority-Laravel [general usage](https://github.com/authority-php/authority-laravel/blob/2.4.3/README.md#general-usage).
 
 ##### CanCan Wiki Docs
 
@@ -259,10 +292,12 @@ Because AuthorityController is a CanCan port, you can also read the Wiki docs of
 
 Controller additions
 --------------------
-Your controllers have a `$params` property:
+Your controllers have now a `$params` property:
 
 ```php
-class ProductsController extends \BaseController
+<?php namespace App\Http\Controllers;
+
+class ProductsController extends Controller
 {
     //code...
 
@@ -281,11 +316,17 @@ class ProductsController extends \BaseController
 
 Changelog
 ---------
-#### 1.2-dev
+#### 2.0.0
+* Laravel 5.0 support!
+* Use your Laravel Aliases to resolve your models namespace name.
+* Or auto guessing them, e.g. `User` => `App\User`
+* Add a new config option `controllerClass` which is by default `Illuminate\Routing\Controller`
 * Support Route Model Binding in the Parameters class.
-
   See: http://laravel.com/docs/4.2/routing#route-model-binding and issue [#21](https://github.com/efficiently/authority-controller/issues/21)
-* Use the [authority-laravel](https://github.com/authority-php/authority-laravel) package instead of [authority-l4](https://github.com/machuga/authority-l4).
+* Use [authority-laravel](https://github.com/authority-php/authority-laravel) package instead of [authority-l4](https://github.com/machuga/authority-l4).
+* Upgrade Notes <small>(if you used previously this package with Laravel 4)</small>:
+  * Move your `authory-controller` config file from `app/config/packages/efficiently/authority-controller/config.php` to `config/authority-controller.php`
+  * Publish the `authory-controller` migrations files <small>(see the section [Create Roles and Permissions Tables](https://github.com/efficiently/authority-controller/blob/2.0/README.md#create-roles-and-permissions-tables) of this README)</small>
 
 #### 1.2.4
 * Add `BaseController::flushAuthorityEvents()` static method.
@@ -304,7 +345,7 @@ Changelog
 #### 1.2.0
 * Security fix: conditional callback was never evaluated when an actual instance object was present.
 * Non backwards compatible: Deny rules override prior rules and Allow rules don't override prior rules but instead are logically or'ed (fix [#5](https://github.com/efficiently/authority-controller/issues/5)).
-  Match more CanCan default behavior unlike `machuga\authority` package.
+  Match more CanCan default behavior unlike `authority-php\authority` package.
   Read the Wiki doc for more information: [Authority-Precedence](https://github.com/efficiently/authority-controller/wiki/Authority-Precedence).
 * Support PHP 5.4, 5.5, 5.6 and HipHop Virtual Machine (hhvm).
 * Update [`Parameters`](https://github.com/efficiently/authority-controller/blob/18c2ad7788385da4e0309708772ea40cc8be0f53/src/Efficiently/AuthorityController/Parameters.php#L46) class to allow custom routes with `id` and `parent_id` routes's parameters (fix [#6](https://github.com/efficiently/authority-controller/issues/6)).
@@ -346,7 +387,7 @@ Missing features
 4. For `allow()` and `deny()` methods of `Authority`, the third argument isn't an optional hash (associative array) of conditions but an anonymous function (Closure):
 
 ```php
-$authority->allow('update', 'Product', function ($self, $product) {
+$authority->allow('update', 'App\Product', function ($self, $product) {
     return $product->available === true;
 });
 ```
@@ -354,11 +395,7 @@ $authority->allow('update', 'Product', function ($self, $product) {
 Good to know
 ------------
 #### Compatibility
-It's **only** compatible with **PHP >= 5.4** and **Laravel 4.1** framework.
-
-#### This is beta-quality software
-It works well according to our tests. The internal API may change and other features will be added.
-We are working to make AuthorityController production quality software.
+It's **only** compatible with **PHP >= 5.4** and **Laravel >= 4.1** framework.
 
 #### Differences between CanCan and AuthorityController
 See Wiki page [Differences between CanCan and AuthorityController](https://github.com/efficiently/authority-controller/wiki/Differences-between-CanCan-and-AuthorityController)

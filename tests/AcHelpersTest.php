@@ -49,4 +49,56 @@ class AcHelpersTest extends AcTestCase
         $this->assertNotEquals('Sub\Task', get_class($mockNamespace));
         $this->assertEquals('Sub\Task', get_classname($mockNamespace));
     }
+
+    public function testAcTrans()
+    {
+        $defaultErrorMessage = ac_trans("messages.unauthorized.default");
+        $this->assertEquals('You are not authorized to access this page.', $defaultErrorMessage);
+
+        App::setLocale('fr');
+        $defaultErrorMessageFr = ac_trans("messages.unauthorized.default");
+
+        $this->assertNotEquals('You are not authorized to access this page.', $defaultErrorMessageFr);
+        $this->assertEquals("Vous n'êtes pas autorisé à accéder à cette page.", $defaultErrorMessageFr);
+    }
+
+    public function testRespondTo()
+    {
+        $mock = m::mock('Project');
+        $this->assertFalse(method_exists($mock, 'toto'));
+        $this->assertFalse(respond_to($mock, 'toto'));
+
+        $mock->shouldReceive('toto');
+        $this->assertFalse(method_exists($mock, 'toto'));
+        $this->assertTrue(respond_to($mock, 'toto'));
+    }
+
+    public function testGetProperty()
+    {
+        $category = new AcCategory;
+        $privatePropertyName = 'privateProperty';
+        $this->assertNotEquals('public property', get_property($category, $privatePropertyName));
+        $this->assertEquals('private property', get_property($category, $privatePropertyName));
+
+    }
+
+    public function testSetProperty()
+    {
+        $category = new AcCategory;
+        $privatePropertyName = 'privateProperty';
+        set_property($category, $privatePropertyName, 'updated private property');
+        $this->assertNotEquals('private property', get_property($category, $privatePropertyName));
+        $this->assertEquals('updated private property', get_property($category, $privatePropertyName));
+    }
+
+    public function testInvokeMethod()
+    {
+        $category = new AcCategory;
+
+        $this->assertTrue(is_callable([$category, 'publicMethod']));
+
+        $privateMethodName = 'privateMethod';
+        $this->assertFalse(is_callable([$category, $privateMethodName]));
+        $this->assertEquals('private method', invoke_method($category, $privateMethodName));
+    }
 }

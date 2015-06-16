@@ -212,13 +212,20 @@ class ControllerResource
         return in_array($this->params['action'], $this->getCreateActions()) || array_key_exists('singleton', $this->options) || ($this->getIdParam() && ! in_array($this->params['action'], $this->getCollectionActions()));
     }
 
+    // Returns the class name used for this resource. This can be overriden by the 'class' option.
+    // If false is passed in it will use the resource name as a lowercase string in which case it should
+    // only be used for authorization, not loading since there's no class to load through.
     protected function getResourceClass()
     {
         if (array_key_exists('class', $this->options)) {
-            return $this->options['class'] === false ? $this->getName() : $this->options['class'];
-        } else {
-            return studly_case($this->getNamespacedName());
+            if ($this->options['class'] === false) {
+                return $this->getName();
+            } elseif (is_string($this->options['class'])) {
+                return studly_case($this->options['class']);
+            }
         }
+
+        return studly_case($this->getNamespacedName());
     }
 
     protected function getResourceClassWithParent()
@@ -346,9 +353,11 @@ class ControllerResource
         return array_key_exists($paramsKey, $this->params) ? $this->params[$paramsKey] : [];
     }
 
-    protected function getNamespace()
+    protected function getNamespace($controllerName = null)
     {
-        return array_slice(preg_split("/\\\\|\//", $this->params['controller']), 0, -1);
+        $controllerName = $controllerName ?: $this->params['controller'];
+
+        return array_slice(preg_split("/\\\\|\//", $controllerName), 0, -1);
     }
 
     protected function getNamespacedName()
@@ -359,7 +368,31 @@ class ControllerResource
             $namespaceName = studly_case(str_singular(implode("\\", array_flatten([$namespace, studly_case($this->getName())]))));
         }
 
-        return class_exists($namespaceName) ? $namespaceName : $this->getName();
+        if (class_exists($namespaceName)) {
+            return $namespaceName;
+        }
+
+        $className = studly_case($this->getName());
+        if (class_exists($className)) {
+            // Support Laravel Alias
+            $aliasLoader = \Illuminate\Foundation\AliasLoader::getInstance();
+            $aliasName = array_get($aliasLoader->getAliases(), $className);
+            return class_exists($aliasName) ? $aliasName : $className;
+        }
+
+        $controllerNamespaces = $this->getNamespace(get_classname($this->controller));
+        // Detect the Root Namespace, based on the current controller namespace
+        // And test if the resource class exists with it
+        // Borrowed from: https://github.com/laravel/framework/blob/v5.0.13/src/Illuminate/Routing/UrlGenerator.php#L526
+        if (! empty($controllerNamespaces) && ! (strpos($className, '\\') === 0)) {
+            $rootNamespace = head($controllerNamespaces);
+            $guessName = $rootNamespace.'\\'.$className;
+            if (class_exists($guessName)) {
+                return $guessName;
+            }
+        }
+
+        return $this->getName();
     }
 
     protected function getCurrentAuthority()

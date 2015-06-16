@@ -14,9 +14,11 @@ if (! function_exists('array_extract_options')) {
                 }
             }
         }
+
         return $options;
     }
 }
+
 if (! function_exists('get_classname')) {
 
     /**
@@ -80,6 +82,7 @@ if (! function_exists('compact_property')) {
                 $compactArray = array_merge($compactArray, compact($property));
             }
         }
+
         return $compactArray;
     }
 }
@@ -111,7 +114,6 @@ if (! function_exists('ac_trans')) {
         return trans($id, $parameters, $domain, $locale);
     }
 }
-
 
 if (! function_exists('ac_trans_choice')) {
     function ac_trans_choice($id, $number, array $parameters = [], $domain = 'messages', $locale = null)
@@ -168,7 +170,6 @@ if (! function_exists('get_property')) {
             return null;
         }
     }
-
 }
 
 if (! function_exists('invoke_method')) {

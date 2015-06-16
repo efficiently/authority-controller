@@ -17,7 +17,6 @@ class AcTasksControllerTest extends AcTestCase
     public function setUp()
     {
         parent::setUp();
-        Route::enableFilters();
         View::addLocation(__DIR__.'/fixtures/views');
 
         $this->parentControllerName = "AcProjectsController";

@@ -53,7 +53,7 @@ trait AuthorityControllerHelpers
     protected function getAuthority($user)
     {
         $authority = new Efficiently\AuthorityController\Authority($user);
-        $fn = Config::get('authority-controller::initialize', null);
+        $fn = Config::get('authority-controller.initialize', null);
 
         if ($fn) {
             $fn($authority);

@@ -71,7 +71,7 @@ class Parameters
                 /**
                  * You can escape or purify these parameters. For example:
                  *
-                 *   class ProductsController extends \BaseController
+                 *   class ProductsController extends Controller
                  *   {
                  *       public function __construct()
                  *       {
@@ -173,7 +173,7 @@ class Parameters
      * Returns all inputs keys who starts with an underscore character (<code>_</code>).
      * For exmaple '_method' and '_token' inputs
      *
-     * @param  array $inputKeyss
+     * @param  array $inputKeys
      * @return array
      */
     protected function specialInputKeys($inputKeys = [])

@@ -83,7 +83,6 @@ class Authority extends OriginalAuthority
         $options = array_extract_options($args);
         if (is_array($options) && array_key_exists('message', $options)) {
             $message = $options['message'];
-            // unset($options['message']);
         } elseif (is_array($args) && array_key_exists(0, $args)) {
             list($message) = $args;
             unset($args[0]);
@@ -168,7 +167,7 @@ class Authority extends OriginalAuthority
     }
 
     /**
-     * @param  string|array $name Name of action(s)
+     * @param  string|array $action Name of action(s)
      * @param  string|object $resource Resource for the rule
      * @return boolean
      */
@@ -180,7 +179,7 @@ class Authority extends OriginalAuthority
     }
 
     /**
-     * @param  string|array $name Name of action(s)
+     * @param  string|array $action Name of action(s)
      * @param  string|object $resource Resource for the rule
      * @return array
      */
