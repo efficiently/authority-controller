@@ -40,7 +40,7 @@ abstract class AcTestCase extends Orchestra\Testbench\TestCase
     protected function getPackageProviders($app)
     {
         return [
-            'Illuminate\Html\HtmlServiceProvider',
+            'Collective\Html\HtmlServiceProvider',
             'Efficiently\AuthorityController\AuthorityControllerServiceProvider',
         ];
     }
@@ -48,8 +48,8 @@ abstract class AcTestCase extends Orchestra\Testbench\TestCase
     protected function getPackageAliases($app)
     {
         return [
-            'Form' => 'Illuminate\Html\FormFacade',
-            'HTML' => 'Illuminate\Html\HtmlFacade',
+            'Form' => 'Collective\Html\FormFacade',
+            'HTML' => 'Collective\Html\HtmlFacade',
             'Authority' => 'Efficiently\AuthorityController\Facades\Authority',
             'Params'    => 'Efficiently\AuthorityController\Facades\Params',
         ];
