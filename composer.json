@@ -36,17 +36,19 @@
     "laravelcollective/html": "5.0.*"
   },
   "autoload": {
-    "classmap": [
-      "src/migrations",
-      "tests/AcTestCase.php", "tests/helpers", "tests/fixtures/",
-      "tests/fixtures/models", "tests/fixtures/controllers"
-    ],
     "files": [
       "src/Efficiently/AuthorityController/helpers.php"
     ],
     "psr-0": {
       "Efficiently\\AuthorityController": "src/"
     }
+  },
+  "autoload-dev": {
+    "classmap": [
+      "src/migrations",
+      "tests/AcTestCase.php", "tests/helpers", "tests/fixtures/",
+      "tests/fixtures/models", "tests/fixtures/controllers"
+    ]
   },
   "extra": {
     "branch-alias": {
