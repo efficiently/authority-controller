@@ -45,7 +45,6 @@
   },
   "autoload-dev": {
     "classmap": [
-      "src/migrations",
       "tests/AcTestCase.php", "tests/helpers", "tests/fixtures/",
       "tests/fixtures/models", "tests/fixtures/controllers"
     ]
