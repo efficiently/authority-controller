@@ -316,6 +316,11 @@ class ProductsController extends Controller
 
 Changelog
 ---------
+#### 2.0.1
+*  Replace the deprecated package [`illuminate/html`](https://github.com/illuminate/html) package by the [`laravelcollective/html`](https://github.com/LaravelCollective/html) package
+* Autoloading migrations class is useless, see issue [#30](https://github.com/efficiently/authority-controller/issues/30) <small>(reported by @Fnatte)</small>
+* Autoloading class from `tests` directory are now only available in Composer's dev mode to avoid conflicts
+
 #### 2.0.0
 * Laravel 5.0 support!
 * Use your Laravel Aliases to resolve your models namespace name.
