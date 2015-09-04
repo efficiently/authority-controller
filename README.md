@@ -302,8 +302,13 @@ class ProductsController extends Controller
 
 Changelog
 ---------
-#### 2.1-dev
+#### 2.1.0
 * Laravel 5.1 support!
+
+#### 2.0.1
+*  Replace the deprecated package [`illuminate/html`](https://github.com/illuminate/html) package by the [`laravelcollective/html`](https://github.com/LaravelCollective/html) package
+* Autoloading migrations class is useless, see issue [#30](https://github.com/efficiently/authority-controller/issues/30) <small>(reported by @Fnatte)</small>
+* Autoloading class from `tests` directory are now only available in Composer's dev mode to avoid conflicts
 
 #### 2.0.0
 * Laravel 5.0 support!
@@ -385,10 +390,6 @@ Good to know
 ------------
 #### Compatibility
 It's **only** compatible with **PHP >= 5.4** and **Laravel >= 4.1** framework.
-
-#### This is beta-quality software
-It works well according to our tests. The internal API may change and other features will be added.
-We are working to make AuthorityController production quality software.
 
 #### Differences between CanCan and AuthorityController
 See Wiki page [Differences between CanCan and AuthorityController](https://github.com/efficiently/authority-controller/wiki/Differences-between-CanCan-and-AuthorityController)
