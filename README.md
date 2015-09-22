@@ -103,14 +103,18 @@ To utilize these tables, you can add the following methods to your `User` model.
 
         return $hasRole;
     }
+```
 
+```php
     //app/Authority/Role.php
     <?php namespace App\Authority;
 
     use Illuminate\Database\Eloquent\Model;
 
     class Role extends Model {}
+```
 
+```php
     //app/Authority/Permission.php
     <?php namespace App\Authority;
 
@@ -120,19 +124,38 @@ To utilize these tables, you can add the following methods to your `User` model.
 ```
 
 ##### Init resource filters and controller methods
-In your `app/Http/Controllers/Controller.php` file to add the `ControllerAdditions` trait:
+In your `app/Http/Controllers/Controller.php` file, add the `ControllerAdditions` trait and disable the use of the `AuthorizesRequests` trait:
 
 ```php
 <?php namespace App\Http\Controllers;
 
-use Illuminate\Foundation\Bus\DispatchesCommands;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Efficiently\AuthorityController\ControllerAdditions as AuthorityControllerAdditions;
 
 abstract class Controller extends BaseController
 {
-  	use DispatchesCommands, ValidatesRequests;
-    use \Efficiently\AuthorityController\ControllerAdditions;
+    // use AuthorizesRequests;
+    use DispatchesJobs, ValidatesRequests;
+    use AuthorityControllerAdditions;
+    //code...
+}
+```
+
+**NB:** If you really need the default Laravel Authorization system, you can use the `AuthorizesRequests` trait, if you alias its `authorize` method, like this:
+
+```php
+<?php
+//code...
+abstract class Controller extends BaseController
+{
+    //code...
+    use AuthorizesRequests, AuthorityControllerAdditions {
+        AuthorityControllerAdditions::authorize insteadof AuthorizesRequests;
+        AuthorizesRequests::authorize as illuminateAuthorize;
+    }
     //code...
 }
 ```
