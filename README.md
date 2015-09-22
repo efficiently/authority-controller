@@ -255,15 +255,16 @@ You can catch the exception and modify its behavior in the `render()` method of 
 ```php
 //app/Exceptions/Handler.php
 
-  /**
-   * Render an exception into an HTTP response.
-   *
-   * @param  \Illuminate\Http\Request  $request
-   * @param  \Exception  $e
-   * @return \Illuminate\Http\Response
-   */
-	public function render($request, Exception $e)
+   /**
+    * Render an exception into an HTTP response.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @param  \Exception  $e
+    * @return \Illuminate\Http\Response
+    */
+    public function render($request, Exception $e)
     {
+        //code...
         if ($e instanceof \Efficiently\AuthorityController\Exceptions\AccessDenied) {
             $msg = $e->getMessage();
             \Log::error('Access denied! '.$msg);
@@ -325,6 +326,9 @@ class ProductsController extends Controller
 
 Changelog
 ---------
+#### 2.1.1-dev
+* Update installation instructions for Laravel >= 5.1.11
+
 #### 2.1.0
 * Laravel 5.1 support!
 
