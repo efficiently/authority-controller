@@ -22,23 +22,27 @@ class AuthorityControllerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Publish config
-        $this->publishes([
-            __DIR__ . '/../../config/config.php' => config_path('authority-controller.php')
-        ], 'config');
+        //Lumen doesn't support publishing config
+        if (!str_contains($this->app->version(), 'Lumen')) {
+            // Publish config
+            $this->publishes([
+                __DIR__ . '/../../config/config.php' => config_path('authority-controller.php')
+            ], 'config');
 
-        // Publish migrations
-        $this->publishes([
-            __DIR__ . '/../../migrations/' => base_path('database/migrations')
-        ], 'migrations');
+            // Publish migrations
+            $this->publishes([
+                __DIR__ . '/../../migrations/' => base_path('database/migrations')
+            ], 'migrations');
+
+            // Publish translations
+            $this->publishes([
+                __DIR__ . '/../../translations' => base_path('resources/lang')
+            ], 'translations');
+        }
+
 
         // Load translations
         $this->loadTranslationsFrom(__DIR__ . '/../../lang', 'authority-controller');
-
-        // Publish translations
-        $this->publishes([
-            __DIR__ . '/../../translations' => base_path('resources/lang')
-        ], 'translations');
     }
 
     /**
