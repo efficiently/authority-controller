@@ -40,7 +40,6 @@ class AuthorityControllerServiceProvider extends ServiceProvider
             ], 'translations');
         }
 
-
         // Load translations
         $this->loadTranslationsFrom(__DIR__ . '/../../lang', 'authority-controller');
     }
