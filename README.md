@@ -14,18 +14,22 @@ For [**Laravel 4.1 or 4.2**](http://laravel.com/docs/4.2) supports see [Authorit
 #### Lumen Support
 For Lumen support, follow the instructions below for the most part, but as Lumen doesn't support config publishing you'll not be able to run php artisan vendor:publish for example, and some of the config is done a little different.
 
-You will need to manually copy the migrations in to your migrations folder from vendor/efficiently/authority-controller/src/migrations/ to your migrations folder and the config from vendor/efficiently/authority-controller/src/config/config.php to config/authority-controller.php.
-
+You will need to manually copy the migrations in to your migrations folder from
+ ```php
+ vendor/efficiently/authority-controller/src/migrations/ to your migrations folder and the config from vendor/efficiently/authority-controller/src/config/config.php to config/authority-controller.php.
+ ```
 Register the aliases (in bootstrap/app.php), notice you'll need to add the Lang alias too.
 
-class_alias('Efficiently\AuthorityController\Facades\Params', 'Params');
-class_alias('Efficiently\AuthorityController\Facades\Authority', 'Authority');
-class_alias('Illuminate\Support\Facades\Lang', 'Lang');
-
+ ```php
+ class_alias('Efficiently\AuthorityController\Facades\Params', 'Params');
+ class_alias('Efficiently\AuthorityController\Facades\Authority', 'Authority');
+ class_alias('Illuminate\Support\Facades\Lang', 'Lang');
+ ```
 Lumen will not automatically load the config file so this will need adding to bootstrap/app.php too
 
-$app->configure('authority-controller');
-
+ ```php
+ $app->configure('authority-controller');
+ ```
 #### Demo application
 
 You can see in action this package with this Laravel 5.1 [**demo application**](https://github.com/efficiently/laravel_authority-controller_app#readme).
