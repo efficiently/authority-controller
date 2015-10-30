@@ -1,7 +1,7 @@
 AuthorityController [![Build Status](https://travis-ci.org/efficiently/authority-controller.png?branch=master)](http://travis-ci.org/efficiently/authority-controller)
 ===================
 
-AuthorityController is an PHP authorization library for [Laravel 5.0 & 5.1](http://laravel.com) and [Lumen (http://lumen.laravel.com/)] which restricts what resources a given user is allowed to access.
+AuthorityController is an PHP authorization library for [Laravel 5.0 & 5.1](http://laravel.com) and [Lumen] (http://lumen.laravel.com/) which restricts what resources a given user is allowed to access.
 
 All permissions are defined in a single location:
 
