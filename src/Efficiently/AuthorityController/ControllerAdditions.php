@@ -1,4 +1,8 @@
-<?php namespace Efficiently\AuthorityController;
+<?php
+
+namespace Efficiently\AuthorityController;
+
+use Event;
 
 trait ControllerAdditions
 {
@@ -7,6 +11,19 @@ trait ControllerAdditions
     protected $currentAuthority;
     protected $currentUser;
     protected $_authorized;
+    /**
+     * The "before" filters registered on the controller.
+     *
+     * @var array
+     */
+    protected $beforeFilters = [];
+
+    /**
+     * The "after" filters registered on the controller.
+     *
+     * @var array
+     */
+    protected $afterFilters = [];
 
    /**
     * Remove all of the Authority-Controller event listeners of the specified controller.
@@ -39,6 +56,382 @@ trait ControllerAdditions
             }
         }
 
+    }
+
+    /**
+     * Register a "before" filter on the controller.
+     *
+     * @param  \Closure|string  $filter
+     * @param  array  $options
+     * @return void
+     */
+    public function beforeFilter($filter, array $options = [])
+    {
+        $this->beforeFilters[] = $this->parseFilter($filter, $options);
+    }
+
+    /**
+     * Register an "after" filter on the controller.
+     *
+     * @param  \Closure|string  $filter
+     * @param  array  $options
+     * @return void
+     */
+    public function afterFilter($filter, array $options = [])
+    {
+        $this->afterFilters[] = $this->parseFilter($filter, $options);
+    }
+
+    /**
+     * Parse the given filter and options.
+     *
+     * @param  \Closure|string  $filter
+     * @param  array  $options
+     * @return array
+     */
+    protected function parseFilter($filter, array $options)
+    {
+        $parameters = [];
+
+        $original = $filter;
+
+        if ($filter instanceof \Closure) {
+            $filter = $this->registerClosureFilter($filter);
+        } elseif ($this->isInstanceFilter($filter)) {
+            $filter = $this->registerInstanceFilter($filter);
+        } else {
+            list($filter, $parameters) = static::parseRouteFilter($filter);
+        }
+
+        return compact('original', 'filter', 'parameters', 'options');
+    }
+
+    /**
+     * Register an anonymous controller filter Closure.
+     *
+     * @param  \Closure  $filter
+     * @return string
+     */
+    protected function registerClosureFilter(Closure $filter)
+    {
+        \Event::listen('router.filter: '.($name = spl_object_hash($filter)), $filter);
+
+        return $name;
+    }
+
+    /**
+     * Register a controller instance method as a filter.
+     *
+     * @param  string  $filter
+     * @return string
+     */
+    protected function registerInstanceFilter($filter)
+    {
+        \Event::listen('router.filter: '.$filter, [$this, substr($filter, 1)]);
+
+        return $filter;
+    }
+
+    /**
+     * Determine if a filter is a local method on the controller.
+     *
+     * @param  mixed  $filter
+     * @return bool
+     *
+     * @throws \InvalidArgumentException
+     */
+    protected function isInstanceFilter($filter)
+    {
+        if (is_string($filter) && starts_with($filter, '@')) {
+            if (method_exists($this, substr($filter, 1))) {
+               return true;
+            }
+
+            throw new InvalidArgumentException("Filter method [$filter] does not exist.");
+        }
+
+       return false;
+    }
+
+    /**
+     * Parse the given filter into name and parameters.
+     *
+     * @param  string  $filter
+     * @return array
+     *
+     */
+    public static function parseRouteFilter($filter)
+    {
+        if (!str_contains($filter, ':')) {
+            return [$filter, []];
+        }
+
+        return static::parseParameterFilter($filter);
+    }
+
+    /**
+     * Parse a filter with parameters.
+     *
+     * @param  string  $filter
+     * @return array
+     */
+    protected static function parseParameterFilter($filter)
+    {
+        list($name, $parameters) = explode(':', $filter, 2);
+
+        return [$name, explode(',', $parameters)];
+    }
+
+    /**
+     * Remove the given before filter.
+     *
+     * @param  string  $filter
+     * @return void
+     */
+    public function forgetBeforeFilter($filter)
+    {
+        $this->beforeFilters = $this->removeFilter($filter, $this->getBeforeFilters());
+    }
+
+    /**
+     * Remove the given after filter.
+     *
+     * @param  string  $filter
+     * @return void
+     */
+    public function forgetAfterFilter($filter)
+    {
+        $this->afterFilters = $this->removeFilter($filter, $this->getAfterFilters());
+    }
+
+    /**
+     * Remove the given controller filter from the provided filter array.
+     *
+     * @param  string  $removing
+     * @param  array   $current
+     * @return array
+     */
+    protected function removeFilter($removing, $current)
+    {
+        return array_filter($current, function ($filter) use ($removing) {
+            return $filter['original'] != $removing;
+        });
+    }
+
+    /**
+     * Get the registered "before" filters.
+     *
+     * @return array
+     */
+    public function getBeforeFilters()
+    {
+        return $this->beforeFilters;
+    }
+
+    /**
+     * Get the registered "after" filters.
+     *
+     * @return array
+     */
+    public function getAfterFilters()
+    {
+        return $this->afterFilters;
+    }
+
+    /**
+     * Execute an action on the controller.
+     *
+     * @param  string  $method
+     * @param  array   $parameters
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function callAction($method, $parameters)
+    {
+        $route = static::getRouter()->current();
+        $request = app('request');
+        $this->assignAfter($route, $request, $method);
+        $response = $this->before($route, $request, $method);
+
+        if (is_null($response)) {
+            $response = call_user_func_array([$this, $method], $parameters);
+        }
+
+        return $response;
+    }
+
+    /**
+     * Call the "before" filters for the controller.
+     *
+     * @param  \Illuminate\Routing\Route  $route
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $method
+     * @return mixed
+     */
+    protected function before($route, $request, $method)
+    {
+        foreach ($this->getBeforeFilters() as $filter) {
+            if ($this->filterApplies($filter, $request, $method)) {
+                // Here we will just check if the filter applies. If it does we will call the filter
+                // and return the responses if it isn't null. If it is null, we will keep hitting
+                // them until we get a response or are finished iterating through this filters.
+                $response = $this->callFilter($filter, $route, $request);
+
+                if (!is_null($response)) {
+                    return $response;
+                }
+            }
+        }
+    }
+
+    /**
+     * Apply the applicable after filters to the route.
+     *
+     * @param  \Illuminate\Routing\Route  $route
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $method
+     * @return mixed
+     */
+    protected function assignAfter($route, $request, $method)
+    {
+        foreach ($this->getAfterFilters() as $filter) {
+            // If the filter applies, we will add it to the route, since it has already been
+            // registered with the router by the controller, and will just let the normal
+            // router take care of calling these filters so we do not duplicate logics.
+            if ($this->filterApplies($filter, $request, $method)) {
+                $route->after($this->getAssignableAfter($filter));
+            }
+        }
+    }
+
+    /**
+     * Get the assignable after filter for the route.
+     *
+     * @param  \Closure|string  $filter
+     * @return string
+     */
+    protected function getAssignableAfter($filter)
+    {
+        if ($filter['original'] instanceof Closure) {
+            return $filter['filter'];
+        }
+
+        return $filter['original'];
+    }
+
+    /**
+     * Determine if the given filter applies to the request.
+     *
+     * @param  array  $filter
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $method
+     * @return bool
+     */
+    protected function filterApplies($filter, $request, $method)
+    {
+        foreach (['Method', 'On'] as $type) {
+            if ($this->{"filterFails{$type}"}($filter, $request, $method)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Determine if the filter fails the method constraints.
+     *
+     * @param  array  $filter
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $method
+     * @return bool
+     */
+    protected function filterFailsMethod($filter, $request, $method)
+    {
+        return $this->methodExcludedByOptions($method, $filter['options']);
+    }
+
+    /**
+     * Determine if the filter fails the "on" constraint.
+     *
+     * @param  array  $filter
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $method
+     * @return bool
+     */
+    protected function filterFailsOn($filter, $request, $method)
+    {
+        $on = array_get($filter, 'options.on');
+
+        if (is_null($on)) {
+            return false;
+        }
+
+        // If the "on" is a string, we will explode it on the pipe so you can set any
+        // amount of methods on the filter constraints and it will still work like
+        // you specified an array. Then we will check if the method is in array.
+        if (is_string($on)) {
+            $on = explode('|', $on);
+        }
+
+        return !in_array(strtolower($request->getMethod()), $on);
+    }
+
+    /**
+     * Call the given controller filter method.
+     *
+     * @param  array  $filter
+     * @param  \Illuminate\Routing\Route  $route
+     * @param  \Illuminate\Http\Request  $request
+     * @return mixed
+     */
+    protected function callFilter($filter, $route, $request)
+    {
+        return $this->callRouteFilter(
+            $filter['filter'], $filter['parameters'], $route, $request
+        );
+    }
+
+    /**
+     * Determine if the given options exclude a particular method.
+     *
+     * @param  string  $method
+     * @param  array  $options
+     * @return bool
+     */
+    public function methodExcludedByOptions($method, array $options)
+    {
+        return (isset($options['only']) && ! in_array($method, (array) $options['only'])) ||
+            (! empty($options['except']) && in_array($method, (array) $options['except']));
+    }
+
+    /**
+     * Call the given route filter.
+     *
+     * @param  string  $filter
+     * @param  array  $parameters
+     * @param  \Illuminate\Routing\Route  $route
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Response|null $response
+     * @return mixed
+     */
+    public function callRouteFilter($filter, $parameters, $route, $request, $response = null)
+    {
+        $data = array_merge([$route, $request, $response], $parameters);
+
+        return Event::until('router.filter: '.$filter, $this->cleanFilterParameters($data));
+    }
+
+    /**
+     * Clean the parameters being passed to a filter callback.
+     *
+     * @param  array  $parameters
+     * @return array
+     */
+    protected function cleanFilterParameters(array $parameters)
+    {
+        return array_filter($parameters, function ($p) {
+            return !is_null($p) && $p !== '';
+        });
     }
 
     public function paramsBeforeFilter($filter, array $options = [])
@@ -394,7 +787,7 @@ trait ControllerAdditions
     public function getCurrentAuthority()
     {
         if (is_null($this->currentAuthority)) {
-            $this->currentAuthority = \App::make('authority');
+            $this->currentAuthority = app('authority');
         }
 
         return $this->currentAuthority;

@@ -48,6 +48,7 @@ abstract class AcTestCase extends Orchestra\Testbench\TestCase
     protected function getPackageAliases($app)
     {
         return [
+            'Input' => 'Illuminate\Support\Facades\Input',
             'Form' => 'Collective\Html\FormFacade',
             'HTML' => 'Collective\Html\HtmlFacade',
             'Authority' => 'Efficiently\AuthorityController\Facades\Authority',

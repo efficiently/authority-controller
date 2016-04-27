@@ -18,6 +18,7 @@
     "laravel",
     "laravel 5",
     "laravel 5.1",
+    "laravel 5.2",
     "rails"
   ],
   "license": "MIT",
@@ -26,14 +27,14 @@
     "email": "tortuetorche@spam.me"
   }],
   "require": {
-    "php": ">=5.4.0",
+    "php": ">=5.5.9",
     "authority-php/authority-laravel": "~2.4.3"
   },
   "require-dev": {
     "phpunit/phpunit": "~4.5",
     "mockery/mockery": "0.9.*",
-    "orchestra/testbench": "~3.0.0||~3.1.0",
-    "laravelcollective/html": "5.0.*"
+    "orchestra/testbench": "~3.2.0",
+    "laravelcollective/html": "5.2.*"
   },
   "autoload": {
     "files": [
@@ -55,7 +56,8 @@
       "dev-1.1": "1.1.x-dev",
       "dev-1.2": "1.2.x-dev",
       "dev-2.0": "2.0.x-dev",
-      "dev-master": "2.1.x-dev"
+      "dev-2.1": "2.1.x-dev",
+      "dev-master": "2.2.x-dev"
     }
   },
   "config": {

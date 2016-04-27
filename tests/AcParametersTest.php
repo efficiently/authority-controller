@@ -355,12 +355,6 @@ class AcParametersTest extends AcTestCase
         $this->mock($controllerName);
         $controllerInstance = $this->app->make($controllerName);
         $controllerInstance->shouldReceive('paramsBeforeFilter')->with(m::type('string'))->once();
-        $controllerInstance->shouldReceive('getBeforeFilters')->once()->andReturn([
-            ['original' => null, 'filter' => null, 'parameters' => [], 'options' => []]
-        ]);
-        $controllerInstance->shouldReceive('getAfterFilters')->once()->andReturn([
-            ['original' => null, 'filter' => null, 'parameters' => [], 'options' => []]
-        ]);
         $controllerInstance->shouldReceive('getMiddleware')->once()->andReturn([]);
         $controllerInstance->shouldReceive('callAction')->with(m::type('string'), m::type('array'))->andReturnUsing(function ($method, $parameters) use ($controllerInstance) {
             $this->app->make('Params')->fillController($controllerInstance);
@@ -385,6 +379,19 @@ class AcParametersTest extends AcTestCase
         $routerFacade = new \Illuminate\Support\Facades\Route;
         $this->invokeMethod($routerFacade, 'createFreshMockInstance', ['router']);
         $router = $routerFacade::getFacadeRoot()->makePartial();
+
+        $router->shouldReceive('substituteBindings')->with(m::type('\Illuminate\Routing\Route'))->andReturnUsing(function ($route) use ($router) {
+            foreach ($route->parameters() as $key => $value) {
+                if (isset($router->binders[$key])) {
+                    $route->setParameter($key, $router->performBinding($key, $value, $route));
+                }
+            }
+            $routePartial = m::mock($route);
+            $routePartial->shouldReceive('signatureParameters')->andReturn([]);
+            $router->substituteImplicitBindings($routePartial);
+
+            return $routePartial;
+        });
 
         $this->setProperty($router, 'events', $app['events']);
         $this->setProperty($router, 'routes', new \Illuminate\Routing\RouteCollection);

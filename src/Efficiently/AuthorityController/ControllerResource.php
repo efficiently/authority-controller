@@ -42,7 +42,7 @@ class ControllerResource
 
         $router = App::make('router');
         if (! Event::hasListeners($filterPrefix.$filterName)) {
-            $router->filter($filterName, function () use ($controller, $method, $resourceOptions, $resourceName) {
+            Event::listen($filterPrefix.$filterName, function () use ($controller, $method, $resourceOptions, $resourceName) {
                 $controllerResource = App::make('Efficiently\AuthorityController\ControllerResource', [
                     $controller, $resourceName, $resourceOptions
                 ]);

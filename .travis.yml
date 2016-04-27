@@ -1,7 +1,6 @@
 language: php
 
 php:
-  - 5.4
   - 5.5
   - 5.6
   - 7.0
@@ -9,18 +8,14 @@ php:
 
 matrix:
   allow_failures:
-    - php: 5.4 # Allow PHP 5.4 failures because Laravel 5.1 requires PHP >= 5.5
     - php: hhvm
-    - php: 7.0
 
 sudo: false
 
-env:
-  - TESTBENCH_VERSION="~3.0.0"
-  - TESTBENCH_VERSION="~3.1.0"
-
 before_install:
-  - sed -i s/~3.0.0\|\|~3.1.0/${TESTBENCH_VERSION}/ composer.json
-  - composer update # Use update since we'll be changing the composer.json
+  - travis_retry composer self-update
+
+install:
+  - travis_retry composer install --no-interaction --prefer-dist
 
 script: vendor/bin/phpunit tests

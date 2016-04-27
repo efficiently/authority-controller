@@ -22,7 +22,7 @@ class Parameters
         $paramsFilterName = "controller.parameters.".$controllerClass;
 
         if (! Event::hasListeners($paramsFilterPrefix.$paramsFilterName)) {
-            $router->filter($paramsFilterName, function () use ($controller, $router) {
+            Event::listen($paramsFilterPrefix.$paramsFilterName, function () use ($controller, $router) {
                 $currentRoute = $router->current();
                 $resourceParams = [];
                 list($resourceParams['controller'], $resourceParams['action']) = explode('@', $router->currentRouteAction());
