@@ -1,4 +1,4 @@
-AuthorityController [![Build Status](https://travis-ci.org/efficiently/authority-controller.png?branch=master)](http://travis-ci.org/efficiently/authority-controller)
+AuthorityController [![Build Status](https://travis-ci.org/efficiently/authority-controller.png?branch=2.1)](http://travis-ci.org/efficiently/authority-controller)
 ===================
 
 AuthorityController is an PHP authorization library for [Laravel 5.0 & 5.1](http://laravel.com) which restricts what resources a given user is allowed to access.
@@ -8,6 +8,8 @@ All permissions are defined in a single location:
     config/authority-controller.php
 
 and not duplicated across controllers, routes, views, and database queries.
+
+For [**Laravel 5.2**](http://laravel.com/docs/5.2) supports see [AuthorityController master branch](https://github.com/efficiently/authority-controller/tree/master)
 
 For [**Laravel 4.1 or 4.2**](http://laravel.com/docs/4.2) supports see [AuthorityController 1.2 branch](https://github.com/efficiently/authority-controller/tree/1.2)
 
@@ -326,7 +328,7 @@ class ProductsController extends Controller
 
 Changelog
 ---------
-#### 2.1.1-dev
+#### 2.1.1
 * Update installation instructions for Laravel >= 5.1.11
 
 #### 2.1.0
