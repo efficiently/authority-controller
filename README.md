@@ -1,7 +1,7 @@
 AuthorityController [![Build Status](https://travis-ci.org/efficiently/authority-controller.png?branch=master)](http://travis-ci.org/efficiently/authority-controller)
 ===================
 
-AuthorityController is an PHP authorization library for [Laravel 5.2](http://laravel.com) which restricts what resources a given user is allowed to access.
+AuthorityController is an PHP authorization library for [Laravel 5.3](http://laravel.com) which restricts what resources a given user is allowed to access.
 
 All permissions are defined in a single location:
 
@@ -9,13 +9,15 @@ All permissions are defined in a single location:
 
 and not duplicated across controllers, routes, views, and database queries.
 
-For [**Laravel 5.0 or 5.1**](http://laravel.com/docs/5.1) supports see [AuthorityController 2.1 branch](https://github.com/efficiently/authority-controller/tree/2.1)
+For [**Laravel 5.2**](http://laravel.com/docs/5.2) supports see [AuthorityController 2.2 branch](https://github.com/efficiently/authority-controller/tree/2.2)
 
-For [**Laravel 4.1 or 4.2**](http://laravel.com/docs/4.2) supports see [AuthorityController 1.2 branch](https://github.com/efficiently/authority-controller/tree/1.2)
+For [Laravel 5.0 or 5.1](http://laravel.com/docs/5.1) supports see [AuthorityController 2.1 branch](https://github.com/efficiently/authority-controller/tree/2.1)
+
+For [Laravel 4.1 or 4.2](http://laravel.com/docs/4.2) supports see [AuthorityController 1.2 branch](https://github.com/efficiently/authority-controller/tree/1.2)
 
 #### Demo application
 
-You can see in action this package with this Laravel 5.2 [**demo application**](https://github.com/efficiently/laravel_authority-controller_app#readme).
+You can see in action this package with this Laravel [**demo application**](https://github.com/efficiently/laravel_authority-controller_app#readme).
 
 #### Origins and Inspirations
 
@@ -137,7 +139,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Efficiently\AuthorityController\ControllerAdditions as AuthorityControllerAdditions;
 
-abstract class Controller extends BaseController
+class Controller extends BaseController
 {
     // use AuthorizesRequests;
     use DispatchesJobs, ValidatesRequests;
@@ -151,7 +153,7 @@ abstract class Controller extends BaseController
 ```php
 <?php
 //code...
-abstract class Controller extends BaseController
+class Controller extends BaseController
 {
     //code...
     use AuthorizesRequests, AuthorityControllerAdditions {
@@ -328,8 +330,10 @@ class ProductsController extends Controller
 
 Changelog
 ---------
+#### 2.3.0-dev
+* Laravel 5.3 support!
 
-#### 2.2.0-dev
+#### 2.2.0
 * Laravel 5.2 support!
 
 #### 2.1.1
@@ -422,7 +426,7 @@ $authority->allow('update', 'App\Product', function ($self, $product) {
 Good to know
 ------------
 #### Compatibility
-It's **only** compatible with **PHP >= 5.4** and **Laravel >= 4.1** framework.
+It's **only** compatible with **PHP >= 5.6** and **Laravel >= 5.3** framework.
 
 #### Differences between CanCan and AuthorityController
 See Wiki page [Differences between CanCan and AuthorityController](https://github.com/efficiently/authority-controller/wiki/Differences-between-CanCan-and-AuthorityController)

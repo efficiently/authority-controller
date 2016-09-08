@@ -1,8 +1,6 @@
 <?php namespace Efficiently\AuthorityController;
 
-use App;
 use Event;
-use Route;
 
 class ControllerResource
 {
@@ -40,10 +38,9 @@ class ControllerResource
         $filterPrefix = "router.filter: ";
         $filterName = "controller.".$method.".".get_classname($controller)."(".md5(json_encode($args)).")";
 
-        $router = App::make('router');
         if (! Event::hasListeners($filterPrefix.$filterName)) {
             Event::listen($filterPrefix.$filterName, function () use ($controller, $method, $resourceOptions, $resourceName) {
-                $controllerResource = App::make('Efficiently\AuthorityController\ControllerResource', [
+                $controllerResource = app('Efficiently\AuthorityController\ControllerResource', [
                     $controller, $resourceName, $resourceOptions
                 ]);
                 $controllerResource->$method();
@@ -51,7 +48,6 @@ class ControllerResource
 
             call_user_func_array([$controller, $beforeFilterMethod], [$filterName, array_only($options, ['only', 'except'])]);
         }
-
     }
 
     public function __construct($controller, $name = null, $options = [])
@@ -89,7 +85,6 @@ class ControllerResource
                 $this->setCollectionInstance($this->loadCollection());
             }
         }
-
     }
 
     public function authorizeResource()
@@ -124,7 +119,7 @@ class ControllerResource
 
     protected function loadCollection()
     {
-        $resourceModel = App::make($this->getResourceBase());
+        $resourceModel = app($this->getResourceBase());
         $collectionScope = $this->getCollectionScopeWithParams();
         $collection = $resourceModel;
         if ($collectionScope) {
@@ -141,7 +136,7 @@ class ControllerResource
         $resourceBase = $this->getResourceBase();
         $resourceParams = $this->getResourceParams();
 
-        $resource = App::make($resourceBase, is_array($resourceParams) ? [$resourceParams] : []);
+        $resource = app($resourceBase, is_array($resourceParams) ? [$resourceParams] : []);
 
         return $this->setAttributes($resource);
     }
@@ -163,7 +158,7 @@ class ControllerResource
         if (array_key_exists('singleton', $this->options) && respond_to($this->getParentResource(), $this->getName())) {
             $resource = call_user_func([$this->getParentResource(), $this->getName()]);
         } else {
-            $resourceModel = App::make($this->getResourceBase());
+            $resourceModel = app($this->getResourceBase());
             if (array_key_exists('findBy', $this->options)) {
                 if (respond_to($resourceModel, "findBy".studly_case($this->options['findBy']))) {
                     $resource = call_user_func_array([$resourceModel, "findBy".studly_case($this->options['findBy']) ], [$this->getIdParam()]);
@@ -307,7 +302,7 @@ class ControllerResource
     protected function getParentName()
     {
         if (array_key_exists('through', $this->options)) {
-            return array_first(array_flatten((array) $this->options['through']), function ($key, $value) {
+            return array_first(array_flatten((array) $this->options['through']), function ($value) {
                 return $this->fetchParent($value);
             });
         }

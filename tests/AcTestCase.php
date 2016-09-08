@@ -55,4 +55,16 @@ abstract class AcTestCase extends Orchestra\Testbench\TestCase
             'Params'    => 'Efficiently\AuthorityController\Facades\Params',
         ];
     }
+
+    /**
+     * Resolve application HTTP exception handler.
+     *
+     * @param  \Illuminate\Foundation\Application  $app
+     *
+     * @return void
+     */
+    protected function resolveApplicationExceptionHandler($app)
+    {
+        $app->singleton('Illuminate\Contracts\Debug\ExceptionHandler', 'AcExceptionsHandler');
+    }
 }

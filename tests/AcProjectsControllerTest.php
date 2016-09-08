@@ -29,7 +29,6 @@ class AcProjectsControllerTest extends AcTestCase
         $this->authority = $this->getAuthority($this->user);
 
         $this->authority->allow('manage', $this->modelName);
-
     }
 
     public function testIndexActionAllows()

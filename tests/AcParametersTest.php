@@ -1,6 +1,25 @@
 <?php
 
+namespace Illuminate\Routing;
+
+use AcTestCase;
+use App;
+use AuthorityControllerHelpers;
+use Event;
 use Mockery as m;
+use Route;
+use Params;
+use function method_exists as original_method_exists;
+
+// Override method_exists() in current namespace for testing
+function method_exists($object, $method)
+{
+    if (is_a($object, 'Mockery\MockInterface') && $method === 'callAction') {
+        return true;
+    }
+
+    return original_method_exists($object, $method);
+}
 
 class AcParametersTest extends AcTestCase
 {
@@ -355,7 +374,6 @@ class AcParametersTest extends AcTestCase
         $this->mock($controllerName);
         $controllerInstance = $this->app->make($controllerName);
         $controllerInstance->shouldReceive('paramsBeforeFilter')->with(m::type('string'))->once();
-        $controllerInstance->shouldReceive('getMiddleware')->once()->andReturn([]);
         $controllerInstance->shouldReceive('callAction')->with(m::type('string'), m::type('array'))->andReturnUsing(function ($method, $parameters) use ($controllerInstance) {
             $this->app->make('Params')->fillController($controllerInstance);
 

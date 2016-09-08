@@ -164,7 +164,7 @@ trait ControllerAdditions
      */
     public function callAction($method, $parameters)
     {
-        $route = static::getRouter()->current();
+        $route = app('router')->current();
         $request = app('request');
         $this->assignAfter($route, $request, $method);
         $response = $this->before($route, $request, $method);
