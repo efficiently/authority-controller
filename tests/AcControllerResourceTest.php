@@ -12,7 +12,7 @@ class AcControllerResourceTest extends AcTestCase
 
         $this->params = ['controller' => 'projects'];
         $this->controllerClass = $this->mock('ProjectsController');
-        $this->controller = App::make('ProjectsController');
+        $this->controller = app('ProjectsController');
 
         $this->user = $this->getUserWithRole('admin');
         $this->authority = $this->getAuthority($this->user);
@@ -133,7 +133,7 @@ class AcControllerResourceTest extends AcTestCase
         );
 
         $this->mock('App\Http\Controllers\CommentsController');
-        $controller = App::make('App\Http\Controllers\CommentsController');
+        $controller = app('App\Http\Controllers\CommentsController');
         $controller->shouldReceive('getParams')->andReturnUsing(function () {
             return $this->params;
         });
@@ -158,7 +158,7 @@ class AcControllerResourceTest extends AcTestCase
         );
 
         $this->mock('App\Http\Controllers\CommentsController');
-        $controller = App::make('App\Http\Controllers\CommentsController');
+        $controller = app('App\Http\Controllers\CommentsController');
         $controller->shouldReceive('getParams')->andReturnUsing(function () {
             return $this->params;
         });
@@ -366,7 +366,7 @@ class AcControllerResourceTest extends AcTestCase
         $className = "Efficiently\\AuthorityController\\ControllerResource";
         $mock = m::mock($className)->makePartial();
         App::instance($className, $mock);
-        $resource = App::make($className, [$this->controller]);
+        $resource = app($className, [$this->controller]);
 
         $resource->shouldReceive('loadResource')->once();
         $resource->shouldReceive('authorizeResource')->once();
@@ -377,7 +377,7 @@ class AcControllerResourceTest extends AcTestCase
     public function testShouldNotBuildASingleResourceWhenOnCustomCollectionActionEvenWithId()
     {
         $project = $this->mock('Project');
-        $project->shouldReceive('get')->once()->andReturn(new Illuminate\Database\Eloquent\Collection);
+        $project->shouldReceive('get')->once()->andReturn(collect());
 
         $this->params = array_merge($this->params, array_merge(['action' => 'sort', 'id' => '123']));
 
@@ -420,7 +420,7 @@ class AcControllerResourceTest extends AcTestCase
     public function testShouldNotTryToLoadResourceForOtherActionIfParamsIdIsUndefined()
     {
         $project = $this->mock('Project');
-        $project->shouldReceive('get')->once()->andReturn(new Illuminate\Database\Eloquent\Collection);
+        $project->shouldReceive('get')->once()->andReturn(collect());
 
         $this->params['action'] = "list";
 
@@ -894,8 +894,8 @@ class AcControllerResourceTest extends AcTestCase
             return $mock;
         });
 
-        $models = new Illuminate\Database\Eloquent\Collection();
-        $models->add($model);
+        $models = collect();
+        $models->push($model);
         $mock->shouldReceive('get')->andReturn($models);
         $mock->shouldReceive('all')->andReturn($models);
 

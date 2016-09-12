@@ -2,7 +2,6 @@
 
 class AcProduct
 {
-
     protected $name;
 
     protected $price;

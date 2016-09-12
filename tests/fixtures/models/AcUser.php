@@ -1,30 +1,21 @@
 <?php
 
-use Illuminate\Auth\Authenticatable;
-use Illuminate\Auth\Passwords\CanResetPassword;
-use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 /**
- * An Ardent Model: 'User'
- *
  * @property integer $id
- * @property string $username
- * @property string $email
- * @property string $firstname
- * @property string $lastname
- * @property string $password
+ * @property string  $username
+ * @property string  $email
+ * @property string  $firstname
+ * @property string  $lastname
+ * @property string  $password
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  */
-class AcUser extends Eloquent implements AuthenticatableContract, CanResetPasswordContract
+class AcUser extends Authenticatable
 {
-    use Authenticatable, CanResetPassword;
-
-    public static $passwordAttributes  = ['password'];
-    public $autoHashPasswordAttributes = true;
-    public $autoPurgeRedundantAttributes = true;
+    use Notifiable;
 
     public static $rules = [
         'username'              => 'required|between:3,16|unique:users',
@@ -44,12 +35,12 @@ class AcUser extends Eloquent implements AuthenticatableContract, CanResetPasswo
 
     public function roles()
     {
-        return $this->belongsToMany('Role');
+        return $this->belongsToMany(AcRole::class)->withTimestamps();
     }
 
     public function permissions()
     {
-        return $this->hasMany('Permission');
+        return $this->hasMany(AcPermission::class);
     }
 
     public function hasRole($key)
@@ -60,50 +51,5 @@ class AcUser extends Eloquent implements AuthenticatableContract, CanResetPasswo
             }
         }
         return false;
-    }
-
-    /**
-     * Get the unique identifier for the user.
-     *
-     * @return mixed
-     */
-    public function getAuthIdentifier()
-    {
-        return $this->getKey();
-    }
-
-    /**
-     * Get the password for the user.
-     *
-     * @return string
-     */
-    public function getAuthPassword()
-    {
-        return $this->password;
-    }
-
-    /**
-     * Get the e-mail address where password reminders are sent.
-     *
-     * @return string
-     */
-    public function getReminderEmail()
-    {
-        return $this->email;
-    }
-
-    public function getRememberToken()
-    {
-        return $this->remember_token;
-    }
-
-    public function setRememberToken($value)
-    {
-        $this->remember_token = $value;
-    }
-
-    public function getRememberTokenName()
-    {
-        return 'remember_token';
     }
 }

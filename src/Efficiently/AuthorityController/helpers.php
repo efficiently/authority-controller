@@ -20,7 +20,6 @@ if (! function_exists('array_extract_options')) {
 }
 
 if (! function_exists('get_classname')) {
-
     /**
      * Like get_class() function but compatible with Mockery and $object parameter is required
      *
@@ -39,7 +38,6 @@ if (! function_exists('get_classname')) {
 }
 
 if (! function_exists('respond_to')) {
-
     /**
      * Like method_exists function but compatible with Mockery
      *
@@ -57,7 +55,7 @@ if (! function_exists('respond_to')) {
                     return true;
                 }
             }
-        } elseif (is_string($object) && class_exists($object) && is_a(($instance=\App::make($object)), '\Mockery\MockInterface')) {
+        } elseif (is_string($object) && class_exists($object) && is_a(($instance=app($object)), '\Mockery\MockInterface')) {
             // Check if a mocked static method exists or not. You need to do:
             //
             //   $category = Mockery::mock('alias:Category', ['getProducts'=>'products']);
@@ -104,9 +102,8 @@ if (! function_exists('ac_trans')) {
                     $id = $defaultId;
                     if (Lang::has($id, 'en')) {
                         return trans($id, $parameters, $domain, 'en');
-                    } else {
-                        return trans($namespace.$id, $parameters, $domain, 'en');
                     }
+                    return trans($namespace.$id, $parameters, $domain, 'en');
                 }
             }
         }
@@ -132,10 +129,8 @@ if (! function_exists('ac_trans_choice')) {
                     $id = $defaultId;
                     if (Lang::has($id, 'en')) {
                         return trans_choice($id, $number, $parameters, $domain, 'en');
-
-                    } else {
-                        return trans_choice($namespace.$id, $number, $parameters, $domain, 'en');
                     }
+                    return trans_choice($namespace.$id, $number, $parameters, $domain, 'en');
                 }
             }
         }
@@ -145,7 +140,6 @@ if (! function_exists('ac_trans_choice')) {
 }
 
 if (! function_exists('set_property')) {
-
     function set_property($object, $propertyName, $value)
     {
         if (property_exists($object, $propertyName)) {
@@ -159,21 +153,18 @@ if (! function_exists('set_property')) {
 }
 
 if (! function_exists('get_property')) {
-
     function get_property($object, $propertyName)
     {
         if (property_exists($object, $propertyName)) {
             $reflection = new \ReflectionProperty($object, $propertyName);
             $reflection->setAccessible(true);
             return $reflection->getValue($object);
-        } else {
-            return null;
         }
+        return null;
     }
 }
 
 if (! function_exists('invoke_method')) {
-
     function invoke_method($object, $methodName, $values = [])
     {
         $values = (array) $values;
@@ -181,8 +172,7 @@ if (! function_exists('invoke_method')) {
             $reflection = new \ReflectionMethod($object, $methodName);
             $reflection->setAccessible(true);
             return $reflection->invokeArgs($object, $values);
-        } else {
-            return call_user_func_array([$object, $methodName], $values);
         }
+        return call_user_func_array([$object, $methodName], $values);
     }
 }

@@ -1,4 +1,6 @@
-<?php namespace Efficiently\AuthorityController\Exceptions;
+<?php
+
+namespace Efficiently\AuthorityController\Exceptions;
 
 /**
  * This error is raised when a user isn't allowed to access a given controller action.

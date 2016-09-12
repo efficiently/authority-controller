@@ -1,6 +1,8 @@
-<?php namespace Efficiently\AuthorityController;
+<?php
 
-use \Authority\Rule as OriginalRule;
+namespace Efficiently\AuthorityController;
+
+use Authority\Rule as OriginalRule;
 
 class Rule extends OriginalRule
 {

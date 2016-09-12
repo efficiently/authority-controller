@@ -1,8 +1,8 @@
-<?php namespace Efficiently\AuthorityController;
+<?php
 
-use App;
+namespace Efficiently\AuthorityController;
+
 use Event;
-use Input;
 
 // TODO: Move this class in its own Laravel package
 class Parameters
@@ -16,7 +16,7 @@ class Parameters
      */
     public function fillController($controller)
     {
-        $router = App::make('router');
+        $router = app('router');
         $controllerClass = get_classname($controller);
         $paramsFilterPrefix = "router.filter: ";
         $paramsFilterName = "controller.parameters.".$controllerClass;
@@ -29,11 +29,11 @@ class Parameters
                 $resourceParams['controller'] = $this->normalizeControllerName($resourceParams['controller']);
 
                 $resourceId = str_singular($resourceParams['controller']);
-                if (Input::has($resourceId)) {
-                    $params = Input::all();
+                if (request()->has($resourceId)) {
+                    $params = request()->all();
                 } else {
                     $specialInputKeys = $this->specialInputKeys();
-                    $params = [$resourceId => Input::except($specialInputKeys)] + Input::only($specialInputKeys);
+                    $params = [$resourceId => request()->except($specialInputKeys)] + request()->only($specialInputKeys);
                 }
                 $routeParams = $currentRoute->parametersWithoutNulls();
 
@@ -178,7 +178,7 @@ class Parameters
      */
     protected function specialInputKeys($inputKeys = [])
     {
-        $inputKeys = $inputKeys ?: array_keys(Input::all());
+        $inputKeys = $inputKeys ?: array_keys(request()->all());
         return array_filter($inputKeys, function ($value) {
             return is_string($value) ? starts_with($value, '_') : false;
         });

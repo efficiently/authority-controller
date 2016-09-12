@@ -372,7 +372,7 @@ trait ControllerAdditions
      * For example, given an ArticlesController it will load the current article into the @article
      * instance variable. It does this by either calling Article->find($this->params['id']); or
      * new Article($this->params['article']); depending upon the action. The index action will
-     * automatically set $this->articles to Article::all(); or Article::$options['collectionScope']()->get();
+     * automatically set $this->articles to Article::get(); or Article::$options['collectionScope']()->get();
      *
      * If a conditional callback is used in the Authority, the '<code>create</code>' and '<code>store</code>' actions will set
      * the initial attributes based on these conditions. This way these actions will satisfy
@@ -493,7 +493,7 @@ trait ControllerAdditions
      *
      *   By default, collection actions (<code>index</code> action) returns all the collection record with:
      *
-     *     Article::get(); // which is equivalent to Article::all();
+     *     Article::get(); // which is equivalent to Article::get();
      *
      * ['<code>prepend</code>']
      *   Passing <code>true</code> will use prependBeforeFilter() instead of a normal beforeFilter().
@@ -590,7 +590,7 @@ trait ControllerAdditions
      *     $this->authorize('read', $this->article);
      *
      *     // But you still need to return the view
-     *     // return View::make('articles.show', compact_property($this, 'article'));
+     *     // return view('articles.show', compact_property($this, 'article'));
      *   }
      *
      * A 'message' option can be passed to specify a different message.
@@ -620,7 +620,7 @@ trait ControllerAdditions
      *            $msg = $e->getMessage();
      *            \Log::error('Access denied! '.$msg);
      *
-     *            return Redirect::route('home')->with('flash_alert', $msg);
+     *            return redirect()->route('home')->with('flash_alert', $msg);
      *        }
      *
      *        return parent::report($e);
@@ -659,8 +659,8 @@ trait ControllerAdditions
      *
      *   public function getCurrentAuthority()
      *   {
-     *     // instead of \App::make('authority');
-     *     $this->currentAuthority = $this->currentAuthority ?: \App::make('UserAuthority', [$this->getCurrentAccount()]);
+     *     // instead of app('authority');
+     *     $this->currentAuthority = $this->currentAuthority ?: app('UserAuthority', [$this->getCurrentAccount()]);
      *
      *     return $this->currentAuthority;
      *   }

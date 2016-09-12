@@ -3,7 +3,6 @@
 namespace Illuminate\Routing;
 
 use AcTestCase;
-use App;
 use AuthorityControllerHelpers;
 use Event;
 use Mockery as m;
@@ -29,7 +28,7 @@ class AcParametersTest extends AcTestCase
     {
         parent::setUp();
 
-        $this->app = $this->app = App::getFacadeRoot();
+        $this->app = $this->app = app();
         $this->app['router'] = $this->router = $this->mockRouter();
 
         $this->controllerName = "ProjectsController";

@@ -1,4 +1,6 @@
-<?php namespace Efficiently\AuthorityController;
+<?php
+
+namespace Efficiently\AuthorityController;
 
 use Event;
 

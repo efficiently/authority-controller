@@ -40,19 +40,19 @@ abstract class AcTestCase extends Orchestra\Testbench\TestCase
     protected function getPackageProviders($app)
     {
         return [
-            'Collective\Html\HtmlServiceProvider',
-            'Efficiently\AuthorityController\AuthorityControllerServiceProvider',
+            Collective\Html\HtmlServiceProvider::class,
+            Efficiently\AuthorityController\AuthorityControllerServiceProvider::class,
         ];
     }
 
     protected function getPackageAliases($app)
     {
         return [
-            'Input' => 'Illuminate\Support\Facades\Input',
-            'Form' => 'Collective\Html\FormFacade',
-            'HTML' => 'Collective\Html\HtmlFacade',
-            'Authority' => 'Efficiently\AuthorityController\Facades\Authority',
-            'Params'    => 'Efficiently\AuthorityController\Facades\Params',
+            'Input' => Illuminate\Support\Facades\Input::class,
+            'Form' => Collective\Html\FormFacade::class,
+            'HTML' => Collective\Html\HtmlFacade::class,
+            'Authority' => Efficiently\AuthorityController\Facades\Authority::class,
+            'Params'    => Efficiently\AuthorityController\Facades\Params::class,
         ];
     }
 

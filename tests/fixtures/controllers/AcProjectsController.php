@@ -37,7 +37,7 @@ class AcProjectsController extends AcBaseController
      */
     public function index()
     {
-        // $this->acProjects = $this->acProjectModel->all();
+        // $this->acProjects = $this->acProjectModel->get();
 
         return view('ac_projects.index', compact_property($this, 'acProjects'));
     }
@@ -59,13 +59,14 @@ class AcProjectsController extends AcBaseController
      */
     public function store()
     {
-        // $this->acProject = App::make('AcProject');
+        // $this->acProject = app('AcProject');
 
-        $this->acProject->fill(Input::except('_method', '_token'));
-        if ($this->acProject->save()) {
-            return Redirect::route('ac_projects.index');
-        } else {
-            return Redirect::route('ac_projects.create')
+        $this->acProject->fill(request()->except('_method', '_token'));
+        try {
+            $this->acProject->save();
+            return redirect()->route('ac_projects.index');
+        } catch (Exception $e) {
+            return redirect()->route('ac_projects.create')
                 ->withErrors($this->acProject->errors())
                 ->with('message', 'There were validation errors.');
         }
@@ -95,7 +96,7 @@ class AcProjectsController extends AcBaseController
         // $this->acProject = $this->acProjectModel->find($id);
 
         if (is_null($this->acProject)) {
-            return Redirect::route('ac_projects.index');
+            return redirect()->route('ac_projects.index');
         }
 
         return view('ac_projects.edit', compact_property($this, 'acProject'));
@@ -111,13 +112,14 @@ class AcProjectsController extends AcBaseController
     {
         // $this->acProject = $this->acProjectModel->find($id);
 
-        $this->acProject->fill(Input::except('_method', '_token'));
-        if ($this->acProject->save()) {
-            return Redirect::route('ac_projects.show', $id);
-        } else {
-            return Redirect::route('ac_projects.edit', $id)
-            ->withErrors($this->acProject->errors())
-            ->with('message', 'There were validation errors.');
+        $this->acProject->fill(request()->except('_method', '_token'));
+        try {
+            $this->acProject->save();
+            return redirect()->route('ac_projects.show', $id);
+        } catch (Exception $e) {
+            return redirect()->route('ac_projects.edit', $id)
+                ->withErrors($this->acProject->errors())
+                ->with('message', 'There were validation errors.');
         }
     }
 
@@ -133,6 +135,6 @@ class AcProjectsController extends AcBaseController
 
         $this->acProject->delete();
 
-        return Redirect::route('ac_projects.index');
+        return redirect()->route('ac_projects.index');
     }
 }

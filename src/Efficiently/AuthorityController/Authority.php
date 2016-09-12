@@ -1,6 +1,8 @@
-<?php namespace Efficiently\AuthorityController;
+<?php
 
-use \Authority\Authority as OriginalAuthority;
+namespace Efficiently\AuthorityController;
+
+use Authority\Authority as OriginalAuthority;
 
 class Authority extends OriginalAuthority
 {

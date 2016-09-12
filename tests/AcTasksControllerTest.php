@@ -55,7 +55,7 @@ class AcTasksControllerTest extends AcTestCase
         $this->assertCan($actionName, $this->modelName);
         $this->action('GET', $this->controllerName."@".$actionName, [$parentModel->id]);
 
-        $this->assertViewHas('acTasks', $model->all());
+        $this->assertViewHas('acTasks', $model->get());
     }
 
     /**
@@ -288,7 +288,7 @@ class AcTasksControllerTest extends AcTestCase
 
         $parentMock->shouldReceive('where->firstOrFail')->once()->andReturn($parentModel);
         $associationName = str_plural(camel_case($this->modelName));
-        $parentMock->shouldReceive($associationName.'->getModel')->/*once()->*/andReturn(App::make($this->modelName));
+        $parentMock->shouldReceive($associationName.'->getModel')->/*once()->*/andReturn(app($this->modelName));
 
         return $parentModel;
     }
@@ -301,10 +301,10 @@ class AcTasksControllerTest extends AcTestCase
 
         $mock->shouldReceive('where->firstOrFail')->/*once()->*/andReturn($model);
         $mock->shouldReceive('save')->/*once()->*/andReturn(true);
-        $models = new Illuminate\Database\Eloquent\Collection();
-        $models->add($model);
+        $models = collect();
+        $models->push($model);
         $mock->shouldReceive('get')->andReturn($models);
-        $mock->shouldReceive('all')->andReturn($models);
+        $mock->shouldReceive('all')->andReturn($models->all());
 
         return $model;
     }

@@ -4,7 +4,6 @@ use Mockery as m;
 
 trait AuthorityControllerHelpers
 {
-
     protected $user;
     protected $userAttributes = [];
     protected $authority;
@@ -53,7 +52,7 @@ trait AuthorityControllerHelpers
     protected function getAuthority($user)
     {
         $authority = new Efficiently\AuthorityController\Authority($user);
-        $fn = Config::get('authority-controller.initialize', null);
+        $fn = config('authority-controller.initialize', null);
 
         if ($fn) {
             $fn($authority);

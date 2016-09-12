@@ -17,7 +17,7 @@ For [Laravel 4.1 or 4.2](http://laravel.com/docs/4.2) supports see [AuthorityCon
 
 #### Demo application
 
-You can see in action this package with this Laravel [**demo application**](https://github.com/efficiently/laravel_authority-controller_app#readme).
+You can see in action this package with this Laravel 5.3 [**demo application**](https://github.com/efficiently/laravel_authority-controller_app#readme).
 
 #### Origins and Inspirations
 
@@ -41,20 +41,20 @@ Installation
 2. Add the service provider to `config/app.php`:
 
  ```php
-     'Efficiently\AuthorityController\AuthorityControllerServiceProvider',
+     Efficiently\AuthorityController\AuthorityControllerServiceProvider::class,
  ```
 
 3. Add the aliases (facades) to your Laravel app config file:
 
  ```php
-     'Params'    => 'Efficiently\AuthorityController\Facades\Params',
-     'Authority' => 'Efficiently\AuthorityController\Facades\Authority',
+     'Params'    => Efficiently\AuthorityController\Facades\Params::class,
+     'Authority' => Efficiently\AuthorityController\Facades\Authority::class,
  ```
 
 4. This will allow you to access the Authority class through the static interface you are used to with Laravel components.
 
  ```php
- Authority::can('update', 'SomeModel');
+ Authority::can('update', SomeModel::class);
  ```
 
 Configuration
@@ -87,12 +87,12 @@ To utilize these tables, you can add the following methods to your `User` model.
     //app/User.php
     public function roles()
     {
-        return $this->belongsToMany('App\Authority\Role');
+        return $this->belongsToMany(Authority\Role::class)->withTimestamps();
     }
 
     public function permissions()
     {
-        return $this->hasMany('App\Authority\Permission');
+        return $this->hasMany(Authority\Permission::class);
     }
 
     public function hasRole($key)
@@ -111,7 +111,9 @@ To utilize these tables, you can add the following methods to your `User` model.
 
 ```php
     //app/Authority/Role.php
-    <?php namespace App\Authority;
+    <?php
+
+    namespace App\Authority;
 
     use Illuminate\Database\Eloquent\Model;
 
@@ -120,7 +122,9 @@ To utilize these tables, you can add the following methods to your `User` model.
 
 ```php
     //app/Authority/Permission.php
-    <?php namespace App\Authority;
+    <?php
+
+    namespace App\Authority;
 
     use Illuminate\Database\Eloquent\Model;
 
@@ -131,7 +135,9 @@ To utilize these tables, you can add the following methods to your `User` model.
 In your `app/Http/Controllers/Controller.php` file, add the `ControllerAdditions` trait and disable the use of the `AuthorizesRequests` trait:
 
 ```php
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
@@ -148,17 +154,18 @@ class Controller extends BaseController
 }
 ```
 
-**NB:** If you really need the default Laravel Authorization system, you can use the `AuthorizesRequests` trait, if you alias its `authorize` method, like this:
+**NB:** If you really need the default Laravel Authorization system, you can use the `AuthorizesRequests` trait, if you alias its `authorize` and `authorizeResource` methods, like this:
 
 ```php
 <?php
 //code...
 class Controller extends BaseController
 {
-    //code...
+    use DispatchesJobs, ValidatesRequests;
     use AuthorizesRequests, AuthorityControllerAdditions {
         AuthorityControllerAdditions::authorize insteadof AuthorizesRequests;
         AuthorizesRequests::authorize as illuminateAuthorize;
+        AuthorizesRequests::authorizeResource as illuminateAuthorizeResource;
     }
     //code...
 }
@@ -166,7 +173,7 @@ class Controller extends BaseController
 
 Getting Started
 ---------------
-AuthorityController expects that `Auth::user()` return the current authenticated user. Now, by default Laravel 5 handles [this](http://laravel.com/docs/5.0/authentication#retrieving-the-authenticated-user).
+AuthorityController expects that `auth()->user()` return the current authenticated user. Now, by default Laravel 5 handles [this](https://laravel.com/docs/5.3/authentication#retrieving-the-authenticated-user).
 
 ##### Defining Authority rules
 
@@ -182,10 +189,12 @@ This will place a copy of the configuration file at `config/authority-controller
 
 ```php
 //config/authority-controller.php
+<?php
 
+$serializer = new SuperClosure\Serializer;
 return [
-    'initialize' => function($authority) {
-        $user = Auth::guest() ? new App\User : $authority->getCurrentUser();
+    'initialize' => $serializer->serialize(function ($authority) {
+        $user = auth()->guest() ? new App\User : $authority->getCurrentUser();
 
         // Action aliases. For example:
         $authority->addAlias('moderate', ['read', 'update', 'delete']);
@@ -196,7 +205,7 @@ return [
         } else {
             $authority->allow('read', 'all');
         }
-    }
+    })
 ];
 ```
 
@@ -227,7 +236,9 @@ public function show($id)
 Setting this for every action can be tedious, therefore the `loadAndAuthorizeResource()` method is provided to automatically authorize all actions in a RESTful style resource controller. It will use a before filter to load the resource into an instance variable and authorize it for every action.
 
 ```php
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 class ArticlesController extends Controller
 {
@@ -309,7 +320,9 @@ Controller additions
 Your controllers have now a `$params` property:
 
 ```php
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 class ProductsController extends Controller
 {

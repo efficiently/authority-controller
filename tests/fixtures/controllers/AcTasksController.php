@@ -54,7 +54,7 @@ class AcTasksController extends AcBaseController
      */
     public function index($acProjectId)
     {
-        // $this->acTasks = $this->acTaskModel->all();
+        // $this->acTasks = $this->acTaskModel->get();
 
         return view('ac_tasks.index', compact_property($this, 'acProject', 'acTasks'));
     }
@@ -78,14 +78,15 @@ class AcTasksController extends AcBaseController
      */
     public function store($acProjectId)
     {
-        // $this->acTask = App::make('AcTask');
+        // $this->acTask = app('AcTask');
 
-        $this->acTask->fill(Input::except('_method', '_token'));
+        $this->acTask->fill(request()->except('_method', '_token'));
         $this->acTask->ac_project_id = $acProjectId;
-        if ($this->acTask->save()) {
-            return Redirect::route('ac_projects.ac_tasks.index', $acProjectId);
-        } else {
-            return Redirect::route('ac_projects.ac_tasks.create', $acProjectId)
+        try {
+            $this->acTask->save();
+            return redirect()->route('ac_projects.ac_tasks.index', $acProjectId);
+        } catch (Exception $e) {
+            return redirect()->route('ac_projects.ac_tasks.create', $acProjectId)
                 ->withErrors($this->acTask->errors())
                 ->with('message', 'There were validation errors.');
         }
@@ -117,7 +118,7 @@ class AcTasksController extends AcBaseController
         // $this->acTask = $this->acTaskModel->find($id);
 
         if (is_null($this->acTask)) {
-            return Redirect::route('ac_projects.ac_tasks.index', $acProjectId);
+            return redirect()->route('ac_projects.ac_tasks.index', $acProjectId);
         }
 
         return view('ac_tasks.edit', compact_property($this, 'acTask'));
@@ -134,13 +135,14 @@ class AcTasksController extends AcBaseController
     {
         // $this->acTask = $this->acTaskModel->find($id);
 
-        $this->acTask->fill(Input::except('_method', '_token'));
-        if ($this->acTask->save()) {
-            return Redirect::route('ac_projects.ac_tasks.show', [$acProjectId, $id]);
-        } else {
-            return Redirect::route('ac_projects.ac_tasks.edit', $id)
-            ->withErrors($this->acTask->errors())
-            ->with('message', 'There were validation errors.');
+        $this->acTask->fill(request()->except('_method', '_token'));
+        try {
+            $this->acTask->save();
+            return redirect()->route('ac_projects.ac_tasks.show', [$acProjectId, $id]);
+        } catch (Exception $e) {
+            return redirect()->route('ac_projects.ac_tasks.edit', $id)
+                ->withErrors($this->acTask->errors())
+                ->with('message', 'There were validation errors.');
         }
     }
 
@@ -157,6 +159,6 @@ class AcTasksController extends AcBaseController
 
         $this->acTask->delete();
 
-        return Redirect::route('ac_projects.ac_tasks.index', $acProjectId);
+        return redirect()->route('ac_projects.ac_tasks.index', $acProjectId);
     }
 }

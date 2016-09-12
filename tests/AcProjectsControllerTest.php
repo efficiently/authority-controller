@@ -40,7 +40,7 @@ class AcProjectsControllerTest extends AcTestCase
         $this->assertCan($actionName, $this->modelName);
 
         $this->action('GET', $this->controllerName."@".$actionName);
-        $this->assertViewHas('acProjects', $model->all());
+        $this->assertViewHas('acProjects', $model->get());
     }
 
     /**
@@ -245,10 +245,10 @@ class AcProjectsControllerTest extends AcTestCase
 
         $mock->shouldReceive('where->firstOrFail')->/*once()->*/andReturn($model);
         $mock->shouldReceive('save')->/*once()->*/andReturn(true);
-        $models = new Illuminate\Database\Eloquent\Collection();
-        $models->add($model);
+        $models = collect();
+        $models->push($model);
         $mock->shouldReceive('get')->andReturn($models);
-        $mock->shouldReceive('all')->andReturn($models);
+        $mock->shouldReceive('all')->andReturn($models->all());
 
         return $model;
     }

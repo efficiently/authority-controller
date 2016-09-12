@@ -1,9 +1,9 @@
-<?php namespace Efficiently\AuthorityController;
+<?php
+
+namespace Efficiently\AuthorityController;
 
 use Illuminate\Support\ServiceProvider;
 use SuperClosure\Serializer;
-use Efficiently\AuthorityController\Authority;
-use Efficiently\AuthorityController\Parameters;
 
 class AuthorityControllerServiceProvider extends ServiceProvider
 {

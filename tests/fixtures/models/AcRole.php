@@ -1,9 +1,8 @@
 <?php
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Model;
 
-class AcRole extends Eloquent
+class AcRole extends Model
 {
-
     protected $fillable = ['name'];
 }

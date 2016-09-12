@@ -13,7 +13,7 @@ class AcAuthorityTest extends AcTestCase
         $this->user->email = "testuser@localhost";
         $this->user->name = "TestUser";
 
-        $this->authority = App::make('authority');
+        $this->authority = app('authority');
         $this->authority->setCurrentUser($this->user);
     }
 
@@ -97,7 +97,7 @@ class AcAuthorityTest extends AcTestCase
         ];
         $this->fillMock($user, $userAttributes);
 
-        $this->authority = App::make('authority');
+        $this->authority = app('authority');
         $this->authority->setCurrentUser($this->user);
 
         $this->authority->allow('read', 'User', function ($self, $user) {
@@ -125,7 +125,7 @@ class AcAuthorityTest extends AcTestCase
         ];
         $this->fillMock($user, $userAttributes);
 
-        $this->authority = App::make('authority');
+        $this->authority = app('authority');
         $this->authority->setCurrentUser($this->user);
 
         $this->authority->allow('read', 'User', function ($self, $user) {

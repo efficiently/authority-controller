@@ -1,4 +1,6 @@
-<?php namespace Efficiently\AuthorityController\Facades;
+<?php
+
+namespace Efficiently\AuthorityController\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
