@@ -48,7 +48,7 @@ class AuthorityControllerServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app['parameters'] = $this->app->share(function ($app) {
+        $this->app->singleton('parameters', function ($app) {
             return new Parameters;
         });
 
@@ -66,7 +66,7 @@ class AuthorityControllerServiceProvider extends ServiceProvider
             }
         });
 
-        $this->app['authority'] = $this->app->share(function ($app) {
+        $this->app->singleton('authority', function ($app) {
             $user = $app['auth']->user();
             $authority = new Authority($user);
 
