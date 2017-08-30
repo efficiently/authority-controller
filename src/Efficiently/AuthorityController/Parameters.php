@@ -46,11 +46,12 @@ class Parameters
                 if ($lastRouteParamKey === 'id' || $resourceId === str_singular($lastRouteParamKey)) {
                     $id = last($routeParams);
                     if (is_a($id, 'Illuminate\Database\Eloquent\Model')) {
+                        $object = $id;
                         $id = $id->getKey();
                     }
                     if (is_string($id) || is_numeric($id)) {
                         array_pop($routeParams);
-                        $routeParamsParsed['id'] = $id;
+                        $routeParamsParsed[$object->getKeyName()] = $id;
                     }
                 }
 

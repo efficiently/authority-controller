@@ -159,6 +159,8 @@ class AcParametersTest extends AcTestCase
 
         $this->call('GET', '/projects/5');// show action
 
+        dd($this->parameters, $this->call('GET', '/projects/5'));
+
         $this->assertArrayHasKey('id', $this->getProperty($parameters, 'params'));
         $this->assertEquals($this->getProperty($parameters, 'params')['id'], '5');
 
